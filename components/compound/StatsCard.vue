@@ -23,6 +23,7 @@ watchEffect(() => {
       <AppCardBody>
         <div class="max-h-screen overflow-scroll relative">
           <div v-if="total">
+            <p class="text-xl">Total</p>
             <p>{{ total }}</p>
           </div>
 
