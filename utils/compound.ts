@@ -1,4 +1,4 @@
-function calculateCompoundInterest(
+export function calculateCompoundInterest(
   principal: number,
   rate: number,
   time: number = 10,
