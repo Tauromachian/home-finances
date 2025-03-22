@@ -201,7 +201,7 @@ function handleFocusCategory() {
         ></AppInput>
 
         <div class="flex justify-end pt-5 pb-2">
-          <BaseButton> Submit </BaseButton>
+          <BaseButton> Add Expense </BaseButton>
         </div>
       </div>
     </Form>
