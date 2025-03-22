@@ -3,7 +3,6 @@
     class="px-3 py-2 rounded-full transition cursor-pointer"
     :class="classes"
     :value="value"
-    v-bind="$attrs"
   >
     <slot></slot>
   </button>
