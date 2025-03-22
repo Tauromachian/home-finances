@@ -1,34 +1,39 @@
 <script setup>
-const chartKey = ref(0);
+import { calculateCompoundInterest } from "@/utils/compound";
 
-function removeInvestment(id) {
-  expenseStore.removeInvestment(id);
-}
+const props = defineProps({
+  compoundValue: { type: [Object, null], default: () => {} },
+});
+
+const finalAmount = ref(0);
+const interestEarned = ref(0);
+
+watchEffect(() => {
+  if (!props.compoundValue) return;
+
+  const calculatedCompound = calculateCompoundInterest(
+    props.compoundValue.amount,
+    props.compoundValue.percent,
+  );
+
+  finalAmount.value = calculatedCompound.finalAmount;
+  interestEarned.value = calculatedCompound.interestEarned;
+});
 </script>
 
 <template>
   <div id="expense-stats" class="w-full max-w-md flex mobile:items-center">
     <AppCard>
       <AppCardBody>
-        <InvestmentLineChart
-          v-if="expenses?.length"
-          :key="chartKey"
-          :expenses="expenses"
-        ></InvestmentLineChart>
-
         <div class="max-h-screen overflow-scroll relative">
-          <div v-if="!expenses?.length" class="text-center my-20">
+          <div v-if="finalAmount && interestEarned">
+            <p>{{ finalAmount }}</p>
+            <p>{{ interestEarned }}</p>
+          </div>
+
+          <div v-else class="text-center my-20">
             Nothing to compound! Add one
           </div>
-          <InvestmentItem
-            v-for="expense in expenses"
-            v-else
-            :key="expense.id"
-            :details="expense"
-            :category="getCategory(expense.categories)"
-            class="border-b last:border-0"
-            @remove-expense="removeInvestment(expense.id)"
-          ></InvestmentItem>
         </div>
       </AppCardBody>
     </AppCard>

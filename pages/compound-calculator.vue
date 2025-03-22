@@ -1,23 +1,14 @@
 <script setup>
-const fadingInOutArrow = ref(false);
 const appToaster = ref();
 
+const compoundValue = ref(null);
+
 function submitForm(form) {
-  expenseStore.addExpense(form);
+  compoundValue.value = { ...form };
 
   if (!appToaster?.value) return;
 
-  appToaster.value.openToast("New expense added!");
-}
-
-function scrollToStats() {
-  const component = document.getElementById("expense-stats");
-
-  if (!component) return;
-
-  component.scrollIntoView({ behavior: "smooth" });
-
-  closeScrollDown();
+  appToaster.value.openToast("New compoundValue added!");
 }
 </script>
 
@@ -28,18 +19,9 @@ function scrollToStats() {
     <div class="flex flex-col md:flex-row gap-5 md:items-start">
       <CompoundForm @submit="submitForm"></CompoundForm>
 
-      <CompoundStatsCard> </CompoundStatsCard>
+      <CompoundStatsCard :compound-value="compoundValue"> </CompoundStatsCard>
     </div>
 
     <AppToaster ref="appToaster"></AppToaster>
-
-    <ScrollDownArrow
-      class="transition-opacity"
-      :class="{
-        'opacity-100': fadingInOutArrow,
-        'opacity-0': !fadingInOutArrow,
-      }"
-      @scroll-to-stats="scrollToStats"
-    ></ScrollDownArrow>
   </div>
 </template>
