@@ -5,19 +5,15 @@ const props = defineProps({
   compoundValue: { type: [Object, null], default: () => {} },
 });
 
-const finalAmount = ref(0);
-const interestEarned = ref(0);
+const total = ref(0);
 
 watchEffect(() => {
   if (!props.compoundValue) return;
 
-  const calculatedCompound = calculateCompoundInterest(
+  total.value = calculateCompoundInterest(
     props.compoundValue.amount,
     props.compoundValue.percent,
   );
-
-  finalAmount.value = calculatedCompound.finalAmount;
-  interestEarned.value = calculatedCompound.interestEarned;
 });
 </script>
 
@@ -26,9 +22,8 @@ watchEffect(() => {
     <AppCard>
       <AppCardBody>
         <div class="max-h-screen overflow-scroll relative">
-          <div v-if="finalAmount && interestEarned">
-            <p>{{ finalAmount }}</p>
-            <p>{{ interestEarned }}</p>
+          <div v-if="total">
+            <p>{{ total }}</p>
           </div>
 
           <div v-else class="text-center my-20">
