@@ -30,6 +30,10 @@ function submitForm(form) {
 function closeScrollDown() {
   fadingInOutArrow.value = false;
 }
+
+onMounted(() => {
+  expenseStore.loadExpenses();
+});
 </script>
 
 <template>
