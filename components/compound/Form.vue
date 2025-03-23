@@ -14,11 +14,15 @@ function onSubmit(values) {
 <template>
   <AppCard>
     <div class="bg-teal-50 flex gap-4 mobile:rounded-t-md py-5 px-7">
-      <Icon
-        name="material-symbols-light:chart-data-outline-rounded"
-        class="text-3xl text-primary-700"
-      />
-      <div class="my-auto">
+      <div
+        class="w-10 h-10 my-auto shadow-md bg-white flex justify-center items-center rounded-xl"
+      >
+        <Icon
+          name="material-symbols-light:chart-data-outline-rounded"
+          class="text-3xl text-primary-700"
+        />
+      </div>
+      <div class="my-auto ml-2">
         <span class="font-bold block text-lg">
           Calculate compounding interest
         </span>
