@@ -31,6 +31,8 @@
   "devDependencies": {
     "@iconify-json/material-symbols": "^1.2.15",
     "@nuxt/eslint": "^1.1.0",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "typescript": "^5.8.2",
+    "vue-tsc": "^2.2.8"
   }
 }
