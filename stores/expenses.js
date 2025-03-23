@@ -30,7 +30,7 @@ export const useExpenseStore = defineStore("expenses", () => {
   }
 
   function loadExpenses() {
-    if (!process.client) return;
+    if (!window) return;
 
     const savedExpenses = localStorage.getItem("expenses");
     expenses.value = savedExpenses ? JSON.parse(savedExpenses) : [];
