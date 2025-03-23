@@ -9,7 +9,7 @@ onMounted(() => {
 });
 
 const emit = defineEmits(["submit"]);
-const types = ref(["One time", "Monthly", "Anual"]);
+const types = ref(["One time", "Monthly", "Annual"]);
 
 const inputCategory = ref("");
 const savedCategory = ref("");
