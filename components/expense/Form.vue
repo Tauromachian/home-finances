@@ -76,7 +76,7 @@ function handleFocusCategory() {
         class="w-10 h-10 my-auto shadow-md bg-white flex justify-center items-center rounded-xl"
       >
         <Icon
-          name="material-symbols:chart-data-outline-rounded"
+          name="material-symbols-light:chart-data-outline-rounded"
           class="text-3xl text-primary-700 rotate-90"
         />
       </div>
@@ -113,7 +113,10 @@ function handleFocusCategory() {
           <div
             class="bg-teal-50 text-teal-700 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-s-lg border peer-focus:border-teal-800"
           >
-            <Icon name="material-symbols:paid-outline" class="text-xl"></Icon>
+            <Icon
+              name="material-symbols-light:paid-outline"
+              class="text-xl"
+            ></Icon>
           </div>
         </template>
       </AppInput>

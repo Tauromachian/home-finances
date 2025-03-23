@@ -1196,12 +1196,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@iconify-json/material-symbols@npm:^1.2.15":
-  version: 1.2.15
-  resolution: "@iconify-json/material-symbols@npm:1.2.15"
+"@iconify-json/material-symbols-light@npm:^1.2.15":
+  version: 1.2.17
+  resolution: "@iconify-json/material-symbols-light@npm:1.2.17"
   dependencies:
     "@iconify/types": "npm:*"
-  checksum: 10/1e1ebdd11c95344de974c8588081a8e5775fac453a5cc689876f79b147fb43699b36ae31714a5f2cbb27d16783d26ba54fee2ce89314a4b8b618804032f43162
+  checksum: 10/609ea36a4219ebb65ffb8f2968472157c1e63ec815e2f88b892b01b187c51b3c8852330df1ab764bc3532188cb1ab4bcd34b14a1cf7e5af1c6216990d6f3f33a
   languageName: node
   linkType: hard
 
@@ -5872,7 +5872,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "home-finances@workspace:."
   dependencies:
-    "@iconify-json/material-symbols": "npm:^1.2.15"
+    "@iconify-json/material-symbols-light": "npm:^1.2.15"
     "@nuxt/eslint": "npm:^1.1.0"
     "@nuxt/icon": "npm:1.10.3"
     "@pinia/nuxt": "npm:^0.10.1"
