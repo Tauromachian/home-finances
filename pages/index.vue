@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from "vue";
-
 import { useExpenseStore } from "../stores/expenses";
 
 const expenseStore = useExpenseStore();
