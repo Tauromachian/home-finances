@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { calculateCompoundInterest } from "@/utils/compound";
 
 const props = defineProps({
