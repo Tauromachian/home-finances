@@ -7,5 +7,5 @@ export function calculateCompoundInterest(
 
   const amount = principal * Math.pow(1 + rate, time);
 
-  return amount.toFixed(2);
+  return +amount.toFixed(2);
 }
