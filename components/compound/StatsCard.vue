@@ -6,6 +6,7 @@ const props = defineProps({
 });
 
 const total = ref(0);
+const yearsAmount = ref(10);
 
 watchEffect(() => {
   if (!props.compoundValue) return;
@@ -13,6 +14,7 @@ watchEffect(() => {
   total.value = calculateCompoundInterest(
     props.compoundValue.amount,
     props.compoundValue.percent,
+    yearsAmount.value,
   );
 });
 </script>
@@ -23,6 +25,12 @@ watchEffect(() => {
       <AppCardBody>
         <div class="max-h-screen overflow-scroll relative">
           <div v-if="total">
+            <AppInput
+              label="Years Amount"
+              v-model="yearsAmount"
+              name="yearsAmount"
+            ></AppInput>
+
             <p class="text-xl">Total</p>
             <p>{{ total }}</p>
           </div>
