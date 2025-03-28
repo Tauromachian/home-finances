@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { compoundInterest } from "@/utils/compound";
+import { compoundInterestWithMonthlyReinvestment } from "@/utils/compound";
 
 const props = defineProps({
   compoundValue: { type: [Object, null], default: () => {} },
@@ -11,8 +11,9 @@ const yearsAmount = ref(10);
 watchEffect(() => {
   if (!props.compoundValue) return;
 
-  total.value = compoundInterest(
-    props.compoundValue.amount,
+  total.value = compoundInterestWithMonthlyReinvestment(
+    props.compoundValue.initialAmount,
+    props.compoundValue.monthlyContribution,
     props.compoundValue.percent,
     yearsAmount.value,
   );
