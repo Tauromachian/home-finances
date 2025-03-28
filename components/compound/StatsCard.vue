@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { calculateCompoundInterest } from "@/utils/compound";
+import { compoundInterest } from "@/utils/compound";
 
 const props = defineProps({
   compoundValue: { type: [Object, null], default: () => {} },
@@ -11,7 +11,7 @@ const yearsAmount = ref(10);
 watchEffect(() => {
   if (!props.compoundValue) return;
 
-  total.value = calculateCompoundInterest(
+  total.value = compoundInterest(
     props.compoundValue.amount,
     props.compoundValue.percent,
     yearsAmount.value,
