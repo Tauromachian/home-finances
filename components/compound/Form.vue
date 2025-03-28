@@ -1,11 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { positiveNumber } from "@/utils/rules";
+
+type CompoundForm = {
+  percent: number;
+  initialAmount: number;
+  monthlyContribution: number;
+};
 
 const formRef = ref(null);
 
 const emit = defineEmits(["submit"]);
 
-function onSubmit(values) {
+function onSubmit(values: CompoundForm) {
   emit("submit", values);
   formRef.value.resetForm();
 }
