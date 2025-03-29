@@ -60,7 +60,7 @@ function getCategory(category) {
               :key="expense.id"
               :expense="expense"
               :category="getCategory(expense.categories)"
-              class="border-b last:border-0"
+              class="border-b last:border-0 border-gray-300"
               @remove="expenseStore.removeExpense(expense.id)"
             ></ExpenseItem>
           </template>
