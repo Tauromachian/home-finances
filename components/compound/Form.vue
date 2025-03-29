@@ -29,9 +29,7 @@ function onSubmit(values: CompoundForm) {
         />
       </div>
       <div class="my-auto ml-2">
-        <span class="font-bold block text-lg">
-          Calculate compounding interest
-        </span>
+        <span class="font-bold block text-lg"> Compound interest </span>
         <span class="text-xs">
           Fill in the form with the details of the compounding
         </span>
