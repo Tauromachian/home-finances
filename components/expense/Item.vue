@@ -35,7 +35,7 @@ function remove() {
         <span class="font-bold">{{ expense.name }}</span>
         <p class="text-sm mt-2">{{ expense.description }}</p>
       </div>
-      <div class="flex flex-col ml-auto">
+      <div class="flex flex-col ml-auto items-end">
         <span class="text-sm">$ {{ expense.expense }}</span>
         <BaseButton variant="text" @click="remove">
           <Icon
