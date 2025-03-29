@@ -60,12 +60,6 @@ export const categories = [
     name: "Clothes",
   },
   {
-    icon: "material-symbols:waterfall-chart",
-    color: "#2eb8b8",
-    bgColor: "#d6f5f5",
-    name: "Investments",
-  },
-  {
     icon: "material-symbols:featured-seasonal-and-gifts",
     color: "#ffcc00",
     bgColor: "#ffcccc",
