@@ -13,6 +13,7 @@
   --color-primary-800: #0e7169;
   --color-primary-900: #09443f;
   --font-nunito: Nunito, sans-serif;
+  --color-neutral: #fffafa;
 }
 
 @utility text-field {
