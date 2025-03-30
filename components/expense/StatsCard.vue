@@ -6,7 +6,7 @@ import { categories } from "../utils/categories";
 const expenseStore = useExpenseStore();
 
 const chartKey = ref(0);
-const expenseTypes = ref(["All", "One time", "Monthly", "Annual"]);
+const frequencies = ref(["All", "One time", "Monthly", "Annual"]);
 const selectedExpenseType = ref("All");
 
 const filteredExpenses = computed(() => {
@@ -35,11 +35,11 @@ function getCategory(category) {
       <AppCardBody>
         <BaseButtonGroup v-model="selectedExpenseType" class="mt-4">
           <BaseButton
-            v-for="(expenseType, index) in expenseTypes"
+            v-for="(frequency, index) in frequencies"
             :key="`expense-type-${index}`"
-            :value="expenseType"
+            :value="frequency"
           >
-            {{ expenseType }}
+            {{ frequency }}
           </BaseButton>
         </BaseButtonGroup>
 

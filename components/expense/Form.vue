@@ -9,7 +9,7 @@ const types = ref(["One time", "Monthly", "Annual"]);
 
 const formRef = ref(null);
 
-const formattedTypes = computed(() => {
+const formattedFrequencies = computed(() => {
   return types.value.map((item) => ({
     title: item,
     value: item,
@@ -90,11 +90,11 @@ onMounted(() => {
       </AppInput>
 
       <AppAutocomplete
-        :error="errors.types"
-        :items="formattedTypes"
+        :error="errors.frequency"
+        :items="formattedFrequencies"
         :rules="required"
-        label="Type"
-        name="types"
+        label="Frequency"
+        name="frequency"
       ></AppAutocomplete>
 
       <AppAutocomplete
