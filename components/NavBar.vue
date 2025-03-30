@@ -14,7 +14,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <nav class="bg-teal-50 py-4 px-8 rounded-full">
+  <nav class="bg-teal-50 py-4 px-8 rounded-full drop-shadow-md">
     <ul class="font-medium flex gap-5">
       <li v-for="link in links" :key="link.to" class="me-2">
         <NuxtLink :to="link.to" class="relative">
