@@ -41,7 +41,7 @@ function getCategory(category) {
       </BaseButton>
     </BaseButtonGroup>
 
-    <div class="flex gap-3">
+    <div class="flex flex-wrap gap-3">
       <AppCard>
         <div v-if="!filteredExpenses?.length" class="flex justify-center mt-6">
           No expenses! Add one
