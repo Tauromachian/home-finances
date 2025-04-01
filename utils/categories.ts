@@ -43,8 +43,8 @@ export const categories = [
   },
   {
     icon: "material-symbols:featured-seasonal-and-gifts",
-    color: "#ffcc00",
-    bgColor: "#ffcccc",
+    color: "#00b300",
+    bgColor: "#e6ffe6",
     name: "Gift",
   },
   {
@@ -52,6 +52,12 @@ export const categories = [
     color: "#ffcc00",
     bgColor: "#ffcccc",
     name: "Tax",
+  },
+  {
+    icon: "material-symbols:productivity",
+    color: "#3385ff",
+    bgColor: "#e6f0ff",
+    name: "Productivity",
   },
   {
     icon: "material-symbols:view-quilt",
