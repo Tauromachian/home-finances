@@ -106,7 +106,7 @@ onMounted(() => {
       ></AppAutocomplete>
 
       <AppInput
-        label="Description"
+        label="Description (optional)"
         as="textarea"
         type="text"
         name="description"
