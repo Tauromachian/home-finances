@@ -1,4 +1,11 @@
-export const categories = [
+type Category = {
+  icon: string;
+  color: string;
+  bgColor: string;
+  name: string;
+};
+
+export const categories: Category[] = [
   {
     icon: "material-symbols:home",
     color: "#990073",
