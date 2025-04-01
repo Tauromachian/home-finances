@@ -15,7 +15,7 @@ defineProps({
     required: true,
   },
 });
-const emit = defineEmits(["removeExpense"]);
+const emit = defineEmits(["remove"]);
 
 function remove() {
   emit("remove");
