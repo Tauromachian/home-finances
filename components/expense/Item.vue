@@ -1,5 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { initTooltips } from "flowbite";
+import type { PropType } from "vue";
 
 onMounted(() => {
   initTooltips();
@@ -11,7 +12,7 @@ defineProps({
     required: true,
   },
   category: {
-    type: Object,
+    type: Object as PropType<Category>,
     required: true,
   },
 });
