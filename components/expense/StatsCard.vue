@@ -43,6 +43,10 @@ function getCategory(category) {
 
     <div class="flex gap-3">
       <AppCard>
+        <div v-if="!filteredExpenses?.length" class="flex justify-center mt-6">
+          No expenses! Add one
+        </div>
+
         <AppCardBody>
           <ExpenseDonutChart
             v-if="filteredExpenses?.length"
@@ -54,6 +58,10 @@ function getCategory(category) {
       </AppCard>
 
       <AppCard>
+        <div v-if="!filteredExpenses?.length" class="flex justify-center mt-6">
+          No expenses! Add one
+        </div>
+
         <AppCardBody>
           <ExpenseItem
             v-for="expense in filteredExpenses"
@@ -65,12 +73,6 @@ function getCategory(category) {
           ></ExpenseItem>
         </AppCardBody>
       </AppCard>
-    </div>
-    <div class="max-h-screen overflow-scroll relative">
-      <div v-if="!filteredExpenses?.length" class="text-center my-20">
-        No expenses! Add one
-      </div>
-      <template v-else> </template>
     </div>
   </div>
 </template>
