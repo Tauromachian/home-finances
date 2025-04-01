@@ -25,11 +25,12 @@ function remove() {
 
 <template>
   <div class="flex items-center py-2">
-    <Icon
-      :name="category.icon"
-      :style="{ color: category.color }"
-      class="w-8 h-8 p-2 mr-3 rounded-full"
-    />
+    <div
+      class="min-w-8 w-8 h-8 mr-3 flex justify-center items-center rounded-full"
+      :style="{ background: category.bgColor }"
+    >
+      <Icon :name="category.icon" :style="{ color: category.color }" />
+    </div>
 
     <div class="w-full flex">
       <div class="flex flex-col text-gray-800">
