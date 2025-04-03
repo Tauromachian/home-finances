@@ -1,8 +1,6 @@
 <script setup>
 import { useExpenseStore } from "../stores/expenses";
 
-import { categories } from "../utils/categories";
-
 const expenseStore = useExpenseStore();
 
 const appToaster = ref(null);
@@ -107,11 +105,15 @@ onMounted(() => {
                 v-for="expense in filteredExpenses"
                 :key="expense.id"
                 :expense="expense"
-                :category="getCategory(expense.categories)"
+                :category="getCategory(expense.category)"
                 class="border-b last:border-0 border-gray-300"
                 @remove="expenseStore.removeExpense(expense.id)"
               ></ExpenseItem>
             </AppCardBody>
+          </AppCard>
+
+          <AppCard>
+            <AppCardBody> </AppCardBody>
           </AppCard>
         </div>
       </div>
