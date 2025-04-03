@@ -72,7 +72,7 @@ onMounted(() => {
       <AppInput
         label="Amount"
         type="text"
-        name="expense"
+        name="amount"
         input-class="pl-12"
         :rules="positiveNumber"
         :error="errors.expense"
@@ -102,7 +102,7 @@ onMounted(() => {
         :items="formattedCategories"
         :rules="required"
         label="Category"
-        name="categories"
+        name="category"
       ></AppAutocomplete>
 
       <AppInput
