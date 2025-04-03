@@ -1,11 +1,10 @@
-<script setup>
+<script setup lang="ts">
+import { categories } from "@/utils/categories";
+import type { Expense } from "~/types/expense";
+
 const props = defineProps({
   expenses: {
-    type: Array,
-    required: true,
-  },
-  categories: {
-    type: Array,
+    type: Array as PropType<Expense[]>,
     required: true,
   },
 });
@@ -37,22 +36,24 @@ const options = ref({
 });
 
 onMounted(() => {
-  const auxiliarArray = props.expenses.reduce((acum, item) => {
-    const { categories, expense } = item;
-    const category = acum.find((x) => x.categoryName === categories);
+  const totalByCategory = {};
 
-    if (category) {
-      category.total += parseInt(expense);
-    } else {
-      acum.push({ categoryName: categories, total: parseInt(expense) });
+  const auxiliarArray = props.expenses.reduce((acum, item) => {
+    const { category, amount } = item;
+
+    if (!totalByCategory[category]) {
+      totalByCategory[category] = 0;
     }
+
+    totalByCategory[category] = totalByCategory[category] += Number(amount);
+    acum.push({ categoryName: category, total: totalByCategory[category] });
 
     return acum;
   }, []);
 
   const expensesPerCategory = auxiliarArray.map((item) => {
     const { categoryName, total } = item;
-    const category = props.categories.find((x) => x.name === categoryName);
+    const category = categories.find((x) => x.name === categoryName);
     return {
       total,
       color: category.color,
