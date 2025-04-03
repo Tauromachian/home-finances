@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const messages = ref([]);
 const showToast = ref(false);
 
@@ -9,11 +9,14 @@ const props = defineProps({
   },
 });
 
-watch(props.message, (newValue) => {
-  if (!newValue) return;
+watch(
+  () => props.message,
+  (newValue) => {
+    if (!newValue) return;
 
-  openToast();
-});
+    openToast();
+  },
+);
 
 const openToast = (message) => {
   messages.value.push(message);
