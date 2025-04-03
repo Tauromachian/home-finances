@@ -14,7 +14,7 @@ watch(
   (newValue) => {
     if (!newValue) return;
 
-    openToast();
+    openToast(newValue);
   },
 );
 
