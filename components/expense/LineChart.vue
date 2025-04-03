@@ -9,6 +9,8 @@ const props = defineProps({
   },
 });
 
+const chartColors = ref([]);
+
 const series = computed(() => {
   const expensesObject = props.expenses.reduce((acum, expense: Expense) => {
     const { category, amount, frequency } = expense;
@@ -35,6 +37,8 @@ const series = computed(() => {
   const series = [];
 
   for (const key in expensesObject as object) {
+    chartColors.value.push(getColorByName(key));
+
     if (expensesObject.hasOwnProperty(key)) {
       series.push({
         name: key,
@@ -46,7 +50,8 @@ const series = computed(() => {
   return series;
 });
 
-const options = {
+const options = computed(() => ({
+  colors: chartColors.value,
   chart: {
     height: 350,
     type: "line",
@@ -62,7 +67,7 @@ const options = {
       text: "Money",
     },
   },
-};
+}));
 </script>
 
 <template>
