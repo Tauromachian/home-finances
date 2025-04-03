@@ -113,7 +113,9 @@ onMounted(() => {
           </AppCard>
 
           <AppCard>
-            <AppCardBody> </AppCardBody>
+            <AppCardBody>
+              <ExpenseLineChart :expenses="filteredExpenses"></ExpenseLineChart>
+            </AppCardBody>
           </AppCard>
         </div>
       </div>
