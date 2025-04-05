@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { initTooltips } from "flowbite";
 import type { PropType } from "vue";
 import type { Category } from "~/types/category";
-
-onMounted(() => {
-  initTooltips();
-});
 
 defineProps({
   expense: {

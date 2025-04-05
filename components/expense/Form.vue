@@ -1,6 +1,4 @@
 <script setup>
-import { initModals } from "flowbite";
-
 import { required, positiveNumber } from "@/utils/rules";
 import { categories } from "@/utils/categories";
 
@@ -31,10 +29,6 @@ function onSubmit(values) {
   emit("submit", values);
   formRef.value.resetForm();
 }
-
-onMounted(() => {
-  initModals();
-});
 </script>
 
 <template>
