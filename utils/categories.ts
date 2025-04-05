@@ -68,3 +68,7 @@ export const categories: Category[] = [
     name: "Others",
   },
 ];
+
+export function getColorByName(name: string) {
+  return categories.find((c) => c.name === name).color;
+}
