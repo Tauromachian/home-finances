@@ -28,7 +28,7 @@ function closeModal() {
         class="bg-white rounded-lg shadow-lg relative min-w-[300px] max-w-[500px]"
       >
         <button
-          class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-lg font-bold"
+          class="absolute z-10 top-2 right-2 text-gray-600 hover:text-red-500 text-lg font-bold"
           @click="closeModal"
         >
           ✕
