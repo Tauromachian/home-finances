@@ -22,9 +22,8 @@ function closeModal() {
     <div
       v-if="isOpen"
       class="fixed inset-0 flex items-center justify-center z-50"
-      @click.self="closeModal"
     >
-      <div class="fixed inset-0 bg-black opacity-40"></div>
+      <div class="fixed inset-0 bg-black opacity-40" @click="closeModal"></div>
       <div
         class="bg-white rounded-lg shadow-lg relative min-w-[300px] max-w-[500px]"
       >
