@@ -21,9 +21,10 @@ function closeModal() {
   <teleport to="body">
     <div
       v-if="isOpen"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      class="fixed inset-0 flex items-center justify-center z-50"
       @click.self="closeModal"
     >
+      <div class="fixed inset-0 bg-black opacity-40"></div>
       <div
         class="bg-white rounded-lg shadow-lg relative min-w-[300px] max-w-[500px]"
       >
