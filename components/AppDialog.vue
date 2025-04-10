@@ -34,7 +34,6 @@ function closeModal() {
           ✕
         </button>
         <slot></slot>
-        <!-- Slot for custom content -->
       </div>
     </div>
   </teleport>
