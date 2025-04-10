@@ -25,7 +25,7 @@ function closeModal() {
     >
       <div class="fixed inset-0 bg-black opacity-40" @click="closeModal"></div>
       <div
-        class="bg-white rounded-lg shadow-lg relative min-w-[300px] max-w-[500px]"
+        class="flex bg-white rounded-lg shadow-lg relative min-w-[300px] max-w-[500px]"
       >
         <button
           class="absolute z-10 top-2 right-2 text-gray-600 hover:text-red-500 text-lg font-bold"
