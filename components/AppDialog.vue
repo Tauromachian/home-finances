@@ -9,12 +9,27 @@ const emit = defineEmits<{
 
 const isOpen = ref(false);
 
-watchEffect(() => (isOpen.value = props.modelValue));
+const escapeEvent = (event: KeyboardEvent) => {
+  if (!isOpen.value) return;
 
+  if (event.key === "Escape") {
+    closeModal();
+  }
+};
+
+watchEffect(() => (isOpen.value = props.modelValue));
 function closeModal() {
   isOpen.value = false;
   emit("update:modelValue", false);
 }
+
+onMounted(() => {
+  document.addEventListener("keydown", escapeEvent);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", escapeEvent);
+});
 </script>
 
 <template>
