@@ -8,6 +8,7 @@ const fadingInOutArrow = ref(false);
 const chartKey = ref(0);
 const frequencies = ref(["All", "One time", "Monthly", "Annual"]);
 const selectedExpenseType = ref("All");
+const isOpen = ref(false);
 
 function scrollToStats() {
   const component = document.getElementById("expense-stats");
@@ -59,8 +60,12 @@ onMounted(() => {
   <div>
     <h1 class="text-3xl font-bold mb-5">Expenses Tracker</h1>
 
+    <BaseButton @click="isOpen = true" class="mb-5">Add Expense</BaseButton>
+
     <div class="flex flex-col md:flex-row gap-5 md:items-start">
-      <ExpenseForm @submit="submitForm"></ExpenseForm>
+      <AppDialog v-model="isOpen">
+        <ExpenseForm @submit="submitForm"></ExpenseForm>
+      </AppDialog>
 
       <div id="expense-stats" class="w-full">
         <BaseButtonGroup v-model="selectedExpenseType" class="mb-4">
