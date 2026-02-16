@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "license": "MIT",
-  "packageManager": "yarn@4.4.1",
+  "packageManager": "pnpm@10.29.3",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
