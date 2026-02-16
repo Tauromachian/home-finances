@@ -8,7 +8,7 @@ export default defineNuxtConfig({
   modules: ["@vee-validate/nuxt", "@pinia/nuxt", "@nuxt/eslint", "@nuxt/icon"],
 
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss() as any],
   },
 
   typescript: {
@@ -16,5 +16,5 @@ export default defineNuxtConfig({
     strict: false,
   },
 
-  compatibilityDate: "2025-03-14",
+  compatibilityDate: "2025-07-15",
 });
