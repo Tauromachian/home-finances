@@ -72,14 +72,10 @@ function onSubmit(values) {
         :error="errors.expense"
       >
         <template #prepend>
-          <div
-            class="bg-teal-50 text-teal-700 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-s-lg border peer-focus:border-teal-800"
-          >
-            <Icon
-              name="material-symbols-light:paid-outline"
-              class="text-xl"
-            ></Icon>
-          </div>
+          <Icon
+            name="material-symbols-light:paid-outline"
+            class="text-xl"
+          ></Icon>
         </template>
       </AppInput>
 
