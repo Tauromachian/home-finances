@@ -22,9 +22,7 @@ const form = defineModel({
       </div>
       <div class="my-auto ml-2">
         <span class="font-bold block text-lg"> Compound interest </span>
-        <span class="text-xs">
-          Fill in the form with the details of the compounding
-        </span>
+        <span class="text-xs"> Fill the form to compound </span>
       </div>
     </div>
     <form class="mx-7 my-4 pt-3">
