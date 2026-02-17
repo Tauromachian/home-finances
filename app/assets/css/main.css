@@ -17,5 +17,5 @@
 }
 
 @utility text-field {
-  @apply w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:outline-none focus:border-teal-800 focus:ring-teal-800;
+  @apply w-full border border-gray-300 px-3 py-2 rounded-sm shadow-sm focus:outline-none focus:border-teal-800 focus:ring-teal-800;
 }
