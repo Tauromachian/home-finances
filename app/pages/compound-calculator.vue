@@ -1,15 +1,26 @@
-<script setup>
-const appToaster = ref();
+<script setup lang="ts">
+import type { CompoundForm } from "~/types/compound";
 
-const compoundValue = ref(null);
+const form = reactive<CompoundForm>({
+  percent: 8,
+  years: 10,
+  initialAmount: 100,
+  monthlyContribution: 100,
+});
 
-function submitForm(form) {
-  compoundValue.value = { ...form };
+const compounedValue = computed(() => {
+  const initialAmount = form.initialAmount ?? 1;
+  const monthlyContribution = form.monthlyContribution ?? 1;
+  const percent = form.percent ?? 1;
+  const years = form.years ?? 1;
 
-  if (!appToaster?.value) return;
-
-  appToaster.value.openToast("New compoundValue added!");
-}
+  return compoundInterestWithMonthlyReinvestment(
+    initialAmount,
+    monthlyContribution,
+    percent,
+    years,
+  );
+});
 </script>
 
 <template>
@@ -17,9 +28,9 @@ function submitForm(form) {
     <h1 class="text-3xl font-bold mb-5">Compound Calculator</h1>
 
     <div class="flex flex-col md:flex-row gap-5 md:items-start">
-      <CompoundForm @submit="submitForm"></CompoundForm>
+      <CompoundForm v-model="form"></CompoundForm>
 
-      <CompoundStatsCard :compound-value="compoundValue"> </CompoundStatsCard>
+      <CompoundStatsCard :compound-value="compounedValue"> </CompoundStatsCard>
     </div>
 
     <AppToaster ref="appToaster"></AppToaster>
