@@ -31,9 +31,10 @@
   "devDependencies": {
     "@iconify-json/material-symbols-light": "^1.2.15",
     "@vue/typescript-plugin": "^3.2.4",
-    "eslint": "^10.0.0",
+    "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
+    "eslint-plugin-vue": "^10.8.0",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.4"
