@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
 
-  modules: ["@vee-validate/nuxt", "@pinia/nuxt", "@nuxt/eslint", "@nuxt/icon"],
+  modules: ["@vee-validate/nuxt", "@pinia/nuxt", "@nuxt/icon", "@nuxt/eslint"],
 
   vite: {
     plugins: [tailwindcss() as any],
@@ -17,4 +17,9 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: "2025-07-15",
+
+  app: {
+    pageTransition: { name: "page", mode: "out-in" },
+  },
 });
+
