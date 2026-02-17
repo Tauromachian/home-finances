@@ -65,7 +65,7 @@ function onSubmit(values) {
 
       <AppInput
         label="Amount"
-        type="text"
+        type="number"
         name="amount"
         input-class="pl-12"
         :rules="positiveNumber"

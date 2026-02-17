@@ -31,18 +31,19 @@ const form = defineModel({
         name="percent"
         v-model="form.percent"
         :rules="positiveNumber"
-        type="text"
+        type="number"
       ></AppInput>
 
       <AppInput
         label="Years Amount"
         v-model="form.years"
         name="yearsAmount"
+        type="number"
       ></AppInput>
 
       <AppInput
         label="Initial Amount"
-        type="text"
+        type="number"
         input-class="pl-12"
         name="initialAmount"
         :rules="positiveNumber"
@@ -57,7 +58,7 @@ const form = defineModel({
 
       <AppInput
         label="Monthly Contribution"
-        type="text"
+        type="number"
         input-class="pl-12"
         name="monthlyContribution"
         :rules="positiveNumber"
