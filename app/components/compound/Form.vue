@@ -46,6 +46,7 @@ const form = defineModel({
         type="number"
         input-class="pl-12"
         name="initialAmount"
+        v-model="form.initialAmount"
         :rules="positiveNumber"
       >
         <template #prepend>
@@ -61,6 +62,7 @@ const form = defineModel({
         type="number"
         input-class="pl-12"
         name="monthlyContribution"
+        v-model="form.monthlyContribution"
         :rules="positiveNumber"
       >
         <template #prepend>
