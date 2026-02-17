@@ -8,7 +8,7 @@ const form = reactive<CompoundForm>({
   monthlyContribution: 100,
 });
 
-const compounedValue = computed(() => {
+const compoundedValue = computed(() => {
   const initialAmount = form.initialAmount ?? 1;
   const monthlyContribution = form.monthlyContribution ?? 1;
   const percent = form.percent ?? 1;
@@ -27,10 +27,10 @@ const compounedValue = computed(() => {
   <div>
     <h1 class="text-3xl font-bold mb-5">Compound Calculator</h1>
 
-    <div class="flex flex-col md:flex-row gap-5 md:items-start">
-      <CompoundForm v-model="form"></CompoundForm>
+    <div class="flex flex-col gap-5 md:items-start">
+      <CompoundStatsCard :compound-value="compoundedValue"> </CompoundStatsCard>
 
-      <CompoundStatsCard :compound-value="compounedValue"> </CompoundStatsCard>
+      <CompoundForm v-model="form"></CompoundForm>
     </div>
 
     <AppToaster ref="appToaster"></AppToaster>
