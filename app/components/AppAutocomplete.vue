@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { Item } from "~/types/item";
+import type { Item } from "@/types/item";
 
-const model = defineModel({
+defineModel({
   type: String,
   default: "",
 });
@@ -11,7 +11,6 @@ const props = defineProps({
   label: { type: String, default: "" },
   items: {
     type: Array as PropType<Item[]>,
-    required: true,
     default: () => [],
   },
 });
@@ -104,19 +103,19 @@ onUnmounted(() => {
     <label :for="name">{{ label }}</label>
 
     <Field
+      ref="inputRef"
       v-model="searchQuery"
+      v-bind="$attrs"
+      class="text-field peer"
       :name="name"
       @input="onInput"
       @keydown="onKeyDown"
       @focus="isOpen = true"
-      ref="inputRef"
-      class="text-field peer"
-      v-bind="$attrs"
     />
     <Transition name="fade">
       <ul
-        ref="listRef"
         v-if="isOpen && filteredItems.length"
+        ref="listRef"
         class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg"
       >
         <li

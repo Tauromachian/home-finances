@@ -36,15 +36,13 @@ const series = computed(() => {
 
   const series = [];
 
-  for (const key in expensesObject as object) {
+  for (const key of Object.keys(expensesObject)) {
     chartColors.value.push(getColorByName(key));
 
-    if (expensesObject.hasOwnProperty(key)) {
-      series.push({
-        name: key,
-        data: expensesObject[key],
-      });
-    }
+    series.push({
+      name: key,
+      data: expensesObject[key],
+    });
   }
 
   return series;

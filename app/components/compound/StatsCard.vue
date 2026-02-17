@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps({
+defineProps({
   compoundValue: { type: Number, default: 1 },
 });
 </script>

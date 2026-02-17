@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
   label: { type: String, default: "" },
   error: { type: String, default: "" },
   inputClass: { type: String, default: "" },

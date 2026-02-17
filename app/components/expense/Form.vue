@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { required, positiveNumber } from "@/utils/rules";
 import { categories } from "@/utils/categories";
 
@@ -51,9 +51,9 @@ function onSubmit(values) {
     </div>
     <Form
       v-slot="{ errors }"
+      ref="formRef"
       class="mx-7 my-4 pt-3"
       @submit="onSubmit"
-      ref="formRef"
     >
       <AppInput
         label="Name"
