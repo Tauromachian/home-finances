@@ -26,6 +26,7 @@ function submitForm(form) {
   if (!appToaster?.value) return;
 
   appToaster.value.openToast("New expense added!");
+  isOpen.value = false;
 }
 
 function closeScrollDown() {
