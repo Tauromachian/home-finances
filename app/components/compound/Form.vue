@@ -37,7 +37,7 @@ const form = defineModel({
 
       <AppInput
         v-model="form.years"
-        label="Years Amount"
+        label="Years"
         min="1"
         name="yearsAmount"
         type="number"
