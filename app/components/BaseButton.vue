@@ -13,15 +13,23 @@ const props = defineProps({
     type: [String, Number],
     default: "",
   },
+  color: {
+    type: String,
+    default: "primary",
+  },
 });
 
 const classes = computed(() => {
   const calculatedClasses = {
-    text: "bg-transparent",
-    outlined: "border bg-transparent border-primary-700",
-    regular:
-      "bg-primary-500 text-white focus:bg-primary-700 focus:text-white hover:bg-primary-700",
+    text: ["bg-transparent"],
+    outlined: ["border", "bg-transparent", "border-primary-700"],
+    regular: ["text-white", "focus:text-white"],
   };
+
+  const color = props.color;
+  calculatedClasses.regular.push(
+    ` bg-${color}-500 focus:bg-${color}-700 hover:bg-${color}-700`.split(" "),
+  );
 
   if (props.variant) return calculatedClasses[props.variant];
 
