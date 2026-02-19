@@ -35,28 +35,23 @@ const options = ref({
 onMounted(() => {
   const totalByCategory = {};
 
-  const auxiliarArray = props.expenses.reduce((acum, item) => {
+  for (const item of props.expenses) {
     const { category, amount } = item;
 
-    if (!totalByCategory[category]) {
-      totalByCategory[category] = 0;
-    }
-
+    if (!totalByCategory[category]) totalByCategory[category] = 0;
     totalByCategory[category] = totalByCategory[category] += Number(amount);
-    acum.push({ categoryName: category, total: totalByCategory[category] });
+  }
 
-    return acum;
-  }, []);
-
-  const expensesPerCategory = auxiliarArray.map((item) => {
-    const { categoryName, total } = item;
+  const expensesPerCategory = [];
+  for (const categoryName of Object.keys(totalByCategory)) {
     const category = categories.find((x) => x.name === categoryName);
-    return {
-      total,
+
+    expensesPerCategory.push({
+      total: totalByCategory[categoryName],
       color: category.color,
       name: category.name,
-    };
-  });
+    });
+  }
 
   expensesPerCategory.sort((a, b) => b.total - a.total);
 
