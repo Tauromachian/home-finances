@@ -1,4 +1,6 @@
-<script setup>
+<script setup lang="ts">
+import type { Category } from "~/types/category";
+
 import { useExpenseStore } from "../stores/expenses";
 
 const expenseStore = useExpenseStore();
@@ -7,7 +9,7 @@ const appToaster = useTemplateRef("appToaster");
 
 const fadingInOutArrow = ref(false);
 const chartKey = ref(0);
-const frequencies = ref(["All", "One time", "Monthly", "Annual"]);
+const frequencies = ["All", "One time", "Monthly", "Annual"];
 const selectedExpenseType = ref("All");
 const isOpen = ref(false);
 
@@ -34,12 +36,10 @@ function closeScrollDown() {
   fadingInOutArrow.value = false;
 }
 
-function getCategory(category) {
-  return categories[
-    categories.findIndex((item) => {
-      return item.name == category;
-    })
-  ];
+function getCategory(category: string): Category {
+  return categories.find((item) => {
+    return item.name == category;
+  });
 }
 
 const filteredExpenses = computed(() => {
