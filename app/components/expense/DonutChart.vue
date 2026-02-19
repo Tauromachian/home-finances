@@ -60,22 +60,6 @@ onMounted(() => {
 
   expensesPerCategory.sort((a, b) => b.total - a.total);
 
-  if (expensesPerCategory.length > 5) {
-    const excedentArray = [...expensesPerCategory];
-    excedentArray.splice(0, 5);
-
-    const excedentTotal = excedentArray.reduce((total, item) => {
-      return total + item.total;
-    }, 0);
-
-    expensesPerCategory.splice(5, expensesPerCategory.length - 5);
-    expensesPerCategory.push({
-      total: excedentTotal,
-      color: "#a6a6a6",
-      name: "Others",
-    });
-  }
-
   chartLabels.value = [];
   chartColors.value = [];
   chartSeries.value = [];
