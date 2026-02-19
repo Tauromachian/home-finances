@@ -14,6 +14,8 @@ defineProps({
 });
 
 defineEmits(["remove"]);
+
+const isConfirmationDialogOpen = ref(false);
 </script>
 
 <template>
@@ -32,7 +34,7 @@ defineEmits(["remove"]);
       </div>
       <div class="flex flex-col ml-auto items-end">
         <span class="text-sm pr-3">$ {{ expense.amount }}</span>
-        <BaseButton variant="text" @click="$emit('remove')">
+        <BaseButton variant="text" @click="isConfirmationDialogOpen = true">
           <Icon
             name="material-symbols:delete-outline"
             class="w-5 h-5 text-red-700 hover:text-red-800 transition-all duration-100 ease-in-out"
@@ -40,5 +42,10 @@ defineEmits(["remove"]);
         </BaseButton>
       </div>
     </div>
+
+    <DialogConfirmDelete
+      v-model="isConfirmationDialogOpen"
+      @click:delete="$emit('remove')"
+    ></DialogConfirmDelete>
   </div>
 </template>
