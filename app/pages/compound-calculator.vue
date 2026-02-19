@@ -32,7 +32,5 @@ const compoundedValue = computed(() => {
 
       <CompoundForm v-model="form"></CompoundForm>
     </div>
-
-    <AppToaster ref="appToaster"></AppToaster>
   </div>
 </template>

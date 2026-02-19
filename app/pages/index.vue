@@ -5,7 +5,7 @@ import { useExpenseStore } from "../stores/expenses";
 
 const expenseStore = useExpenseStore();
 
-const appToaster = useTemplateRef("appToaster");
+const appToaster = inject<Ref>("appToaster");
 
 const fadingInOutArrow = ref(false);
 const chartKey = ref(0);
@@ -25,11 +25,11 @@ function scrollToStats() {
 
 function submitForm(form) {
   expenseStore.addExpense(form);
+  isOpen.value = false;
 
   if (!appToaster?.value) return;
 
   appToaster.value.openToast("New expense added!");
-  isOpen.value = false;
 }
 
 function closeScrollDown() {
@@ -125,8 +125,6 @@ onMounted(() => expenseStore.loadExpenses());
         </div>
       </div>
     </div>
-
-    <AppToaster ref="appToaster"></AppToaster>
 
     <ScrollDownArrow
       class="transition-opacity"
