@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const appToaster = useTemplateRef("appToaster");
+
+provide("appToaster", appToaster);
+</script>
+
 <template>
   <main class="font-nunito min-h-screen bg-neutral">
     <div class="max-w-7xl mx-4 lg:mx-auto pt-5">
@@ -5,6 +11,8 @@
 
       <NuxtPage />
     </div>
+
+    <AppToaster ref="appToaster"></AppToaster>
   </main>
 </template>
 
