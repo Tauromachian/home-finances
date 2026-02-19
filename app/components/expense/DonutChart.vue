@@ -25,7 +25,13 @@ const options = ref({
             show: true,
             fontSize: 18,
             formatter: function (w) {
-              return "$" + w.globals.seriesTotals.reduce((a, b) => a + b, 0);
+              return (
+                "$" +
+                w.globals.seriesTotals.reduce(
+                  (a: number, b: number) => a + b,
+                  0,
+                )
+              );
             },
             color: "#1f2937",
           },

@@ -1,13 +1,3 @@
-<template>
-  <button
-    class="px-3 py-2 rounded-full transition cursor-pointer"
-    :class="classes"
-    :value="value"
-  >
-    <slot></slot>
-  </button>
-</template>
-
 <script setup>
 import { computed } from "vue";
 
@@ -38,3 +28,13 @@ const classes = computed(() => {
   return calculatedClasses.regular;
 });
 </script>
+
+<template>
+  <button
+    class="px-3 py-2 rounded-full transition cursor-pointer"
+    :class="classes"
+    :value="value"
+  >
+    <slot></slot>
+  </button>
+</template>

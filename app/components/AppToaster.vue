@@ -18,7 +18,7 @@ watch(
   },
 );
 
-const openToast = (message) => {
+const openToast = (message: string) => {
   messages.value.push(message);
   showToast.value = true;
   closeToast();

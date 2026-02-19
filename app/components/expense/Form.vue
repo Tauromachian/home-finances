@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { required, positiveNumber } from "@/utils/rules";
 import { categories } from "@/utils/categories";
+import type { Expense } from "~/types/expense";
 
-const emit = defineEmits(["submit"]);
+const emit = defineEmits<{ submit: [expense: Expense] }>();
 const types = ref(["One time", "Monthly", "Annual"]);
 
 const formRef = ref(null);
@@ -25,8 +26,8 @@ const formattedCategories = computed(() => {
   }));
 });
 
-function onSubmit(values) {
-  emit("submit", values);
+function onSubmit(expense: Expense) {
+  emit("submit", expense);
   formRef.value.resetForm();
 }
 </script>
@@ -109,4 +110,3 @@ function onSubmit(values) {
     </Form>
   </AppCard>
 </template>
-

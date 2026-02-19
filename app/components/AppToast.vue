@@ -1,5 +1,6 @@
 <script setup>
 const emit = defineEmits(["close"]);
+
 defineProps({
   message: {
     type: String,

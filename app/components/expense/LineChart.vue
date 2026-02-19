@@ -4,14 +4,12 @@ import type { Expense } from "~/types/expense";
 
 const props = defineProps({
   expenses: {
-    type: Array,
+    type: Array as PropType<Expense[]>,
     required: true,
   },
 });
 
-const chartColors = ref([]);
-
-const series = computed(() => {
+const series = computed<{ name: string; data: Expense }[]>(() => {
   const expensesObject = props.expenses.reduce((acum, expense: Expense) => {
     const { category, amount, frequency } = expense;
 
@@ -37,8 +35,6 @@ const series = computed(() => {
   const series = [];
 
   for (const key of Object.keys(expensesObject)) {
-    chartColors.value.push(getColorByName(key));
-
     series.push({
       name: key,
       data: expensesObject[key],
@@ -46,6 +42,16 @@ const series = computed(() => {
   }
 
   return series;
+});
+
+const chartColors = computed(() => {
+  const colors = [];
+
+  for (const seriesItem of series.value) {
+    colors.push(getColorByName(seriesItem.name));
+  }
+
+  return colors;
 });
 
 const options = computed(() => ({
@@ -69,11 +75,13 @@ const options = computed(() => ({
 </script>
 
 <template>
-  <apexchart
-    type="line"
-    width="100%"
-    height="250px"
-    :options="options"
-    :series="series"
-  ></apexchart>
+  <ClientOnly>
+    <apexchart
+      type="line"
+      width="100%"
+      height="250px"
+      :options="options"
+      :series="series"
+    ></apexchart>
+  </ClientOnly>
 </template>

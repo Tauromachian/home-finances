@@ -3,7 +3,8 @@ import { useExpenseStore } from "../stores/expenses";
 
 const expenseStore = useExpenseStore();
 
-const appToaster = ref(null);
+const appToaster = useTemplateRef("appToaster");
+
 const fadingInOutArrow = ref(false);
 const chartKey = ref(0);
 const frequencies = ref(["All", "One time", "Monthly", "Annual"]);
@@ -52,9 +53,7 @@ const filteredExpenses = computed(() => {
 
 watch(filteredExpenses, () => chartKey.value++);
 
-onMounted(() => {
-  expenseStore.loadExpenses();
-});
+onMounted(() => expenseStore.loadExpenses());
 </script>
 
 <template>

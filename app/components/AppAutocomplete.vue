@@ -20,6 +20,7 @@ const emit = defineEmits(["selected"]);
 const searchQuery = ref("");
 const isOpen = ref(false);
 const selectedIndex = ref(-1);
+
 const inputRef = useTemplateRef("inputRef");
 const listRef = useTemplateRef("listRef");
 
