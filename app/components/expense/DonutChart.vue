@@ -35,6 +35,11 @@ const options = ref({
 onMounted(() => {
   const totalByCategory = {};
 
+  const categoryByName = categories.reduce((acum, category) => {
+    acum[category.name] = category;
+    return acum;
+  }, {});
+
   for (const item of props.expenses) {
     const { category, amount } = item;
 
@@ -44,7 +49,7 @@ onMounted(() => {
 
   const expensesPerCategory = [];
   for (const categoryName of Object.keys(totalByCategory)) {
-    const category = categories.find((x) => x.name === categoryName);
+    const category = categoryByName[categoryName];
 
     expensesPerCategory.push({
       total: totalByCategory[categoryName],
