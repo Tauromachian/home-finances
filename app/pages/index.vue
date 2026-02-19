@@ -8,7 +8,6 @@ const expenseStore = useExpenseStore();
 const appToaster = inject<Ref>("appToaster");
 
 const fadingInOutArrow = ref(false);
-const chartKey = ref(0);
 const frequencies = ["All", "One time", "Monthly", "Annual"];
 const selectedExpenseType = ref("All");
 const isOpen = ref(false);
@@ -51,8 +50,6 @@ const filteredExpenses = computed(() => {
   });
 });
 
-watch(filteredExpenses, () => chartKey.value++);
-
 onMounted(() => expenseStore.loadExpenses());
 </script>
 
@@ -90,7 +87,6 @@ onMounted(() => expenseStore.loadExpenses());
             <AppCardBody>
               <ExpenseDonutChart
                 v-if="filteredExpenses?.length"
-                :key="chartKey"
                 :expenses="filteredExpenses"
                 :categories="categories"
               ></ExpenseDonutChart>

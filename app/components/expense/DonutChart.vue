@@ -9,30 +9,7 @@ const props = defineProps({
   },
 });
 
-const chartLabels = ref([]);
-const chartColors = ref([]);
-const chartSeries = ref([]);
-
-const options = ref({
-  labels: chartLabels,
-  colors: chartColors,
-  plotOptions: {
-    pie: {
-      donut: {
-        labels: {
-          show: true,
-          total: {
-            show: true,
-            fontSize: 18,
-            color: "#1f2937",
-          },
-        },
-      },
-    },
-  },
-});
-
-onMounted(() => {
+const expensesByCategory = computed(() => {
   const totalByCategory = {};
 
   const categoryByName = categories.reduce((acum, category) => {
@@ -60,15 +37,45 @@ onMounted(() => {
 
   expensesPerCategory.sort((a, b) => b.total - a.total);
 
-  chartLabels.value = [];
-  chartColors.value = [];
-  chartSeries.value = [];
-  expensesPerCategory.forEach((category) => {
-    chartLabels.value.push(category.name);
-    chartColors.value.push(category.color);
-    chartSeries.value.push(category.total);
-  });
+  return expensesPerCategory;
 });
+
+const chartData = computed<{
+  labels: string[];
+  colors: string[];
+  series: number[];
+}>(() => {
+  const chartLabels = [];
+  const chartColors = [];
+  const chartSeries = [];
+
+  expensesByCategory.value.forEach((category) => {
+    chartLabels.push(category.name);
+    chartColors.push(category.color);
+    chartSeries.push(category.total);
+  });
+
+  return { labels: chartLabels, colors: chartColors, series: chartSeries };
+});
+
+const options = computed(() => ({
+  labels: chartData.value.labels,
+  colors: chartData.value.colors,
+  plotOptions: {
+    pie: {
+      donut: {
+        labels: {
+          show: true,
+          total: {
+            show: true,
+            fontSize: 18,
+            color: "#1f2937",
+          },
+        },
+      },
+    },
+  },
+}));
 </script>
 
 <template>
@@ -76,7 +83,7 @@ onMounted(() => {
     <apexchart
       type="donut"
       :options="options"
-      :series="chartSeries"
+      :series="chartData.series"
       class="my-2"
     ></apexchart>
   </ClientOnly>
