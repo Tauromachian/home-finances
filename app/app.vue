@@ -5,7 +5,14 @@ provide("appToaster", appToaster);
 </script>
 
 <template>
-  <main class="font-nunito min-h-screen bg-neutral">
+  <main class="font-sans min-h-screen bg-neutral">
+    <header class="max-w-7xl mx-4 lg:mx-auto pt-5">
+      <h1 class="font-serif text-4xl">
+        Home
+        <span class="text-accent italic"> Finances </span>
+      </h1>
+    </header>
+
     <div class="max-w-7xl mx-4 lg:mx-auto pt-5">
       <NavBar class="mb-8"></NavBar>
 
