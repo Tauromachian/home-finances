@@ -28,7 +28,7 @@ const classes = computed(() => {
 
   const color = props.color;
   calculatedClasses.regular.push(
-    `bg-${color}-0 focus:bg-${color}-700 hover:bg-${color}-700`.split(" "),
+    `bg-${color}-0 hover:bg-${color}-1`.split(" "),
   );
 
   if (props.variant) return calculatedClasses[props.variant];
