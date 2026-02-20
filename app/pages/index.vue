@@ -55,9 +55,9 @@ onMounted(() => expenseStore.loadExpenses());
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold mb-5">Expenses Tracker</h1>
-
-    <BaseButton class="mb-5" @click="isOpen = true">Add Expense</BaseButton>
+    <BaseButton class="mb-5" @click="isOpen = true">
+      <span class="text-xl">+</span> Add Expense
+    </BaseButton>
 
     <div class="flex flex-col md:flex-row gap-5 md:items-start">
       <AppDialog v-model="isOpen">
