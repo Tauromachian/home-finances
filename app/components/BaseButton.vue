@@ -15,7 +15,7 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: "primary",
+    default: "accent",
   },
 });
 
@@ -28,7 +28,7 @@ const classes = computed(() => {
 
   const color = props.color;
   calculatedClasses.regular.push(
-    ` bg-${color}-500 focus:bg-${color}-700 hover:bg-${color}-700`.split(" "),
+    `bg-${color}-0 focus:bg-${color}-700 hover:bg-${color}-700`.split(" "),
   );
 
   if (props.variant) return calculatedClasses[props.variant];
@@ -39,7 +39,7 @@ const classes = computed(() => {
 
 <template>
   <button
-    class="px-3 py-2 rounded-full transition cursor-pointer"
+    class="px-3 py-2 rounded-xl transition cursor-pointer"
     :class="classes"
     :value="value"
   >
