@@ -1,14 +1,30 @@
-<script setup>
+<script setup lang="ts">
 defineProps({
   label: { type: String, default: "" },
   error: { type: String, default: "" },
   inputClass: { type: String, default: "" },
 });
+
+const attrs = useAttrs();
+
+const [model, modifiers] = defineModel<number | string>({
+  set(v) {
+    if (modifiers.number) {
+      return Number(v);
+    }
+
+    return v;
+  },
+});
+
+const name = computed<string>(() => {
+  return String(attrs?.name ?? "");
+});
 </script>
 
 <template>
   <div>
-    <label :for="$attrs.name">{{ label }}</label>
+    <label :for="name">{{ label }}</label>
     <div class="mt-1 mb-5 text-gray-800 relative">
       <div
         v-if="$slots.prepend"
@@ -16,7 +32,13 @@ defineProps({
       >
         <slot name="prepend"></slot>
       </div>
-      <Field v-bind="$attrs" class="text-field" :class="inputClass" />
+      <Field
+        v-bind="$attrs"
+        v-model="model"
+        class="text-field"
+        :name="name"
+        :class="inputClass"
+      />
       <ErrorText> {{ error }}</ErrorText>
     </div>
   </div>
