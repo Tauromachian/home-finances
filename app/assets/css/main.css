@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap");
 
 @import "tailwindcss";
 
@@ -14,6 +14,9 @@
   --color-primary-900: #09443f;
   --color-danger: #c10007;
   --color-neutral: #f5f0e8;
+
+  --font-serif: "DM Serif Display", sans-serif;
+  --font-sans: "DM Sans", sans-serif;
 }
 
 @utility text-field {
