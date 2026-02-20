@@ -1,11 +1,9 @@
-<script setup>
-import { computed } from "vue";
-
+<script setup lang="ts">
 const props = defineProps({
   variant: {
     type: String,
     default: "",
-    validator(value) {
+    validator(value: string | undefined) {
       return ["", "text", "outlined"].includes(value);
     },
   },
@@ -28,7 +26,7 @@ const classes = computed(() => {
 
   const color = props.color;
   calculatedClasses.regular.push(
-    `bg-${color}-0 hover:bg-${color}-1`.split(" "),
+    ...`bg-${color}-0 hover:bg-${color}-1`.split(" "),
   );
 
   if (props.variant) return calculatedClasses[props.variant];
