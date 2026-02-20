@@ -7,7 +7,7 @@ provide("appToaster", appToaster);
 <template>
   <main class="font-sans min-h-screen bg-neutral">
     <header class="max-w-7xl mx-4 lg:mx-auto pt-5">
-      <h1 class="font-serif text-4xl">
+      <h1 class="font-serif text-4xl font-bold">
         Home
         <span class="text-accent italic"> Finances </span>
       </h1>
