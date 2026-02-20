@@ -18,7 +18,9 @@
   --color-neutral-1: #e0d8cc;
   --color-neutral-2: #fffdf8;
 
-  --color-accent: #c94f2a;
+  --color-accent-0: #c94f2a;
+  --color-accent-1: #c94f2a;
+  --color-accent-2: #c94f2a;
 
   --font-serif: "DM Serif Display", sans-serif;
   --font-sans: "DM Sans", sans-serif;
