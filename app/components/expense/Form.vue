@@ -34,26 +34,13 @@ function onSubmit(expense: Expense) {
 
 <template>
   <AppCard>
-    <div class="bg-teal-50 flex gap-4 mobile:rounded-t-md py-5 px-7">
-      <div
-        class="w-10 h-10 my-auto shadow-md bg-white flex justify-center items-center rounded-xl"
-      >
-        <Icon
-          name="material-symbols-light:chart-data-outline-rounded"
-          class="text-3xl text-primary-700 rotate-90"
-        />
-      </div>
-      <div class="my-auto ml-2">
-        <span class="font-bold block text-lg">Add new expense</span>
-        <span class="text-xs">
-          Fill in the form with the details of the expense
-        </span>
-      </div>
-    </div>
+    <AppCardBody>
+      <p class="font-serif text-2xl font-bold">New Expense</p>
+    </AppCardBody>
     <Form
       v-slot="{ errors }"
       ref="formRef"
-      class="mx-7 my-4 pt-3"
+      class="mx-7 mb-4"
       @submit="onSubmit"
     >
       <AppInput
@@ -104,7 +91,7 @@ function onSubmit(expense: Expense) {
         :error="errors.description"
       ></AppInput>
 
-      <div class="flex justify-end pt-5 pb-2">
+      <div class="flex justify-end pt-2 pb-2">
         <BaseButton> Add Expense </BaseButton>
       </div>
     </Form>
