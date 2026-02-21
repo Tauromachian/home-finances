@@ -17,12 +17,14 @@
   --color-accent-1: #b03f1e;
   --color-accent-2: #2a6b5a;
 
+  --color-input: #f5f0e8;
+
   --font-serif: "DM Serif Display", sans-serif;
   --font-sans: "DM Sans", sans-serif;
 }
 
 @utility text-field {
-  @apply w-full border border-gray-300 px-3 py-2 rounded-sm shadow-sm focus:outline-none focus:border-teal-800 focus:ring-teal-800;
+  @apply w-full border bg-input border-neutral-3 px-3 py-2 rounded-sm focus:outline-none focus:border-accent-0;
 }
 
 @utility card-body {
