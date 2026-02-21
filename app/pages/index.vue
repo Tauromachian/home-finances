@@ -46,6 +46,19 @@ const totalExpenses = computed(() => {
   }, 0);
 });
 
+const monthlyExpenses = computed(() => {
+  return filteredExpenses.value.reduce((acum: number, next: Expense) => {
+    if (next.frequency === "Monthly") {
+      const monthly = (next.amount / 12).toFixed(2);
+      acum += Number(monthly);
+    } else {
+      acum += next.amount;
+    }
+
+    return acum;
+  }, 0);
+});
+
 onMounted(() => expenseStore.loadExpenses());
 </script>
 
@@ -79,7 +92,7 @@ onMounted(() => expenseStore.loadExpenses());
           <AppCardBody>
             <p class="text-sm">Monthly</p>
             <p class="text-3xl font-serif mt-2 text-text-1">
-              ${{ totalExpenses }}
+              ${{ monthlyExpenses }}
             </p>
           </AppCardBody>
         </AppCard>
