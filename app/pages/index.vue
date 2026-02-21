@@ -38,6 +38,14 @@ const filteredExpenses = computed(() => {
   });
 });
 
+const totalExpenses = computed(() => {
+  return filteredExpenses.value.reduce((acum: number, next: Expense) => {
+    acum += Number(next.amount);
+
+    return acum;
+  }, 0);
+});
+
 onMounted(() => expenseStore.loadExpenses());
 </script>
 
@@ -57,7 +65,33 @@ onMounted(() => expenseStore.loadExpenses());
       </AppChip>
     </AppChipGroup>
 
-    <div class="grid grid-rows-3">
+    <div class="grid gap-5">
+      <div class="grid grid-cols-3 gap-5">
+        <AppCard>
+          <AppCardBody>
+            <p class="text-sm">Total Expenses</p>
+            <p class="text-3xl font-serif text-accent-0 mt-2">
+              ${{ totalExpenses }}
+            </p>
+          </AppCardBody>
+        </AppCard>
+        <AppCard>
+          <AppCardBody>
+            <p class="text-sm">Monthly</p>
+            <p class="text-3xl font-serif mt-2 text-text-1">
+              ${{ totalExpenses }}
+            </p>
+          </AppCardBody>
+        </AppCard>
+        <AppCard>
+          <AppCardBody>
+            <p class="text-sm">Total Expenses</p>
+            <p class="text-3xl font-serif mt-2 text-text-1">
+              {{ totalExpenses }}
+            </p>
+          </AppCardBody>
+        </AppCard>
+      </div>
       <div class="grid grid-cols-2 gap-5">
         <AppCard>
           <div
