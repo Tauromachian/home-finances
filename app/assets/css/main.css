@@ -24,7 +24,7 @@
 }
 
 @utility text-field {
-  @apply w-full border bg-input border-neutral-3 px-3 py-2 rounded-sm focus:outline-none focus:border-accent-0;
+  @apply w-full border bg-input border-neutral-3 px-3 py-2 rounded-lg focus:outline-none focus:border-accent-0;
 }
 
 @utility card-body {
