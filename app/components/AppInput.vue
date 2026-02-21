@@ -24,11 +24,11 @@ const name = computed<string>(() => {
 
 <template>
   <div>
-    <label :for="name">{{ label }}</label>
-    <div class="mt-1 mb-5 text-gray-800 relative">
+    <label :for="name" class="text-text-0">{{ label }}</label>
+    <div class="mt-1 mb-5 relative">
       <div
         v-if="$slots.prepend"
-        class="bg-teal-50 text-teal-700 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-sm border peer-focus:border-teal-800"
+        class="bg-teal-50 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-sm border peer-focus:border-teal-800"
       >
         <slot name="prepend"></slot>
       </div>
