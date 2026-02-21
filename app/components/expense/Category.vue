@@ -12,7 +12,7 @@ defineProps({
 <template>
   <AppCard>
     <AppCardBody>
-      <p class="uppercase text-sm font-bold">By Category</p>
+      <p class="text-md font-bold">By Category</p>
     </AppCardBody>
   </AppCard>
 </template>

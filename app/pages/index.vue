@@ -119,6 +119,9 @@ onMounted(() => expenseStore.loadExpenses());
       </div>
       <div class="grid grid-cols-2 gap-5 max-h-120">
         <AppCard class="h-full max-h-[inherit]">
+          <AppCardBody>
+            <p class="text-md font-bold">Breakdown</p>
+          </AppCardBody>
           <div
             v-if="!filteredExpenses?.length"
             class="flex justify-center mt-6"
@@ -144,6 +147,7 @@ onMounted(() => expenseStore.loadExpenses());
           </div>
 
           <AppCardBody>
+            <p class="text-md font-bold">Expenses</p>
             <ExpenseItem
               v-for="expense in filteredExpenses"
               :key="expense.id"
