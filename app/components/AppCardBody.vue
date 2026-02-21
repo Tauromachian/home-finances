@@ -1,5 +1,5 @@
 <template>
-  <div class="px-7 py-3">
+  <div class="card-body">
     <slot></slot>
   </div>
 </template>

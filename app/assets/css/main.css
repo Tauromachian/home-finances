@@ -26,5 +26,5 @@
 }
 
 @utility card-body {
-  @apply px-7 py-3;
+  @apply px-6 py-4;
 }
