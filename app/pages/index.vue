@@ -117,8 +117,8 @@ onMounted(() => expenseStore.loadExpenses());
           </AppCardBody>
         </AppCard>
       </div>
-      <div class="grid grid-cols-2 gap-5">
-        <AppCard>
+      <div class="grid grid-cols-2 gap-5 max-h-120">
+        <AppCard class="h-full max-h-[inherit]">
           <div
             v-if="!filteredExpenses?.length"
             class="flex justify-center mt-6"
@@ -135,7 +135,7 @@ onMounted(() => expenseStore.loadExpenses());
           </AppCardBody>
         </AppCard>
 
-        <AppCard>
+        <AppCard class="h-full max-h-[inherit]">
           <div
             v-if="!filteredExpenses?.length"
             class="flex justify-center mt-6"
