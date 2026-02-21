@@ -11,21 +11,10 @@ const form = defineModel({
 
 <template>
   <AppCard>
-    <div class="bg-teal-50 flex gap-4 mobile:rounded-t-md py-5 px-7">
-      <div
-        class="w-10 h-10 my-auto shadow-md bg-white flex justify-center items-center rounded-xl"
-      >
-        <Icon
-          name="material-symbols-light:chart-data-outline-rounded"
-          class="text-3xl text-primary-700"
-        />
-      </div>
-      <div class="my-auto ml-2">
-        <span class="font-bold block text-lg"> Compound interest </span>
-        <span class="text-xs"> Fill the form to compound </span>
-      </div>
-    </div>
-    <form class="mx-7 my-4 pt-3">
+    <AppCardBody>
+      <p class="font-serif text-text-1 text-2xl font-bold">Compound interest</p>
+    </AppCardBody>
+    <form class="mx-7 mb-2 pt-3">
       <AppInput
         v-model.number="form.percent"
         label="Percent(%)"
