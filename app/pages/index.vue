@@ -29,7 +29,7 @@ function getCategory(category: string): Category {
   });
 }
 
-const filteredExpenses = computed(() => {
+const filteredExpenses = computed<Expense[]>(() => {
   const allExpenses = expenseStore.expenses;
 
   return allExpenses.filter((expense) => {
