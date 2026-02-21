@@ -65,15 +65,15 @@ onMounted(() => expenseStore.loadExpenses());
       </AppDialog>
 
       <div id="expense-stats" class="w-full">
-        <BaseButtonGroup v-model="selectedExpenseType" class="mb-4">
-          <BaseButton
+        <AppChipGroup v-model="selectedExpenseType" class="mb-4">
+          <AppChip
             v-for="(frequency, index) in frequencies"
             :key="`expense-type-${index}`"
             :value="frequency"
           >
             {{ frequency }}
-          </BaseButton>
-        </BaseButtonGroup>
+          </AppChip>
+        </AppChipGroup>
 
         <div class="flex flex-wrap gap-3">
           <AppCard>
