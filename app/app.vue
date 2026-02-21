@@ -5,7 +5,7 @@ provide("appToaster", appToaster);
 </script>
 
 <template>
-  <main class="font-sans min-h-screen bg-neutral-0">
+  <main class="font-sans min-h-screen bg-neutral-0 text-text-0">
     <header class="max-w-7xl mx-4 lg:mx-auto pt-5">
       <h1 class="font-serif text-4xl font-bold">
         Home
