@@ -40,7 +40,7 @@ onUnmounted(() => {
     >
       <div class="fixed inset-0 bg-black opacity-40" @click="closeModal"></div>
       <div
-        class="flex bg-white rounded-lg shadow-lg relative min-w-75 max-w-125"
+        class="flex bg-white rounded-2xl shadow-lg relative min-w-75 max-w-125"
       >
         <button
           class="absolute z-10 top-2 cursor-pointer right-4 text-gray-600 hover:text-red-500 text-lg font-bold"
