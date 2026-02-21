@@ -4,13 +4,14 @@ import type { Expense } from "~/types/expense";
 
 import { useExpenseStore } from "../stores/expenses";
 
+type Frequency = "All" | "One time" | "Monthly" | "Annual";
+
 const expenseStore = useExpenseStore();
 
 const appToaster = inject<Ref>("appToaster");
 
-const fadingInOutArrow = ref(false);
-const frequencies = ["All", "One time", "Monthly", "Annual"];
-const selectedExpenseType = ref("All");
+const frequencies: Frequency[] = ["All", "One time", "Monthly", "Annual"];
+const selectedExpenseType = ref<Frequency>("All");
 const isOpen = ref(false);
 
 function scrollToStats() {
