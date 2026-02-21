@@ -59,6 +59,18 @@ const monthlyExpenses = computed(() => {
   }, 0);
 });
 
+const categoriesCount = computed(() => {
+  const categoriesObj = filteredExpenses.value.reduce(
+    (acum: Record<string, boolean>, next: Expense) => {
+      acum[next.category] = true;
+      return acum;
+    },
+    {},
+  );
+
+  return Object.keys(categoriesObj).length;
+});
+
 onMounted(() => expenseStore.loadExpenses());
 </script>
 
@@ -98,9 +110,9 @@ onMounted(() => expenseStore.loadExpenses());
         </AppCard>
         <AppCard>
           <AppCardBody>
-            <p class="text-sm">Total Expenses</p>
+            <p class="text-sm">Categories</p>
             <p class="text-3xl font-serif mt-2 text-text-1">
-              {{ totalExpenses }}
+              {{ categoriesCount }}
             </p>
           </AppCardBody>
         </AppCard>
