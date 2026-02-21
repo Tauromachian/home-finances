@@ -112,12 +112,6 @@ onMounted(() => expenseStore.loadExpenses());
               ></ExpenseItem>
             </AppCardBody>
           </AppCard>
-
-          <AppCard>
-            <AppCardBody>
-              <ExpenseLineChart :expenses="filteredExpenses"></ExpenseLineChart>
-            </AppCardBody>
-          </AppCard>
         </div>
       </div>
     </div>
