@@ -25,8 +25,6 @@ const compoundedValue = computed(() => {
 
 <template>
   <div>
-    <h1 class="text-3xl font-bold mb-5">Compound Calculator</h1>
-
     <div class="flex flex-col gap-5 md:items-start">
       <CompoundStatsCard :compound-value="compoundedValue"> </CompoundStatsCard>
 
