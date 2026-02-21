@@ -14,16 +14,6 @@ const frequencies: Frequency[] = ["All", "One time", "Monthly", "Annual"];
 const selectedExpenseType = ref<Frequency>("All");
 const isOpen = ref(false);
 
-function scrollToStats() {
-  const component = document.getElementById("expense-stats");
-
-  if (!component) return;
-
-  component.scrollIntoView({ behavior: "smooth" });
-
-  closeScrollDown();
-}
-
 function submitForm(form: Expense) {
   expenseStore.addExpense(form);
   isOpen.value = false;
@@ -31,10 +21,6 @@ function submitForm(form: Expense) {
   if (!appToaster?.value) return;
 
   appToaster.value.openToast("New expense added!");
-}
-
-function closeScrollDown() {
-  fadingInOutArrow.value = false;
 }
 
 function getCategory(category: string): Category {
@@ -61,71 +47,60 @@ onMounted(() => expenseStore.loadExpenses());
       <span class="text-xl">+</span> Add Expense
     </BaseButton>
 
-    <div class="flex flex-col md:flex-row gap-5 md:items-start">
-      <AppDialog v-model="isOpen">
-        <ExpenseForm @submit="submitForm"></ExpenseForm>
-      </AppDialog>
+    <AppChipGroup v-model="selectedExpenseType" class="mb-4">
+      <AppChip
+        v-for="(frequency, index) in frequencies"
+        :key="`expense-type-${index}`"
+        :value="frequency"
+      >
+        {{ frequency }}
+      </AppChip>
+    </AppChipGroup>
 
-      <div id="expense-stats" class="w-full">
-        <AppChipGroup v-model="selectedExpenseType" class="mb-4">
-          <AppChip
-            v-for="(frequency, index) in frequencies"
-            :key="`expense-type-${index}`"
-            :value="frequency"
+    <div class="grid grid-rows-3">
+      <div class="grid grid-cols-2 gap-5">
+        <AppCard>
+          <div
+            v-if="!filteredExpenses?.length"
+            class="flex justify-center mt-6"
           >
-            {{ frequency }}
-          </AppChip>
-        </AppChipGroup>
+            No expenses! Add one
+          </div>
 
-        <div class="flex flex-wrap gap-3">
-          <AppCard>
-            <div
-              v-if="!filteredExpenses?.length"
-              class="flex justify-center mt-6"
-            >
-              No expenses! Add one
-            </div>
+          <AppCardBody>
+            <ExpenseDonutChart
+              v-if="filteredExpenses?.length"
+              :expenses="filteredExpenses"
+              :categories="categories"
+            ></ExpenseDonutChart>
+          </AppCardBody>
+        </AppCard>
 
-            <AppCardBody>
-              <ExpenseDonutChart
-                v-if="filteredExpenses?.length"
-                :expenses="filteredExpenses"
-                :categories="categories"
-              ></ExpenseDonutChart>
-            </AppCardBody>
-          </AppCard>
+        <AppCard>
+          <div
+            v-if="!filteredExpenses?.length"
+            class="flex justify-center mt-6"
+          >
+            No expenses! Add one
+          </div>
 
-          <AppCard>
-            <div
-              v-if="!filteredExpenses?.length"
-              class="flex justify-center mt-6"
-            >
-              No expenses! Add one
-            </div>
-
-            <AppCardBody>
-              <ExpenseItem
-                v-for="expense in filteredExpenses"
-                :key="expense.id"
-                :expense="expense"
-                :category="getCategory(expense.category)"
-                class="border-b last:border-0 border-gray-300"
-                @remove="expenseStore.removeExpense(expense.id)"
-              ></ExpenseItem>
-            </AppCardBody>
-          </AppCard>
-        </div>
+          <AppCardBody>
+            <ExpenseItem
+              v-for="expense in filteredExpenses"
+              :key="expense.id"
+              :expense="expense"
+              :category="getCategory(expense.category)"
+              class="border-b last:border-0 border-gray-300"
+              @remove="expenseStore.removeExpense(expense.id)"
+            ></ExpenseItem>
+          </AppCardBody>
+        </AppCard>
       </div>
     </div>
 
-    <ScrollDownArrow
-      class="transition-opacity"
-      :class="{
-        'opacity-100': fadingInOutArrow,
-        'opacity-0': !fadingInOutArrow,
-      }"
-      @scroll-to-stats="scrollToStats"
-    ></ScrollDownArrow>
+    <AppDialog v-model="isOpen">
+      <ExpenseForm @submit="submitForm"></ExpenseForm>
+    </AppDialog>
   </div>
 </template>
 
