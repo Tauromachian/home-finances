@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Category } from "~/types/category";
+import type { Expense } from "~/types/expense";
 
 import { useExpenseStore } from "../stores/expenses";
 
@@ -22,7 +23,7 @@ function scrollToStats() {
   closeScrollDown();
 }
 
-function submitForm(form) {
+function submitForm(form: Expense) {
   expenseStore.addExpense(form);
   isOpen.value = false;
 
