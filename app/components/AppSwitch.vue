@@ -2,7 +2,7 @@
 const model = defineModel<boolean>();
 
 const classes = computed(() => {
-  const inactiveClasses = ["bg-[#5A6478]"];
+  const inactiveClasses = ["bg-text-0"];
   const activeClasses = ["translate-x-6", "bg-accent-0"];
 
   return model.value ? activeClasses : inactiveClasses;
