@@ -161,8 +161,6 @@ onMounted(() => expenseStore.loadExpenses());
           </AppCardBody>
         </AppCard>
       </div>
-
-      <ExpenseCategory></ExpenseCategory>
     </div>
 
     <AppDialog v-model="isOpen">
