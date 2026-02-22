@@ -147,15 +147,17 @@ onMounted(() => expenseStore.loadExpenses());
           </div>
 
           <AppCardBody>
-            <p class="text-md font-bold">Expenses</p>
-            <ExpenseItem
-              v-for="expense in filteredExpenses"
-              :key="expense.id"
-              :expense="expense"
-              :category="getCategory(expense.category)"
-              class="border-b last:border-0 border-gray-300"
-              @remove="expenseStore.removeExpense(expense.id)"
-            ></ExpenseItem>
+            <p class="text-md font-bold mb-4">Expenses</p>
+            <div class="flex flex-col gap-3">
+              <ExpenseItem
+                v-for="expense in filteredExpenses"
+                :key="expense.id"
+                :expense="expense"
+                variant="outlined"
+                :category="getCategory(expense.category)"
+                @remove="expenseStore.removeExpense(expense.id)"
+              ></ExpenseItem>
+            </div>
           </AppCardBody>
         </AppCard>
       </div>
