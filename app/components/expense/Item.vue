@@ -30,7 +30,7 @@ const isConfirmationDialogOpen = ref(false);
         </div>
 
         <p
-          class="ml-auto rounded-full bg-green-800 text-white px-2 text-sm uppercase mr-2"
+          class="ml-auto rounded-full bg-green-800 text-white px-2 text-sm uppercase mr-3"
         >
           {{ expense.frequency }}
         </p>
