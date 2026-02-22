@@ -6,7 +6,7 @@ const { variant = "" } = defineProps<{
 const classes = computed(() => {
   const classesByVariant = {
     "": ["shadow-sm", "bg-neutral-2"],
-    outlined: ["border", "border-border-0", "bg-neutral-0"],
+    outlined: ["border", "border-neutral-1", "bg-neutral-0"],
   };
 
   return classesByVariant[variant];

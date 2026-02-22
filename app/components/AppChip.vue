@@ -37,7 +37,7 @@ const classes = computed(() => {
 
 <template>
   <button
-    class="rounded-full px-4 py-2 text-sm cursor-pointer text-text-1 border-neutral-3"
+    class="rounded-full px-4 py-2 text-sm cursor-pointer text-text-1 border-neutral-1"
     :class="classes"
     :value="value"
   >

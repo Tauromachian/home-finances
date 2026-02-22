@@ -11,20 +11,17 @@
   --color-neutral-0: #eef1f7;
   --color-neutral-1: #d4dae8;
   --color-neutral-2: #f8f9fc;
-  --color-neutral-3: #d4dae8;
 
   --color-accent-0: #2563eb;
   --color-accent-1: #1b5be8;
   --color-accent-2: #5a6478;
-
-  --color-border-0: #d4dae8;
 
   --font-serif: "DM Serif Display", sans-serif;
   --font-sans: "DM Sans", sans-serif;
 }
 
 @utility text-field {
-  @apply w-full border bg-neutral-0 border-neutral-3 px-3 py-2 rounded-xl focus:outline-none focus:border-accent-0;
+  @apply w-full border bg-neutral-0 border-neutral-1 px-3 py-2 rounded-xl focus:outline-none focus:border-accent-0;
 }
 
 @utility card-body {
