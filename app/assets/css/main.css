@@ -2,6 +2,8 @@
 
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
 @theme {
   --color-danger-0: #c10007;
 
@@ -18,6 +20,21 @@
 
   --font-serif: "DM Serif Display", sans-serif;
   --font-sans: "DM Sans", sans-serif;
+}
+
+@variant dark {
+  --color-danger-0: #c10007;
+
+  --color-text-0: #6b7a96;
+  --color-text-1: #e4eaf5;
+
+  --color-neutral-0: #0d1117;
+  --color-neutral-1: #1e2736;
+  --color-neutral-2: #161c27;
+
+  --color-accent-0: #3b82f6;
+  --color-accent-1: #1b5be8;
+  --color-accent-2: #5a6478;
 }
 
 @utility text-field {
