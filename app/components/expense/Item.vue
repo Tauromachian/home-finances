@@ -15,7 +15,11 @@ const isConfirmationDialogOpen = ref(false);
         class="min-w-12 w-12 h-12 mr-3 flex justify-center items-center rounded-md"
         :style="{ background: category.color + '12' }"
       >
-        <Icon :name="category.icon" :style="{ color: category.color }" />
+        <Icon
+          :size="22"
+          :name="category.icon"
+          :style="{ color: category.color }"
+        />
       </div>
 
       <div class="w-full flex items-center">
