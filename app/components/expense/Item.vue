@@ -13,7 +13,7 @@ const isConfirmationDialogOpen = ref(false);
     <AppCardBody class="flex items-center py-2">
       <div
         class="min-w-12 w-12 h-12 mr-3 flex justify-center items-center rounded-md"
-        :style="{ background: category.bgColor }"
+        :style="{ background: category.color + '12' }"
       >
         <Icon :name="category.icon" :style="{ color: category.color }" />
       </div>
