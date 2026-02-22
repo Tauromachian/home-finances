@@ -84,7 +84,7 @@ const options = computed(() => ({
       type="donut"
       :options="options"
       :series="chartData.series"
-      class="mr-20"
+      class="mr-20 ml-5 mb-5"
     ></apexchart>
   </ClientOnly>
 </template>
