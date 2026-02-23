@@ -35,7 +35,7 @@ function onSubmit(expense: Expense) {
 <template>
   <AppCard>
     <AppCardBody>
-      <p class="font-serif text-2xl font-bold">New Expense</p>
+      <p class="font-serif text-2xl font-bold text-text-1">New Expense</p>
     </AppCardBody>
     <Form
       v-slot="{ errors }"
