@@ -111,11 +111,14 @@ onMounted(() => expenseStore.loadExpenses());
           <AppCardBody>
             <p class="text-md font-bold">Breakdown</p>
           </AppCardBody>
+
           <div
             v-if="!filteredExpenses?.length"
-            class="flex justify-center mt-6"
+            class="flex flex-col items-center gap-5 justify-center my-6"
           >
-            No expenses! Add one
+            <Icon size="48" name="material-symbols:note-outline"></Icon>
+
+            <p>No expenses! Add one</p>
           </div>
 
           <AppCardBody>
@@ -128,13 +131,6 @@ onMounted(() => expenseStore.loadExpenses());
         </AppCard>
 
         <AppCard class="h-full max-h-[inherit]">
-          <div
-            v-if="!filteredExpenses?.length"
-            class="flex justify-center mt-6"
-          >
-            No expenses! Add one
-          </div>
-
           <AppCardBody class="max-h-full">
             <p class="text-md font-bold mb-4">Expenses</p>
             <div class="flex flex-col gap-3 max-h-96 overflow-y-scroll">
@@ -146,6 +142,14 @@ onMounted(() => expenseStore.loadExpenses());
                 :category="getCategory(expense.category)"
                 @remove="expenseStore.removeExpense(expense.id)"
               ></ExpenseItem>
+            </div>
+
+            <div
+              v-if="!filteredExpenses?.length"
+              class="flex flex-col items-center gap-5 justify-center my-6"
+            >
+              <Icon size="48" name="material-symbols:note-outline"></Icon>
+              <p>No expenses! Add one</p>
             </div>
           </AppCardBody>
         </AppCard>
