@@ -1,11 +1,12 @@
 <script setup lang="ts">
-const { variant = "" } = defineProps<{
+const { variant = "", color = "neutral-2" } = defineProps<{
   variant?: "" | "outlined";
+  color?: string;
 }>();
 
 const classes = computed(() => {
   const classesByVariant = {
-    "": ["shadow-sm", "bg-neutral-2"],
+    "": ["shadow-sm", `bg-${color}`],
     outlined: ["border", "border-neutral-1", "bg-neutral-0"],
   };
 
