@@ -17,6 +17,8 @@
   --color-accent-0: #2563eb;
   --color-accent-1: #1b5be8;
   --color-accent-2: #5a6478;
+  --color-accent-3: #0f1623;
+  --color-accent-4: #0ea5e9;
 
   --font-serif: "DM Serif Display", sans-serif;
   --font-sans: "DM Sans", sans-serif;
@@ -35,6 +37,8 @@
   --color-accent-0: #3b82f6;
   --color-accent-1: #1b5be8;
   --color-accent-2: #5a6478;
+  --color-accent-3: #e4eaf5;
+  --color-accent-4: #3b82f6;
 }
 
 @utility text-field {
