@@ -21,7 +21,7 @@ jobs:
         run: pnpm install --production
 
       - name: Build
-        run: pnpm run generate # The build command of your project
+        run: pnpm dlx nuxt generate
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop
