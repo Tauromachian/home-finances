@@ -101,7 +101,7 @@ onUnmounted(() => {
 
 <template>
   <div class="relative mt-1 mb-5">
-    <label :for="name">{{ label }}</label>
+    <label :for="name" class="text-text-0">{{ label }}</label>
 
     <Field
       ref="inputRef"
