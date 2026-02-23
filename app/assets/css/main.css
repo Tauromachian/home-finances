@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source inline("{hover:,}bg-accent-{0,1,2,3,4}");
+
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
