@@ -5,7 +5,8 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 @theme {
-  --color-danger-0: #c10007;
+  --color-danger-0: #e7000b;
+  --color-danger-1: #c10007;
 
   --color-text-0: #5a6478;
   --color-text-1: #0f1623;
@@ -25,7 +26,8 @@
 }
 
 @variant dark {
-  --color-danger-0: #c10007;
+  --color-danger-0: #e7000b;
+  --color-danger-1: #c10007;
 
   --color-text-0: #6b7a96;
   --color-text-1: #e4eaf5;
