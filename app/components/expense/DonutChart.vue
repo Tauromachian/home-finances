@@ -9,6 +9,15 @@ const props = defineProps({
   },
 });
 
+const theme = inject<Ref<string>>("theme");
+const textColor = ref<string>("Light");
+
+watch(theme, () => {
+  textColor.value = getComputedStyle(document.documentElement).getPropertyValue(
+    "--color-text-1",
+  );
+});
+
 const expensesByCategory = computed(() => {
   const totalByCategory = {};
 
@@ -50,7 +59,7 @@ const chartData = computed<{
   const chartSeries = [];
 
   expensesByCategory.value.forEach((category) => {
-    chartLabels.push(category.name);
+    chartLabels.push(`${category.name} €${category.total}`);
     chartColors.push(category.color);
     chartSeries.push(category.total);
   });
@@ -58,24 +67,45 @@ const chartData = computed<{
   return { labels: chartLabels, colors: chartColors, series: chartSeries };
 });
 
-const options = computed(() => ({
-  labels: chartData.value.labels,
-  colors: chartData.value.colors,
-  plotOptions: {
-    pie: {
-      donut: {
-        labels: {
-          show: true,
-          total: {
+const options = computed(() => {
+  return {
+    labels: chartData.value.labels,
+    colors: chartData.value.colors,
+    legend: {
+      formatter: function (val: string) {
+        const [firstSection, secondSection] = val.split("€");
+
+        return `<span class="font-sans text-md md:text-lg ml-2">
+                    ${firstSection}
+                    <span class="text-text-1 font-bold">€${secondSection}
+                    </span>
+              </span>`;
+      },
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
             show: true,
-            fontSize: 18,
-            color: "#1f2937",
+            value: {
+              show: true,
+              fontSize: "28px",
+              fontFamily: '"DM Serif Display", sans-serif',
+              fontWeight: 700,
+              color: textColor.value,
+            },
+            total: {
+              show: true,
+              fontSize: 18,
+              color: textColor.value,
+              fontFamily: '"DM Sans", sans-serif',
+            },
           },
         },
       },
     },
-  },
-}));
+  };
+});
 </script>
 
 <template>
@@ -84,7 +114,7 @@ const options = computed(() => ({
       type="donut"
       :options="options"
       :series="chartData.series"
-      class="mr-20 ml-5 mb-5"
+      class="mx-5 mb-5"
     ></apexchart>
   </ClientOnly>
 </template>
