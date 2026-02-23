@@ -91,7 +91,7 @@ onMounted(() => expenseStore.loadExpenses());
     </AppChipGroup>
 
     <div class="grid gap-5">
-      <div class="grid grid-cols-3 gap-5">
+      <div class="grid md:grid-cols-3 gap-5">
         <AppCard>
           <AppCardBody>
             <p class="text-sm">Total Expenses</p>
@@ -117,7 +117,7 @@ onMounted(() => expenseStore.loadExpenses());
           </AppCardBody>
         </AppCard>
       </div>
-      <div class="grid grid-cols-2 gap-5 max-h-120">
+      <div class="grid md:grid-cols-2 gap-5 max-h-120">
         <AppCard class="h-full max-h-[inherit]">
           <AppCardBody>
             <p class="text-md font-bold">Breakdown</p>
