@@ -3,6 +3,10 @@ const appToaster = useTemplateRef("appToaster");
 
 const theme = ref(false);
 
+const themeName = computed(() => {
+  return theme.value ? "Dark" : "Light";
+});
+
 watch(theme, (value) => {
   const html = document.querySelector("html");
   html.setAttribute("data-theme", value ? "dark" : "light");
@@ -19,7 +23,7 @@ provide("appToaster", appToaster);
         <span class="text-accent-0 italic"> Finances </span>
       </h1>
 
-      <AppSwitch v-model="theme" class="ml-auto"></AppSwitch>
+      <AppSwitch v-model="theme" class="ml-auto" :label="themeName"></AppSwitch>
     </header>
 
     <div class="max-w-7xl mx-4 lg:mx-auto pt-5">
