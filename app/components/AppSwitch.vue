@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+defineProps<{ label?: string }>();
+
 const model = defineModel<boolean>();
 
 const classes = computed(() => {
@@ -10,16 +12,21 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <button
-    type="button"
-    class="rounded-full bg-neutral-1 w-12 h-6 cursor-pointer"
-    @click="model = !model"
-  >
-    <div
-      class="rounded-full h-4 w-4 transition duration-200 ease-in-out cursor-pointer ml-1"
-      :class="classes"
+  <div class="flex items-center gap-1">
+    <button
+      type="button"
+      class="rounded-full bg-neutral-1 w-12 h-6 cursor-pointer"
+      @click="model = !model"
     >
-      <input v-model="model" type="checkbox" class="opacity-0" />
-    </div>
-  </button>
+      <div
+        class="rounded-full h-4 w-4 transition duration-200 ease-in-out cursor-pointer ml-1"
+        :class="classes"
+      >
+        <input v-model="model" type="checkbox" class="opacity-0" />
+      </div>
+    </button>
+    <label v-if="label" for="" class="cursor-pointer" @click="model = !model">
+      {{ label }}
+    </label>
+  </div>
 </template>
