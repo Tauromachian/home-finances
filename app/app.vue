@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import "@fontsource-variable/dm-sans";
+import "@fontsource/dm-serif-display";
+
 const appToaster = useTemplateRef("appToaster");
 
 const theme = ref(false);
