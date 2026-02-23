@@ -21,12 +21,25 @@ const compoundedValue = computed(() => {
     years,
   );
 });
+
+const totalInvested = computed(() => {
+  return form.initialAmount + form.monthlyContribution * 12 * form.years;
+});
+
+const interestEarned = computed(() => {
+  return compoundedValue.value - totalInvested.value;
+});
 </script>
 
 <template>
   <div>
     <div class="flex flex-col gap-5 md:items-start max-w-xl mx-auto">
-      <CompoundStatsCard :compound-value="compoundedValue"> </CompoundStatsCard>
+      <CompoundStatsCard
+        :compound-value="compoundedValue"
+        :total-invested="totalInvested"
+        :interest-earned="interestEarned"
+      >
+      </CompoundStatsCard>
 
       <CompoundForm v-model="form"></CompoundForm>
     </div>

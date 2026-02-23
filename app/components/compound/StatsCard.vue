@@ -1,6 +1,8 @@
 <script setup lang="ts">
 defineProps({
   compoundValue: { type: Number, default: 1 },
+  totalInvested: { type: Number, default: 1 },
+  interestEarned: { type: Number, default: 1 },
 });
 </script>
 
@@ -9,6 +11,11 @@ defineProps({
     <AppCardBody class="flex flex-col items-center gap-2">
       <p>Total</p>
       <p class="text-5xl font-serif text-accent-4">{{ compoundValue }}</p>
+      <span class="flex gap-2">
+        <p>Interest Earned: {{ interestEarned }}</p>
+        <p>||</p>
+        <p>Total Invested: {{ totalInvested }}</p>
+      </span>
     </AppCardBody>
   </AppCard>
 </template>
