@@ -44,7 +44,7 @@ onUnmounted(() => {
   <Teleport to="body">
     <dialog
       ref="dialog"
-      class="backdrop:bg-black w-sm rounded-2xl left-1/2 top-1/2 -translate-1/2 transition"
+      class="backdrop:bg-black w-sm rounded-2xl left-1/2 top-1/2 -translate-1/2 transition bg-neutral-0"
       :class="[...classes, `duration-${DURATION}`]"
       @click="closeModal"
     >
