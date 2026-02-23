@@ -20,7 +20,7 @@ const props = defineProps({
 const classes = computed(() => {
   const calculatedClasses = {
     text: ["bg-transparent"],
-    outlined: ["border", "bg-transparent", "border-primary-700"],
+    outlined: ["border", "bg-transparent", "border-neutral-1", "text-text-1"],
     regular: ["text-white", "focus:text-white"],
   };
 
