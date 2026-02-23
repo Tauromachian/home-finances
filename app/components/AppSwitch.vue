@@ -12,7 +12,7 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <div class="flex items-center gap-1">
+  <div class="flex items-center">
     <button
       type="button"
       class="rounded-full bg-neutral-1 w-12 h-6 cursor-pointer"
@@ -25,7 +25,12 @@ const classes = computed(() => {
         <input v-model="model" type="checkbox" class="opacity-0" />
       </div>
     </button>
-    <label v-if="label" for="" class="cursor-pointer" @click="model = !model">
+    <label
+      v-if="label"
+      for=""
+      class="cursor-pointer pl-1"
+      @click="model = !model"
+    >
       {{ label }}
     </label>
   </div>
