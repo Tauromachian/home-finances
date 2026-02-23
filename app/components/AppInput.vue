@@ -28,7 +28,7 @@ const name = computed<string>(() => {
     <div class="mt-1 mb-5 relative">
       <div
         v-if="$slots.prepend"
-        class="bg-teal-50 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-sm border peer-focus:border-teal-800"
+        class="bg-neutral-1 text-text-1 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-l-xl border border-neutral-1 peer-focus:border-teal-800"
       >
         <slot name="prepend"></slot>
       </div>
