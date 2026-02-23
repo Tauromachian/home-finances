@@ -80,16 +80,6 @@ onMounted(() => expenseStore.loadExpenses());
       <span class="text-xl">+</span> Add Expense
     </BaseButton>
 
-    <AppChipGroup v-model="selectedExpenseType" class="mb-4">
-      <AppChip
-        v-for="(frequency, index) in frequencies"
-        :key="`expense-type-${index}`"
-        :value="frequency"
-      >
-        {{ frequency }}
-      </AppChip>
-    </AppChipGroup>
-
     <div class="grid gap-5">
       <div class="grid md:grid-cols-3 gap-5">
         <AppCard>
