@@ -7,6 +7,8 @@ const themeName = computed(() => {
   return theme.value ? "Dark" : "Light";
 });
 
+provide("theme", themeName);
+
 watch(theme, (value) => {
   const html = document.querySelector("html");
   html.setAttribute("data-theme", value ? "dark" : "light");
