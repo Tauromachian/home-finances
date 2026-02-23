@@ -10,7 +10,6 @@ const expenseStore = useExpenseStore();
 
 const appToaster = inject<Ref>("appToaster");
 
-const frequencies: Frequency[] = ["All", "One time", "Monthly", "Annual"];
 const selectedExpenseType = ref<Frequency>("All");
 const isOpen = ref(false);
 
