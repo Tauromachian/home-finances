@@ -11,9 +11,9 @@ const props = defineProps({
     type: [String, Number],
     default: "",
   },
-  color: {
-    type: String,
-    default: "accent",
+  colors: {
+    type: Object as PropType<{ color: string; hover: string }>,
+    default: () => ({ color: "accent-0", hover: "accent-1" }),
   },
 });
 
@@ -24,10 +24,8 @@ const classes = computed(() => {
     regular: ["text-white", "focus:text-white"],
   };
 
-  const color = props.color;
-  calculatedClasses.regular.push(
-    ...`bg-${color}-0 hover:bg-${color}-1`.split(" "),
-  );
+  const { color, hover } = props.colors;
+  calculatedClasses.regular.push(...[`bg-${color}`, `hover:bg-${hover}`]);
 
   if (props.variant) return calculatedClasses[props.variant];
 
