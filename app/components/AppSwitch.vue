@@ -12,12 +12,14 @@ const classes = computed(() => {
 <template>
   <button
     type="button"
-    class="relative rounded-full bg-neutral-1 w-12 h-6 cursor-pointer"
+    class="rounded-full bg-neutral-1 w-12 h-6 cursor-pointer"
     @click="model = !model"
   >
-    <span
-      class="absolute left-1 rounded-full h-4 w-4 top-1 transition duration-200 ease-in-out"
+    <div
+      class="rounded-full h-4 w-4 transition duration-200 ease-in-out cursor-pointer ml-1"
       :class="classes"
-    ></span>
+    >
+      <input v-model="model" type="checkbox" class="opacity-0" />
+    </div>
   </button>
 </template>
