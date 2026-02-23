@@ -5,20 +5,10 @@ defineProps({
 </script>
 
 <template>
-  <div id="expense-stats" class="w-full max-w-md flex mobile:items-center">
-    <AppCard>
-      <AppCardBody>
-        <div class="max-h-screen overflow-scroll relative">
-          <div v-if="compoundValue">
-            <p class="text-xl">Total</p>
-            <p>{{ compoundValue }}</p>
-          </div>
-
-          <div v-else class="text-center my-20">
-            Nothing to compound! Add one
-          </div>
-        </div>
-      </AppCardBody>
-    </AppCard>
-  </div>
+  <AppCard color="accent-3">
+    <AppCardBody class="flex flex-col items-center gap-2">
+      <p>Total</p>
+      <p class="text-5xl font-serif text-accent-4">{{ compoundValue }}</p>
+    </AppCardBody>
+  </AppCard>
 </template>
