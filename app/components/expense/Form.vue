@@ -40,7 +40,7 @@ function onSubmit(expense: Expense) {
     <Form
       v-slot="{ errors }"
       ref="formRef"
-      class="mx-7 mb-4"
+      class="px-7 pb-4"
       @submit="onSubmit"
     >
       <AppInput
