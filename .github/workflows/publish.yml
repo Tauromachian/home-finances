@@ -18,10 +18,10 @@ jobs:
         run: corepack enable
 
       - name: Install all dependencies
-        run: yarn
+        run: pnpm install --production
 
       - name: Build
-        run: yarn generate # The build command of your project
+        run: pnpm run generate # The build command of your project
 
       - name: Push
         uses: s0/git-publish-subdir-action@develop
