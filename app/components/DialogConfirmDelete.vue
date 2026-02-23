@@ -27,7 +27,10 @@ const model = defineModel({
           <BaseButton class="ml-auto" variant="outlined" @click="model = false">
             Cancel
           </BaseButton>
-          <BaseButton color="red" @click="$emit('click:delete')">
+          <BaseButton
+            :colors="{ color: 'danger-0', hover: 'danger-1' }"
+            @click="$emit('click:delete')"
+          >
             Delete
           </BaseButton>
         </div>
