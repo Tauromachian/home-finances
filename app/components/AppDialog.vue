@@ -3,12 +3,22 @@ const model = defineModel<boolean>();
 
 const dialogEl = useTemplateRef("dialog");
 
-watch(model, async (val) => {
+const DURATION = 150; // milliseconds
+
+watch(model, (val) => {
   if (val) {
     dialogEl.value.showModal();
   } else {
-    dialogEl.value.close();
+    setTimeout(() => {
+      dialogEl.value.close();
+    }, DURATION);
   }
+});
+
+const classes = computed(() => {
+  return model.value
+    ? ["scale-100", "backdrop:opacity-40"]
+    : ["scale-0", "backdrop:opacity-0"];
 });
 
 const escapeEvent = (event: KeyboardEvent) => {
@@ -34,7 +44,8 @@ onUnmounted(() => {
   <Teleport to="body">
     <dialog
       ref="dialog"
-      class="backdrop:opacity-40 backdrop:bg-black w-sm rounded-2xl left-1/2 top-1/2 -translate-1/2"
+      class="backdrop:bg-black w-sm rounded-2xl left-1/2 top-1/2 -translate-1/2 transition"
+      :class="[...classes, `duration-${DURATION}`]"
       @click="closeModal"
     >
       <div @click.stop>
