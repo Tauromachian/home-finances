@@ -18,7 +18,7 @@ jobs:
         run: corepack enable
 
       - name: Install all dependencies
-        run: pnpm install --production
+        run: pnpm install
 
       - name: Build
         run: pnpm dlx nuxt generate
