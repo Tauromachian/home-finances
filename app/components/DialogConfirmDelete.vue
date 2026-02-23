@@ -10,7 +10,7 @@ const model = defineModel({
 <template>
   <AppDialog v-model="model">
     <AppCard>
-      <div class="flex gap-4 mobile:rounded-t-md pt-4 px-7">
+      <div class="flex gap-4 mobile:rounded-t-md pt-4 px-7 text-text-1">
         <div class="my-auto">
           <span class="font-bold block text-lg">
             Are you sure you want to delete this resource?
@@ -19,7 +19,7 @@ const model = defineModel({
       </div>
 
       <AppCardBody>
-        <p>
+        <p class="text-text-0">
           The resource will be deleted permanently. This action is irreversible.
         </p>
 
