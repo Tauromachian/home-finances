@@ -25,7 +25,7 @@ const compoundedValue = computed(() => {
 
 <template>
   <div>
-    <div class="flex flex-col gap-5 md:items-start">
+    <div class="flex flex-col gap-5 md:items-start max-w-xl mx-auto">
       <CompoundStatsCard :compound-value="compoundedValue"> </CompoundStatsCard>
 
       <CompoundForm v-model="form"></CompoundForm>
