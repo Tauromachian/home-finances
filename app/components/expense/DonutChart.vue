@@ -75,7 +75,7 @@ const options = computed(() => {
       formatter: function (val: string) {
         const [firstSection, secondSection] = val.split("€");
 
-        return `<span class="font-sans text-md md:text-lg ml-2">
+        return `<span class="font-sans text-md md:text-lg ml-2 text-text-0">
                     ${firstSection}
                     <span class="text-text-1 font-bold">€${secondSection}
                     </span>
