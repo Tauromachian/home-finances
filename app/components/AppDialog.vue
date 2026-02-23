@@ -1,26 +1,24 @@
 <script setup lang="ts">
-const props = defineProps<{
-  modelValue: boolean;
-}>();
+const model = defineModel<boolean>();
 
-const emit = defineEmits<{
-  (e: "update:modelValue", value: boolean): void;
-}>();
+const dialogEl = useTemplateRef("dialog");
 
-const isOpen = ref(false);
+watch(model, async (val) => {
+  if (val) {
+    dialogEl.value.showModal();
+  } else {
+    dialogEl.value.close();
+  }
+});
 
 const escapeEvent = (event: KeyboardEvent) => {
-  if (!isOpen.value) return;
+  if (!model.value) return;
 
-  if (event.key === "Escape") {
-    closeModal();
-  }
+  if (event.key === "Escape") closeModal();
 };
 
-watchEffect(() => (isOpen.value = props.modelValue));
 function closeModal() {
-  isOpen.value = false;
-  emit("update:modelValue", false);
+  model.value = false;
 }
 
 onMounted(() => {
@@ -34,14 +32,12 @@ onUnmounted(() => {
 
 <template>
   <Teleport to="body">
-    <div
-      v-if="isOpen"
-      class="fixed inset-0 flex items-center justify-center z-50"
+    <dialog
+      ref="dialog"
+      class="backdrop:opacity-40 backdrop:bg-black w-sm rounded-2xl left-1/2 top-1/2 -translate-1/2"
+      @click="closeModal"
     >
-      <div class="fixed inset-0 bg-black opacity-40" @click="closeModal"></div>
-      <div
-        class="flex bg-white rounded-2xl shadow-lg relative min-w-75 max-w-125"
-      >
+      <div @click.stop>
         <button
           class="absolute z-10 top-2 cursor-pointer right-4 text-gray-600 hover:text-red-500 text-lg font-bold"
           type="button"
@@ -49,8 +45,9 @@ onUnmounted(() => {
         >
           ✕
         </button>
+
         <slot></slot>
       </div>
-    </div>
+    </dialog>
   </Teleport>
 </template>
