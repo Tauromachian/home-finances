@@ -122,6 +122,10 @@ onMounted(() => investmentsStore.loadInvestments());
           </div>
         </AppCard>
       </div>
+
+      <InvestmentHoldings
+        :investments="investmentsStore.investments"
+      ></InvestmentHoldings>
     </div>
 
     <AppDialog v-model="isOpen">
