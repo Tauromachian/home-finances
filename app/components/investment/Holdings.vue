@@ -15,12 +15,15 @@ defineProps<{ investments: Investment[] }>();
   <AppCard>
     <AppCardBody>
       <p class="text-md font-bold mb-4">Holdings</p>
-      <InvestmentItem
-        v-for="(investment, index) in investments"
-        :key="`investment-${index}`"
-        :investment
-        :category="getCategory(investment.category)"
-      ></InvestmentItem>
+      <template v-if="investments.length">
+        <InvestmentItem
+          v-for="(investment, index) in investments"
+          :key="`investment-${index}`"
+          :investment
+          :category="getCategory(investment.category)"
+        ></InvestmentItem>
+      </template>
+      <EmptyState v-else></EmptyState>
     </AppCardBody>
   </AppCard>
 </template>
