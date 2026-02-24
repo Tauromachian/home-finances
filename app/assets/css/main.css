@@ -47,7 +47,7 @@
 }
 
 @utility text-field {
-  @apply w-full border bg-neutral-0 border-neutral-1 px-3 py-2 rounded-xl focus:outline-none focus:border-accent-0;
+  @apply w-full text-text-1 border bg-neutral-0 border-neutral-1 px-3 py-2 rounded-xl focus:outline-none focus:border-accent-0;
 }
 
 @utility card-body {
