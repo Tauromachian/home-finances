@@ -8,12 +8,12 @@ export const assets: Category[] = [
   },
   {
     icon: "material-symbols:currency-bitcoin",
-    color: "#2563eb",
+    color: "#8B5CF6",
     name: "Crypto",
   },
   {
     icon: "material-symbols:money-bag-rounded",
-    color: "#2563eb",
+    color: "#0D9488",
     name: "Savings",
   },
 ];
