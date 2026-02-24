@@ -83,9 +83,9 @@ function submitForm(form: Investment) {
             <p class="text-md font-bold">Allocation</p>
           </AppCardBody>
 
-          <AppCardBody v-if="holdings.length">
+          <AppCardBody v-if="investmentsStore.investments.length">
             <InvestmentDonutChart
-              :investments="holdings"
+              :investments="investmentsStore.investments"
             ></InvestmentDonutChart>
           </AppCardBody>
 
@@ -104,9 +104,9 @@ function submitForm(form: Investment) {
             <p class="text-md font-bold">Growth Overview</p>
           </AppCardBody>
 
-          <AppCardBody v-if="holdings.length">
+          <AppCardBody v-if="investmentsStore.investments.length">
             <InvestmentDonutChart
-              :investments="holdings"
+              :investments="investmentsStore.investments"
             ></InvestmentDonutChart>
           </AppCardBody>
 
