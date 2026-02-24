@@ -33,7 +33,10 @@ const isConfirmationDialogOpen = ref(false);
           </p>
         </div>
 
-        <p class="ml-auto rounded-full text-white px-2 text-sm uppercase mr-3">
+        <p
+          class="ml-auto rounded-full text-white px-2 text-sm uppercase mr-3"
+          :style="{ 'background-color': category.color }"
+        >
           {{ investment.category }}
         </p>
 
