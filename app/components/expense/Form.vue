@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Form } from "vee-validate";
+
 import { required, positiveNumber } from "@/utils/rules";
 import { categories } from "@/utils/categories";
 import type { Expense } from "~/types/expense";
@@ -6,7 +8,7 @@ import type { Expense } from "~/types/expense";
 const emit = defineEmits<{ submit: [expense: Expense] }>();
 const types = ref(["One time", "Monthly", "Annual"]);
 
-const formRef = ref(null);
+const formRef = useTemplateRef<typeof Form>("formRef");
 
 const formattedFrequencies = computed(() => {
   return types.value.map((item) => ({
