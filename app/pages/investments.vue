@@ -44,6 +44,8 @@ function submitForm(form: Investment) {
 
   appToaster.value.openToast("New investment added!");
 }
+
+onMounted(() => investmentsStore.loadInvestments());
 </script>
 
 <template>
