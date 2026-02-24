@@ -14,6 +14,7 @@ defineProps<{ investments: Investment[] }>();
 <template>
   <AppCard>
     <AppCardBody>
+      <p class="text-md font-bold mb-4">Holdings</p>
       <InvestmentItem
         v-for="(investment, index) in investments"
         :key="`investment-${index}`"
