@@ -125,6 +125,7 @@ onMounted(() => investmentsStore.loadInvestments());
 
       <InvestmentHoldings
         :investments="investmentsStore.investments"
+        @remove="(id) => investmentsStore.removeInvestment(id)"
       ></InvestmentHoldings>
     </div>
 

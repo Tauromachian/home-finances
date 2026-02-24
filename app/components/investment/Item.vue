@@ -3,7 +3,7 @@ import type { Category } from "~/types/category";
 import type { Investment } from "~/types/investment";
 
 defineProps<{ investment: Investment; category: Category }>();
-defineEmits(["remove"]);
+defineEmits<{ remove: [] }>();
 
 const isConfirmationDialogOpen = ref(false);
 </script>

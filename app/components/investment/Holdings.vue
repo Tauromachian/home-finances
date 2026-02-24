@@ -9,6 +9,7 @@ function getCategory(category: string): Category {
 }
 
 defineProps<{ investments: Investment[] }>();
+defineEmits<{ remove: [id: number | string] }>();
 </script>
 
 <template>
@@ -21,6 +22,7 @@ defineProps<{ investments: Investment[] }>();
           :key="`investment-${index}`"
           :investment
           :category="getCategory(investment.category)"
+          @remove="$emit('remove', investment.id)"
         ></InvestmentItem>
       </template>
       <EmptyState v-else></EmptyState>
