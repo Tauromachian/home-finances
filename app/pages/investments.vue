@@ -4,8 +4,6 @@ import type { Investment } from "~/types/investment";
 const investmentsStore = useInvestmentStore();
 const isOpen = ref(false);
 
-const holdings = ref<Investment[]>([]);
-
 const appToaster = inject<Ref>("appToaster");
 
 const portfolioValue = computed(() => {
