@@ -9,18 +9,7 @@ const props = defineProps({
   },
 });
 
-const theme = inject<Ref<string>>("theme");
-const textColor = ref<string>("Light");
-
-watch(
-  theme,
-  () => {
-    textColor.value = getComputedStyle(
-      document.documentElement,
-    ).getPropertyValue("--color-text-1");
-  },
-  { immediate: true },
-);
+const textColor = inject<Ref<string | undefined>>("donutChartTextColor");
 
 const expensesByCategory = computed(() => {
   const totalByCategory = {};

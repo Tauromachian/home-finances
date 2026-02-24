@@ -5,16 +5,21 @@ import "@fontsource/dm-serif-display";
 const appToaster = useTemplateRef("appToaster");
 
 const theme = ref(false);
+const textColor = ref();
 
 const themeName = computed(() => {
   return theme.value ? "Dark" : "Light";
 });
 
-provide("theme", themeName);
+provide("donutChartTextColor", textColor);
 
 watch(theme, (value) => {
   const html = document.querySelector("html");
   html.setAttribute("data-theme", value ? "dark" : "light");
+
+  textColor.value = window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue("--color-text-1");
 });
 
 provide("appToaster", appToaster);
