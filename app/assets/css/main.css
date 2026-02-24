@@ -11,6 +11,7 @@
 
   --color-text-0: #5a6478;
   --color-text-1: #0f1623;
+  --color-text-inverse: white;
 
   --color-neutral-0: #eef1f7;
   --color-neutral-1: #d4dae8;
@@ -32,6 +33,7 @@
 
   --color-text-0: #6b7a96;
   --color-text-1: #e4eaf5;
+  --color-text-inverse: black;
 
   --color-neutral-0: #0d1117;
   --color-neutral-1: #1e2736;
