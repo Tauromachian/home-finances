@@ -85,7 +85,7 @@ onMounted(() => expenseStore.loadExpenses());
           <AppCardBody>
             <p class="text-sm">Total Expenses</p>
             <p class="text-3xl font-serif text-accent-0 mt-2">
-              ${{ totalExpenses }}
+              €{{ totalExpenses }}
             </p>
           </AppCardBody>
         </AppCard>
@@ -93,7 +93,7 @@ onMounted(() => expenseStore.loadExpenses());
           <AppCardBody>
             <p class="text-sm">Monthly</p>
             <p class="text-3xl font-serif mt-2 text-text-1">
-              ${{ monthlyExpenses }}
+              €{{ monthlyExpenses }}
             </p>
           </AppCardBody>
         </AppCard>

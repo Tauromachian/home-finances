@@ -39,9 +39,7 @@ const isConfirmationDialogOpen = ref(false);
           {{ expense.frequency }}
         </p>
 
-        <p class="font-serif text-text-1 mr-2 text-lg">
-          $ {{ expense.amount }}
-        </p>
+        <p class="font-serif text-text-1 mr-2 text-lg">€{{ expense.amount }}</p>
 
         <BaseButton
           variant="text"
