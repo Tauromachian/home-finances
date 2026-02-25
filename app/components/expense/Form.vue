@@ -2,7 +2,7 @@
 import { Form } from "vee-validate";
 
 import { required, positiveNumber } from "@/utils/rules";
-import { categories } from "@/utils/categories";
+import { expensesCategories } from "@/utils/categories";
 import type { Expense } from "~/types/expense";
 
 const emit = defineEmits<{ submit: [expense: Expense] }>();
@@ -18,7 +18,7 @@ const formattedFrequencies = computed(() => {
 });
 
 const formattedCategories = computed(() => {
-  return categories.map((item) => ({
+  return expensesCategories.map((item) => ({
     title: item.name,
     value: item.name,
     icon: {

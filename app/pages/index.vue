@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { expensesCategories } from "~/utils/categories";
+
 import type { Category } from "~/types/category";
 import type { Expense } from "~/types/expense";
 
@@ -23,7 +25,7 @@ function submitForm(form: Expense) {
 }
 
 function getCategory(category: string): Category {
-  return categories.find((item) => {
+  return expensesCategories.find((item) => {
     return item.name == category;
   });
 }
@@ -125,7 +127,7 @@ onMounted(() => expenseStore.loadExpenses());
             <ExpenseDonutChart
               v-if="filteredExpenses?.length"
               :expenses="filteredExpenses"
-              :categories="categories"
+              :categories="expensesCategories"
             ></ExpenseDonutChart>
           </AppCardBody>
         </AppCard>

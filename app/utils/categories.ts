@@ -1,6 +1,6 @@
 import type { Category } from "@/types/category";
 
-export const categories: Category[] = [
+export const expensesCategories: Category[] = [
   {
     icon: "material-symbols:home",
     color: "#2563eb",
@@ -34,5 +34,5 @@ export const categories: Category[] = [
 ];
 
 export function getColorByName(name: string) {
-  return categories.find((c) => c.name === name).color;
+  return expensesCategories.find((c) => c.name === name).color;
 }

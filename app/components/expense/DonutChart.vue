@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { categories } from "@/utils/categories";
+import { expensesCategories } from "@/utils/categories";
 import type { Expense } from "~/types/expense";
 
 const props = defineProps({
@@ -14,7 +14,7 @@ const textColor = inject<Ref<string | undefined>>("donutChartTextColor");
 const expensesByCategory = computed(() => {
   const totalByCategory = {};
 
-  const categoryByName = categories.reduce((acum, category) => {
+  const categoryByName = expensesCategories.reduce((acum, category) => {
     acum[category.name] = category;
     return acum;
   }, {});
