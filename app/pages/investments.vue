@@ -107,9 +107,9 @@ onMounted(() => investmentsStore.loadInvestments());
           </AppCardBody>
 
           <AppCardBody v-if="investmentsStore.investments.length">
-            <InvestmentDonutChart
+            <InvestmentLineChart
               :investments="investmentsStore.investments"
-            ></InvestmentDonutChart>
+            ></InvestmentLineChart>
           </AppCardBody>
 
           <div
