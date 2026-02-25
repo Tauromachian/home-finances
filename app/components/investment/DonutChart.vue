@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { assets } from "@/utils/assets";
+import { assetsCategories } from "@/utils/categories";
 
 import type { Investment } from "~/types/investment";
 
@@ -15,7 +15,7 @@ const textColor = inject<Ref<string | undefined>>("donutChartTextColor");
 const investmentsByCategory = computed(() => {
   const totalByCategory = {};
 
-  const categoryByName = assets.reduce((acum, category) => {
+  const categoryByName = assetsCategories.reduce((acum, category) => {
     acum[category.name] = category;
     return acum;
   }, {});

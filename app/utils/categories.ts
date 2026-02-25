@@ -33,6 +33,30 @@ export const expensesCategories: Category[] = [
   },
 ];
 
+export const assetsCategories: Category[] = [
+  {
+    icon: "material-symbols:work",
+    color: "#2563eb",
+    name: "Stocks/ETFs",
+  },
+  {
+    icon: "material-symbols:currency-bitcoin",
+    color: "#8B5CF6",
+    name: "Crypto",
+  },
+  {
+    icon: "material-symbols:money-bag-rounded",
+    color: "#0D9488",
+    name: "Savings",
+  },
+];
+
+export function getCategoryByName(name: string, categories: Category[]) {
+  for (const category of categories) {
+    if (category.name === name) return category;
+  }
+}
+
 export function getColorByName(name: string) {
   return expensesCategories.find((c) => c.name === name).color;
 }

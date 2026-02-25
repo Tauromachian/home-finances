@@ -2,11 +2,11 @@
 import { Form } from "vee-validate";
 
 import { required, positiveNumber } from "@/utils/rules";
-import { assets } from "@/utils/assets";
+import { assetsCategories } from "@/utils/categories";
 import type { Investment } from "~/types/investment";
 
 const emit = defineEmits<{ submit: [investment: Investment] }>();
-const formattedCategories = assets.map((item) => ({
+const formattedCategories = assetsCategories.map((item) => ({
   title: item.name,
   value: item.name,
   icon: {
