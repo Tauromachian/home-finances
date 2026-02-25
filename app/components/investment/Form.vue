@@ -45,10 +45,10 @@ function onSubmit(investment: Investment) {
       <AppInput
         label="Amount"
         type="number"
-        name="amount"
+        name="amountInvested"
         input-class="pl-12"
         :rules="positiveNumber"
-        :error="errors.investment"
+        :error="errors.amountInvested"
       >
         <template #prepend>
           <Icon
