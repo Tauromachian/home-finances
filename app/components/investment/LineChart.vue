@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Category } from "~/types/category";
 import type { Investment } from "~/types/investment";
 
 const { investments = [] } = defineProps<{ investments?: Investment[] }>();
@@ -24,6 +25,23 @@ const calculatedSeries = computed(() => {
   }
 
   return series;
+});
+
+function getCategory(category: string): Category {
+  return assets.find((item) => {
+    return item.name == category;
+  });
+}
+
+const colors = computed(() => {
+  const colors = [];
+
+  for (const investment of investments) {
+    const category = getCategory(investment.category);
+    colors.push(category.color);
+  }
+
+  return colors;
 });
 
 const options = computed(() => {
@@ -54,6 +72,7 @@ const options = computed(() => {
               </span>`;
       },
     },
+    colors: [...colors.value],
     xaxis: {
       categories: months,
     },
