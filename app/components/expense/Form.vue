@@ -58,6 +58,7 @@ function onSubmit(expense: Expense) {
         type="number"
         name="amount"
         input-class="pl-12"
+        :min="0"
         :rules="positiveNumber"
         :error="errors.expense"
       >
