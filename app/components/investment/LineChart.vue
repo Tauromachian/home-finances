@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Category } from "~/types/category";
 import type { Investment } from "~/types/investment";
 
 const { investments = [] } = defineProps<{ investments?: Investment[] }>();
@@ -27,17 +26,11 @@ const calculatedSeries = computed(() => {
   return series;
 });
 
-function getCategory(category: string): Category {
-  return assets.find((item) => {
-    return item.name == category;
-  });
-}
-
 const colors = computed(() => {
   const colors = [];
 
   for (const investment of investments) {
-    const category = getCategory(investment.category);
+    const category = getCategoryByName(investment.category, assetsCategories);
     colors.push(category.color);
   }
 

@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import type { Category } from "~/types/category";
 import type { Investment } from "~/types/investment";
-
-function getCategory(category: string): Category {
-  return assets.find((item) => {
-    return item.name == category;
-  });
-}
 
 defineProps<{ investments: Investment[] }>();
 defineEmits<{ remove: [id: number | string] }>();
@@ -21,7 +14,7 @@ defineEmits<{ remove: [id: number | string] }>();
           v-for="(investment, index) in investments"
           :key="`investment-${index}`"
           :investment
-          :category="getCategory(investment.category)"
+          :category="getCategoryByName(investment.category, assetsCategories)"
           @remove="$emit('remove', investment.id)"
         ></InvestmentItem>
       </template>

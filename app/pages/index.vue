@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { expensesCategories } from "~/utils/categories";
 
-import type { Category } from "~/types/category";
 import type { Expense } from "~/types/expense";
 
 import { useExpenseStore } from "../stores/expenses";
@@ -22,12 +21,6 @@ function submitForm(form: Expense) {
   if (!appToaster?.value) return;
 
   appToaster.value.openToast("New expense added!");
-}
-
-function getCategory(category: string): Category {
-  return expensesCategories.find((item) => {
-    return item.name == category;
-  });
 }
 
 const filteredExpenses = computed<Expense[]>(() => {
@@ -141,7 +134,9 @@ onMounted(() => expenseStore.loadExpenses());
                 :key="expense.id"
                 :expense="expense"
                 variant="outlined"
-                :category="getCategory(expense.category)"
+                :category="
+                  getCategoryByName(expense.category, expensesCategories)
+                "
                 @remove="expenseStore.removeExpense(expense.id)"
               ></ExpenseItem>
             </div>
