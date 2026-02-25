@@ -10,6 +10,14 @@ export const useExpenseStore = defineStore("expenses", () => {
     loadExpenses();
   }
 
+  function editExpense(id, expense) {
+    const expenseToEdit = expenses.find((expense) => expense.id === id);
+
+    for (const key of Object.keys(expense)) {
+      expenseToEdit[key] = expense[key];
+    }
+  }
+
   function removeExpense(id) {
     expenses.value = expenses.value.filter((expense) => expense.id != id);
     saveExpenses();
@@ -49,6 +57,7 @@ export const useExpenseStore = defineStore("expenses", () => {
   return {
     expenses,
     addExpense,
+    editExpense,
     removeExpense,
     clearExpenses,
     loadExpenses,
