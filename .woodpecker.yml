@@ -16,17 +16,31 @@ steps:
       - pnpm install --frozen-lockfile # safer for CI
       - pnpm dlx nuxt generate
 
-  - name: publish-to-build-branch
-    image: appleboy/drone-git-push # this is the recommended plugin for this task
-    settings:
-      branch: build
-      remote_name: origin
-      commit: true
-      force: true # like git-publish-subdir-action's behavior (overwrite history)
-      path: dist # only add/commit/push contents of this folder
-      message: >-
-        Build: ${CI_COMMIT_SHA} - ${CI_COMMIT_MESSAGE}
-      username:
-        from_secret: git_username # optional if using token auth
-      password:
-        from_secret: git_token # or GITHUB_TOKEN / forge token
+  - name: publish to build branch
+    image: alpine/git
+    environment:
+      GIT_TOKEN:
+        from_secret: git_token
+    commands:
+      # - echo "== WORKSPACE =="
+      # - pwd
+      # - ls /
+      # - echo "== FIND DIST =="
+      # - find / -type d -name .output 2>/dev/null || echo "No dist folder found anywhere"
+      # - echo "== WOODPECKER SRC =="
+      # - ls /woodpecker/src || echo "No /woodpecker/src"
+
+      - git config --global user.email "54786476+Tauromachian@users.noreply.github.com"
+      - git config --global user.name "Tauromachian"
+
+      - git clone https://github.com/Tauromachian/home-finances.git repo
+      - cd repo
+      - git checkout build || git checkout -b build
+      - find . -mindepth 1 -not -path './.git*' -delete
+
+      - cp -r /woodpecker/src/github.com/Tauromachian/home-finances/.output/. .
+
+      - git remote set-url origin https://$GIT_TOKEN@github.com/Tauromachian/home-finances.git
+      - git add .
+      - git diff --cached --quiet || git commit -m "Build ${CI_COMMIT_SHA} - ${CI_COMMIT_MESSAGE}"
+      - git push --force origin build

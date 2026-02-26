@@ -13,9 +13,9 @@ const dialogEl = useTemplateRef("dialog");
 
 let hasJustOpened = false;
 
-watch(model, (val) => {
+watch(model, () => {
   hasJustOpened = true;
-  if (val) dialogEl.value.togglePopover();
+  dialogEl.value.togglePopover();
 });
 
 function onToggle() {
