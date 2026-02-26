@@ -1,0 +1,32 @@
+when:
+  - event: push
+    branch: main
+
+steps:
+  - name: checkout
+    image: woodpeckerci/plugin-git
+    settings:
+      depth: 50 # optional, fetches more history if needed
+
+  - name: enable-corepack-and-install
+    image: node:lts
+    commands:
+      - corepack enable
+      - corepack prepare pnpm@latest --activate # optional but ensures latest pnpm
+      - pnpm install --frozen-lockfile # safer for CI
+      - pnpm dlx nuxt generate
+
+  - name: publish-to-build-branch
+    image: appleboy/drone-git-push # this is the recommended plugin for this task
+    settings:
+      branch: build
+      remote_name: origin
+      commit: true
+      force: true # like git-publish-subdir-action's behavior (overwrite history)
+      path: dist # only add/commit/push contents of this folder
+      message: >-
+        Build: ${CI_COMMIT_SHA} - ${CI_COMMIT_MESSAGE}
+      username:
+        from_secret: git_username # optional if using token auth
+      password:
+        from_secret: git_token # or GITHUB_TOKEN / forge token
