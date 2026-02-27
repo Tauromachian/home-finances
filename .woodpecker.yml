@@ -38,7 +38,7 @@ steps:
       - git checkout build || git checkout -b build
       - find . -mindepth 1 -not -path './.git*' -delete
 
-      - cp -r /woodpecker/src/github.com/Tauromachian/home-finances/.output/. .
+      - cp -r /woodpecker/src/github.com/Tauromachian/home-finances/.output/public/. .
 
       - git remote set-url origin https://$GIT_TOKEN@github.com/Tauromachian/home-finances.git
       - git add .
