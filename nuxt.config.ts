@@ -5,7 +5,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
 
-  modules: ["@vee-validate/nuxt", "@pinia/nuxt", "@nuxt/icon", "@nuxt/eslint"],
+  modules: [
+    "@vee-validate/nuxt",
+    "@pinia/nuxt",
+    "@nuxt/icon",
+    "@nuxt/eslint",
+    "@nuxt/test-utils/module",
+  ],
 
   vite: {
     plugins: [tailwindcss() as any],

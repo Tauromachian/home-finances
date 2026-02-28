@@ -11,7 +11,12 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:unit": "vitest --project unit",
+    "test:nuxt": "vitest --project nuxt",
+    "test:e2e": "vitest --project e2e"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.2.8",
@@ -32,13 +37,17 @@
   },
   "devDependencies": {
     "@iconify-json/material-symbols-light": "^1.2.15",
+    "@nuxt/test-utils": "^4.0.0",
+    "@vue/test-utils": "^2.4.6",
     "@vue/typescript-plugin": "^3.2.4",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-vue": "^10.8.0",
+    "happy-dom": "^20.7.0",
     "prettier": "^3.8.1",
     "typescript": "^5.9.3",
+    "vitest": "^4.0.18",
     "vue-tsc": "^3.2.4"
   }
 }
