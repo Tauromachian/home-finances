@@ -23,6 +23,12 @@ watch(theme, (value) => {
 });
 
 provide("appToaster", appToaster);
+
+onMounted(() => {
+  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  if (isDark) theme.value = true;
+});
 </script>
 
 <template>
