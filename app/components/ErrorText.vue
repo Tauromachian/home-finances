@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="text-danger-0 text-sm empty:opacity-0 opacity-100 transition">
+  <div v-show="$slots.default" class="text-danger-0 text-sm">
     <slot></slot>
   </div>
 </template>
