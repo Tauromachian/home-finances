@@ -1,16 +1,21 @@
 <script setup lang="ts">
+const _variants = ["", "regular", "text", "outlined"] as const;
+
+type Variant = (typeof _variants)[number];
+
 const props = defineProps({
   variant: {
-    type: String,
-    default: "",
+    type: String as PropType<Variant>,
+    default: "regular",
     validator(value: string | undefined) {
-      return ["", "text", "outlined"].includes(value);
+      return ["", "regular", "text", "outlined"].includes(value);
     },
   },
   value: {
     type: [String, Number],
     default: "",
   },
+  icon: { type: Boolean, default: false },
   colors: {
     type: Object as PropType<{ color: string; hover: string }>,
     default: () => ({ color: "accent-0", hover: "accent-1" }),
@@ -18,7 +23,8 @@ const props = defineProps({
 });
 
 const classes = computed(() => {
-  const calculatedClasses = {
+  const calculatedClasses: Record<Variant, string[]> = {
+    "": [],
     text: ["bg-transparent"],
     outlined: ["border", "bg-transparent", "border-neutral-1", "text-text-1"],
     regular: ["text-white", "focus:text-white"],
@@ -27,18 +33,19 @@ const classes = computed(() => {
   const { color, hover } = props.colors;
   calculatedClasses.regular.push(...[`bg-${color}`, `hover:bg-${hover}`]);
 
-  if (props.variant) return calculatedClasses[props.variant];
+  if (props.icon) {
+    calculatedClasses[props.variant].push("px-2", "py-2", "rounded-full");
+  } else {
+    calculatedClasses[props.variant].push("px-3", "py-2", "rounded-xl");
+  }
 
+  if (props.variant) return calculatedClasses[props.variant];
   return calculatedClasses.regular;
 });
 </script>
 
 <template>
-  <button
-    class="px-3 py-2 rounded-xl transition cursor-pointer"
-    :class="classes"
-    :value="value"
-  >
+  <button class="transition cursor-pointer" :class="classes" :value="value">
     <slot></slot>
   </button>
 </template>
