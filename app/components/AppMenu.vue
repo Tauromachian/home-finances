@@ -9,6 +9,8 @@ type XCoordinate = (typeof _xCoordinate)[number];
 
 type Anchor = `${YCoordinate} ${XCoordinate}`;
 
+let isOpening = true;
+
 const isOpen = defineModel<boolean>();
 
 const dialogRef = useTemplateRef("dialogRef");
@@ -49,11 +51,33 @@ function positionDialog() {
   }
 }
 
-onMounted(() => positionDialog());
+function clickOutside() {
+  if (isOpening) {
+    isOpening = false;
+    return;
+  }
+
+  isOpen.value = false;
+}
+
+watch(isOpen, (newVal, oldVal) => {
+  if (!oldVal && newVal) isOpening = true;
+});
+
+onMounted(() => {
+  positionDialog();
+
+  document.body.addEventListener("click", clickOutside);
+});
 </script>
 
 <template>
-  <dialog ref="dialogRef" :open="isOpen" class="z-50 rounded-2xl shadow-lg">
+  <dialog
+    ref="dialogRef"
+    :open="isOpen"
+    class="z-50 rounded-2xl shadow-lg"
+    @click.stop
+  >
     <slot></slot>
   </dialog>
 </template>
