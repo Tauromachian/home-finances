@@ -85,7 +85,7 @@ onUnmounted(() => {
   <dialog
     ref="dialogRef"
     :open="isOpen"
-    class="z-50 rounded-2xl shadow-lg"
+    class="z-50 rounded-2xl shadow-lg bg-neutral-2"
     @click.stop
   >
     <slot></slot>
