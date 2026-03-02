@@ -53,7 +53,7 @@ onMounted(() => positionDialog());
 </script>
 
 <template>
-  <dialog ref="dialogRef" :open="isOpen" class="z-50 rounded-2xl">
+  <dialog ref="dialogRef" :open="isOpen" class="z-50 rounded-2xl shadow-lg">
     <slot></slot>
   </dialog>
 </template>
