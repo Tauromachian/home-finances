@@ -39,7 +39,7 @@ const name = computed<string>(() => {
         :name="name"
         :class="inputClass"
       />
-      <ErrorText> {{ error }}</ErrorText>
+      <ErrorText class="absolute"> {{ error }}</ErrorText>
     </div>
   </div>
 </template>
