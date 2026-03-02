@@ -10,6 +10,7 @@ type XCoordinate = (typeof _xCoordinate)[number];
 type Anchor = `${YCoordinate} ${XCoordinate}`;
 
 let isOpening = true;
+let resizeObserver: ResizeObserver;
 
 const isOpen = defineModel<boolean>();
 
@@ -22,6 +23,8 @@ const { location = "", target = undefined } = defineProps<{
 
 function positionDialog() {
   if (!target) return;
+
+  if (!dialogRef.value) return;
 
   let clientRect = null;
 
@@ -68,6 +71,13 @@ onMounted(() => {
   positionDialog();
 
   document.body.addEventListener("click", clickOutside);
+  resizeObserver = new ResizeObserver(positionDialog);
+  resizeObserver.observe(document.body);
+});
+
+onUnmounted(() => {
+  document.body.removeEventListener("click", clickOutside);
+  resizeObserver.disconnect();
 });
 </script>
 
