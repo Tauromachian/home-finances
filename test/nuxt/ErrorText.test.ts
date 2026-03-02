@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { mount } from "@vue/test-utils";
 
-import ErrorText from "../../app/components/ErrorText.vue";
+import ErrorText from "~/components/ErrorText.vue";
 
 describe("ErrorText.vue component", () => {
   it("Sets display none if it has no slots", () => {
