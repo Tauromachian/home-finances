@@ -9,17 +9,16 @@ type XCoordinate = (typeof _xCoordinate)[number];
 
 type Anchor = `${YCoordinate} ${XCoordinate}`;
 
-let isOpening = true;
-let resizeObserver: ResizeObserver;
-
-const isOpen = defineModel<boolean>();
-
-const dialogRef = useTemplateRef("dialogRef");
-
 const { location = "", target = undefined } = defineProps<{
   location?: Anchor;
-  target?: HTMLElement | ComponentPublicInstance;
+  target?: HTMLElement | Ref<ComponentPublicInstance> | ComponentPublicInstance;
 }>();
+
+const isOpen = defineModel<boolean>();
+const dialogRef = useTemplateRef("dialogRef");
+
+let isOpening = true;
+let resizeObserver: ResizeObserver;
 
 function positionDialog() {
   if (!target) return;
@@ -63,16 +62,22 @@ function clickOutside() {
   isOpen.value = false;
 }
 
-watch(isOpen, (newVal, oldVal) => {
+watch(isOpen, async (newVal, oldVal) => {
   if (!oldVal && newVal) isOpening = true;
+
+  if (!newVal) return;
+
+  await nextTick();
+  positionDialog();
+
+  if (!resizeObserver) {
+    resizeObserver = new ResizeObserver(positionDialog);
+    resizeObserver.observe(document.body);
+  }
 });
 
 onMounted(() => {
-  positionDialog();
-
   document.body.addEventListener("click", clickOutside);
-  resizeObserver = new ResizeObserver(positionDialog);
-  resizeObserver.observe(document.body);
 });
 
 onUnmounted(() => {
