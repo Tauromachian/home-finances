@@ -1,11 +1,9 @@
 <script setup></script>
 
 <template>
-  <span
-    class="text-red-500 text-sm block empty:opacity-0 opacity-100 transition"
-  >
+  <div class="text-red-500 text-sm empty:opacity-0 opacity-100 transition">
     <slot></slot>
-  </span>
+  </div>
 </template>
 
 <style scoped></style>
