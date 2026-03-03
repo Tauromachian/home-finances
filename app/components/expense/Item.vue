@@ -2,10 +2,23 @@
 import type { Category } from "~/types/category";
 import type { Expense } from "~/types/expense";
 
-defineProps<{ expense: Expense; category: Category }>();
-defineEmits(["remove"]);
+const { expense } = defineProps<{ expense: Expense; category: Category }>();
+const emit = defineEmits<{
+  delete: [id: number | string];
+  edit: [id: number | string];
+}>();
 
-const isConfirmationDialogOpen = ref(false);
+const buttonRef = useTemplateRef("buttonRef");
+
+const isActionsMenuOpen = ref(false);
+
+function executeAction(action: "delete" | "edit") {
+  if (action === "delete") {
+    emit("delete", expense.id);
+  } else {
+    emit("edit", expense.id);
+  }
+}
 </script>
 
 <template>
@@ -39,24 +52,36 @@ const isConfirmationDialogOpen = ref(false);
           {{ expense.frequency }}
         </p>
 
-        <p class="font-serif text-text-1 mr-2 text-lg">€{{ expense.amount }}</p>
+        <p class="font-serif text-text-1 mr-4 text-lg">€{{ expense.amount }}</p>
 
         <BaseButton
-          variant="text"
+          ref="buttonRef"
+          variant="outlined"
           class="flex items-center"
-          @click="isConfirmationDialogOpen = true"
+          icon
+          @click="isActionsMenuOpen = true"
         >
           <Icon
-            name="material-symbols:delete-outline"
-            class="w-5 h-5 text-red-700 hover:text-red-800 transition-all duration-100 ease-in-out"
+            name="material-symbols:more-vert"
+            size="20"
+            class="w-10 h-10 text-accent-0 hover:text-accent-1 transition-all duration-100 ease-in-out"
           />
         </BaseButton>
       </div>
     </AppCardBody>
 
-    <DialogConfirmDelete
-      v-model="isConfirmationDialogOpen"
-      @click:delete="$emit('remove')"
-    ></DialogConfirmDelete>
+    <AppMenu
+      v-model="isActionsMenuOpen"
+      location="bottom right"
+      :target="buttonRef"
+    >
+      <BaseList
+        :items="[
+          { name: 'Edit', id: 'edit' },
+          { name: 'Delete', id: 'delete' },
+        ]"
+        @click="executeAction"
+      ></BaseList>
+    </AppMenu>
   </AppCard>
 </template>
