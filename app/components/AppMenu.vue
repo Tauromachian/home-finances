@@ -82,6 +82,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.body.removeEventListener("click", clickOutside);
+
+  if (!resizeObserver?.disconnect) return;
+
   resizeObserver.disconnect();
 });
 </script>
