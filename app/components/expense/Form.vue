@@ -32,6 +32,8 @@ function onSubmit(expense: Expense) {
   emit("submit", expense);
   formRef.value.resetForm();
 }
+
+defineExpose({ internalRef: formRef });
 </script>
 
 <template>
