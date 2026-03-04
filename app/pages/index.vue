@@ -6,21 +6,75 @@ import type { Expense } from "~/types/expense";
 import { useExpenseStore } from "../stores/expenses";
 
 type Frequency = "All" | "One time" | "Monthly" | "Annual";
+type FormMode = "edit" | "insert";
 
 const expenseStore = useExpenseStore();
 
+const formRef = useTemplateRef("formRef");
+
 const appToaster = inject<Ref>("appToaster");
 
+const expenseForm = ref<Partial<Expense>>();
 const selectedExpenseType = ref<Frequency>("All");
 const isOpen = ref(false);
+const isConfirmationDialogOpen = ref(false);
 
-function submitForm(form: Expense) {
-  expenseStore.addExpense(form);
+const EMPTY_EXPENSE: Expense = {
+  name: "",
+  amount: 0,
+  category: "",
+  frequency: "",
+  description: "",
+};
+
+let selectedId: number | string = "";
+let formMode: FormMode;
+
+function showMessage(message: string) {
   isOpen.value = false;
 
   if (!appToaster?.value) return;
 
-  appToaster.value.openToast("New expense added!");
+  appToaster.value.openToast(message);
+}
+
+function submitForm(form: Expense) {
+  if (formMode === "insert") {
+    expenseStore.addExpense(form);
+    showMessage("New expense added!");
+  } else {
+    expenseStore.editExpense(selectedId, form);
+    showMessage("Expense edited");
+  }
+}
+
+function openForm(mode: FormMode, id?: string | number) {
+  formMode = mode;
+
+  if (mode === "insert") {
+    expenseForm.value = { ...EMPTY_EXPENSE };
+
+    formRef.value.internalRef.resetForm();
+  } else {
+    const expenseToEdit: Expense = expenseStore.expenses.find(
+      (expense: Expense) => expense.id === id,
+    );
+
+    selectedId = expenseToEdit.id;
+    expenseForm.value = { ...expenseToEdit };
+  }
+
+  isOpen.value = true;
+}
+
+function openDeleteConfirmationDialog(id: string | number) {
+  selectedId = id;
+  isConfirmationDialogOpen.value = true;
+}
+
+function deleteExpense() {
+  expenseStore.removeExpense(selectedId);
+  isConfirmationDialogOpen.value = false;
 }
 
 const filteredExpenses = computed<Expense[]>(() => {
@@ -70,7 +124,7 @@ onMounted(() => expenseStore.loadExpenses());
 
 <template>
   <div>
-    <BaseButton class="mb-5" @click="isOpen = true">
+    <BaseButton class="mb-5" @click="openForm('insert')">
       <span class="text-xl">+</span> Add Expense
     </BaseButton>
 
@@ -137,7 +191,8 @@ onMounted(() => expenseStore.loadExpenses());
                 :category="
                   getCategoryByName(expense.category, expensesCategories)
                 "
-                @remove="expenseStore.removeExpense(expense.id)"
+                @delete="openDeleteConfirmationDialog"
+                @edit="(id: string | number) => openForm('edit', id)"
               ></ExpenseItem>
             </div>
 
@@ -153,10 +208,17 @@ onMounted(() => expenseStore.loadExpenses());
       </div>
     </div>
 
+    <DialogConfirmDelete
+      v-model="isConfirmationDialogOpen"
+      @click:delete="deleteExpense"
+    ></DialogConfirmDelete>
+
     <AppDialog v-model="isOpen">
-      <ExpenseForm @submit="submitForm"></ExpenseForm>
+      <ExpenseForm
+        ref="formRef"
+        v-model="expenseForm"
+        @submit="submitForm"
+      ></ExpenseForm>
     </AppDialog>
   </div>
 </template>
-
-<style lang="scss" scoped></style>
