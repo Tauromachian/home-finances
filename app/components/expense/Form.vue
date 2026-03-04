@@ -5,6 +5,8 @@ import { required, positiveNumber } from "@/utils/rules";
 import { expensesCategories } from "@/utils/categories";
 import type { Expense } from "~/types/expense";
 
+defineModel<Partial<Expense>>();
+
 const emit = defineEmits<{ submit: [expense: Expense] }>();
 const types = ref(["One time", "Monthly", "Annual"]);
 
@@ -48,6 +50,7 @@ defineExpose({ internalRef: formRef });
       @submit="onSubmit"
     >
       <AppInput
+        :model-value="modelValue?.name ?? ''"
         label="Name"
         name="name"
         :error="errors.name"
@@ -56,6 +59,7 @@ defineExpose({ internalRef: formRef });
       ></AppInput>
 
       <AppInput
+        :model-value="modelValue?.amount ?? ''"
         label="Amount"
         type="number"
         name="amount"
@@ -73,6 +77,7 @@ defineExpose({ internalRef: formRef });
       </AppInput>
 
       <AppAutocomplete
+        :model-value="modelValue?.frequency ?? ''"
         :error="errors.frequency"
         :items="formattedFrequencies"
         :rules="required"
@@ -81,6 +86,7 @@ defineExpose({ internalRef: formRef });
       ></AppAutocomplete>
 
       <AppAutocomplete
+        :model-value="modelValue?.category ?? ''"
         :error="errors.categories"
         :items="formattedCategories"
         :rules="required"
@@ -89,6 +95,7 @@ defineExpose({ internalRef: formRef });
       ></AppAutocomplete>
 
       <AppInput
+        :model-value="modelValue?.description ?? ''"
         label="Description (optional)"
         as="textarea"
         type="text"
