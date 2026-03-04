@@ -11,9 +11,16 @@ export const useExpenseStore = defineStore("expenses", () => {
   }
 
   function editExpense(id, expense) {
-    const expenseToEdit = expenses.find((expense) => expense.id === id);
+    const expenseToEdit = expenses.value.find((expense) => expense.id === id);
+
+    if (!expenseToEdit) {
+      console.warn("Trying to edit unexisting expense");
+      return;
+    }
 
     for (const key of Object.keys(expense)) {
+      if (!expense[key] || !expenseToEdit[key]) continue;
+
       expenseToEdit[key] = expense[key];
     }
   }
