@@ -88,7 +88,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.body.removeEventListener("click", clickOutside);
-  document.body.addEventListener("keydown", onKeydown);
+  document.body.removeEventListener("keydown", onKeydown);
 
   if (!resizeObserver?.disconnect) return;
 
