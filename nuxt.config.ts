@@ -17,6 +17,12 @@ export default defineNuxtConfig({
     plugins: [tailwindcss() as any],
   },
 
+  icon: {
+    serverBundle: {
+      collections: ["material-symbols-light"],
+    },
+  },
+
   typescript: {
     typeCheck: true,
     strict: false,
