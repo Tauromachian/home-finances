@@ -9,6 +9,7 @@ defineModel({
 const props = defineProps({
   name: { type: String, required: true },
   label: { type: String, default: "" },
+  error: { type: String, default: "" },
   items: {
     type: Array as PropType<Item[]>,
     default: () => [],
@@ -139,6 +140,8 @@ onUnmounted(() => {
         </li>
       </ul>
     </Transition>
+
+    <ErrorText class="absolute"> {{ error }}</ErrorText>
 
     <span>
       <Icon
