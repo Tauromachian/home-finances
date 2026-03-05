@@ -62,6 +62,11 @@ function clickOutside() {
   isOpen.value = false;
 }
 
+function onKeydown(event: KeyboardEvent) {
+  if (event.key !== "Escape") return;
+  clickOutside();
+}
+
 watch(isOpen, async (newVal, oldVal) => {
   if (!oldVal && newVal) isOpening = true;
 
@@ -78,10 +83,12 @@ watch(isOpen, async (newVal, oldVal) => {
 
 onMounted(() => {
   document.body.addEventListener("click", clickOutside);
+  document.body.addEventListener("keydown", onKeydown);
 });
 
 onUnmounted(() => {
   document.body.removeEventListener("click", clickOutside);
+  document.body.addEventListener("keydown", onKeydown);
 
   if (!resizeObserver?.disconnect) return;
 
