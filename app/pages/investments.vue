@@ -95,7 +95,7 @@ onMounted(() => investmentsStore.loadInvestments());
             v-else
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
-            <Icon size="48" name="material-symbols:note-outline"></Icon>
+            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
             <p>No Investments! Add one</p>
           </div>
@@ -116,7 +116,7 @@ onMounted(() => investmentsStore.loadInvestments());
             v-else
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
-            <Icon size="48" name="material-symbols:note-outline"></Icon>
+            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
             <p>No Investments! Add one</p>
           </div>

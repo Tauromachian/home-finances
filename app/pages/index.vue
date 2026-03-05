@@ -165,7 +165,7 @@ onMounted(() => expenseStore.loadExpenses());
             v-if="!filteredExpenses?.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
-            <Icon size="48" name="material-symbols:note-outline"></Icon>
+            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
             <p>No expenses! Add one</p>
           </div>
@@ -200,7 +200,7 @@ onMounted(() => expenseStore.loadExpenses());
               v-if="!filteredExpenses?.length"
               class="flex flex-col items-center gap-5 justify-center my-6"
             >
-              <Icon size="48" name="material-symbols:note-outline"></Icon>
+              <Icon size="48" name="material-symbols-light:note-outline"></Icon>
               <p>No expenses! Add one</p>
             </div>
           </AppCardBody>

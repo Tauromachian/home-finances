@@ -50,7 +50,7 @@ const isConfirmationDialogOpen = ref(false);
           @click="isConfirmationDialogOpen = true"
         >
           <Icon
-            name="material-symbols:delete-outline"
+            name="material-symbols-light:delete-outline"
             class="w-5 h-5 text-red-700 hover:text-red-800 transition-all duration-100 ease-in-out"
           />
         </BaseButton>

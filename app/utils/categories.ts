@@ -2,22 +2,22 @@ import type { Category } from "@/types/category";
 
 export const expensesCategories: Category[] = [
   {
-    icon: "material-symbols:home",
+    icon: "material-symbols-light:home",
     color: "#2563eb",
     name: "House",
   },
   {
-    icon: "material-symbols:sports-basketball",
+    icon: "material-symbols-light:sports-basketball",
     color: "#ec4899",
     name: "Entertainment",
   },
   {
-    icon: "material-symbols:fastfood",
+    icon: "material-symbols-light:fastfood",
     color: "#f59e0b",
     name: "Food",
   },
   {
-    icon: "material-symbols:travel-luggage-and-bags",
+    icon: "material-symbols-light:travel-luggage-and-bags",
     color: "#0d9488",
     name: "Travel",
   },
@@ -27,7 +27,7 @@ export const expensesCategories: Category[] = [
     name: "Health",
   },
   {
-    icon: "material-symbols:view-quilt",
+    icon: "material-symbols-light:view-quilt",
     color: "#64748b",
     name: "Others",
   },
@@ -35,17 +35,17 @@ export const expensesCategories: Category[] = [
 
 export const assetsCategories: Category[] = [
   {
-    icon: "material-symbols:work",
+    icon: "material-symbols-light:work",
     color: "#2563eb",
     name: "Stocks/ETFs",
   },
   {
-    icon: "material-symbols:currency-bitcoin",
+    icon: "material-symbols-light:currency-bitcoin",
     color: "#8B5CF6",
     name: "Crypto",
   },
   {
-    icon: "material-symbols:money-bag-rounded",
+    icon: "material-symbols-light:money-bag-rounded",
     color: "#0D9488",
     name: "Savings",
   },

@@ -62,7 +62,7 @@ function executeAction(action: "delete" | "edit") {
           @click="isActionsMenuOpen = true"
         >
           <Icon
-            name="material-symbols:more-vert"
+            name="material-symbols-light:more-vert"
             size="20"
             class="w-10 h-10 text-accent-0 hover:text-accent-1 transition-all duration-100 ease-in-out"
           />
