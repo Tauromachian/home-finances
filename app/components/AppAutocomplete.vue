@@ -145,7 +145,7 @@ onUnmounted(() => {
 
     <span>
       <Icon
-        name="material-symbols:arrow-drop-down"
+        name="material-symbols-light:arrow-drop-down"
         class="absolute right-2 top-8 text-text-0"
         size="24"
       ></Icon>
