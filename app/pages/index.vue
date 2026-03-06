@@ -182,7 +182,10 @@ onMounted(() => expenseStore.loadExpenses());
         <AppCard class="h-full max-h-[inherit]">
           <AppCardBody class="max-h-full">
             <p class="text-md font-bold mb-4">Expenses</p>
-            <div class="flex flex-col gap-3 max-h-96 overflow-y-scroll">
+            <div
+              class="flex flex-col gap-3 max-h-96 overflow-y-scroll"
+              data-testid="expenses-items"
+            >
               <ExpenseItem
                 v-for="expense in filteredExpenses"
                 :key="expense.id"
