@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import type { Item } from "@/types/item";
 
-const model = defineModel({
-  type: String,
-  default: "",
-});
+const model = defineModel<string>();
 
 const props = defineProps({
   name: { type: String, required: true },
