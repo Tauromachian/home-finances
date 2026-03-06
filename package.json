@@ -16,7 +16,7 @@
     "test:watch": "vitest --watch",
     "test:unit": "vitest --project unit",
     "test:nuxt": "vitest --project nuxt",
-    "test:e2e": "vitest --project e2e"
+    "test:e2e": "pnpm exec playwright test"
   },
   "dependencies": {
     "@fontsource-variable/dm-sans": "^5.2.8",
@@ -38,6 +38,8 @@
   "devDependencies": {
     "@iconify-json/material-symbols-light": "^1.2.15",
     "@nuxt/test-utils": "^4.0.0",
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.3",
     "@vue/test-utils": "^2.4.6",
     "@vue/typescript-plugin": "^3.2.4",
     "eslint": "^9.39.1",
