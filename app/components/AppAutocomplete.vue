@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Item } from "@/types/item";
 
-defineModel({
+const model = defineModel({
   type: String,
   default: "",
 });
@@ -90,6 +90,10 @@ const handleClickOutside = (event: MouseEvent) => {
 
   isOpen.value = false;
 };
+
+watchEffect(() => {
+  searchQuery.value = model.value;
+});
 
 onMounted(() => {
   document.addEventListener("click", handleClickOutside);
