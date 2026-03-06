@@ -1,21 +1,13 @@
 <script setup lang="ts">
-const props = defineProps({
-  variant: {
-    type: String,
-    default: "",
-    validator(value: string | undefined) {
-      return ["", "text", "outlined"].includes(value);
-    },
-  },
-  value: {
-    type: [String, Number],
-    default: "",
-  },
-  color: {
-    type: String,
-    default: "accent",
-  },
-});
+const {
+  variant = "",
+  value = "",
+  color = "accent",
+} = defineProps<{
+  variant?: "" | "text" | "outlined";
+  value?: string | number;
+  color?: string;
+}>();
 
 const classes = computed(() => {
   const calculatedClasses = {
@@ -24,12 +16,11 @@ const classes = computed(() => {
     regular: ["text-white", "focus:text-white"],
   };
 
-  const color = props.color;
   calculatedClasses.regular.push(
     ...`bg-${color}-0 hover:bg-${color}-1`.split(" "),
   );
 
-  if (props.variant) return calculatedClasses[props.variant];
+  if (variant) return calculatedClasses[variant];
 
   return calculatedClasses.regular;
 });
