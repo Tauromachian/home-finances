@@ -3,6 +3,7 @@ defineProps({
   label: { type: String, default: "" },
   error: { type: String, default: "" },
   inputClass: { type: String, default: "" },
+  noError: { type: Boolean, default: false },
 });
 
 const attrs = useAttrs();
@@ -25,7 +26,7 @@ const name = computed<string>(() => {
 <template>
   <div>
     <label :for="name" class="text-text-0">{{ label }}</label>
-    <div class="mt-1 mb-5 relative">
+    <div class="mt-1 relative" :class="{ 'mb-5': !noError, 'mb-1': noError }">
       <div
         v-if="$slots.prepend"
         class="bg-neutral-1 text-text-1 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-l-xl border border-neutral-1 peer-focus:border-teal-800"
@@ -39,7 +40,7 @@ const name = computed<string>(() => {
         :name="name"
         :class="inputClass"
       />
-      <ErrorText class="absolute"> {{ error }}</ErrorText>
+      <ErrorText v-if="!noError" class="absolute"> {{ error }}</ErrorText>
     </div>
   </div>
 </template>
