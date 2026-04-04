@@ -3,21 +3,15 @@ import { Form } from "vee-validate";
 
 import { required, positiveNumber } from "@/utils/rules";
 import { expensesCategories } from "@/utils/categories";
+import { frequencies } from "@/utils/frequencies";
+
 import type { Expense } from "~/types/expense";
 
 defineModel<Partial<Expense>>();
 
 const emit = defineEmits<{ submit: [expense: Expense] }>();
-const types = ref(["One time", "Monthly", "Annual"]);
 
 const formRef = useTemplateRef<typeof Form>("formRef");
-
-const formattedFrequencies = computed(() => {
-  return types.value.map((item) => ({
-    title: item,
-    value: item,
-  }));
-});
 
 const formattedCategories = computed(() => {
   return expensesCategories.map((item) => ({
@@ -79,7 +73,7 @@ defineExpose({ internalRef: formRef });
       <AppAutocomplete
         :model-value="modelValue?.frequency ?? ''"
         :error="errors.frequency"
-        :items="formattedFrequencies"
+        :items="frequencies"
         :rules="required"
         label="Frequency"
         name="frequency"
