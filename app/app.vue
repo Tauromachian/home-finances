@@ -4,30 +4,44 @@ import "@fontsource/dm-serif-display";
 
 const appToaster = useTemplateRef("appToaster");
 
-const theme = ref(false);
+type Theme = "light" | "system" | "dark";
+
+const theme = ref<Theme>("system");
 const textColor = ref();
 
+function getSystemTheme(): "dark" | "light" {
+  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  return isDark ? "dark" : "light";
+}
+
 const themeName = computed(() => {
-  return theme.value ? "Dark" : "Light";
+  return theme.value[0].toUpperCase() + theme.value.slice(1);
 });
 
 provide("donutChartTextColor", textColor);
 
 watch(theme, (value) => {
+  let enterTheme = value;
+  if (value === "system") enterTheme = getSystemTheme();
+
   const html = document.querySelector("html");
-  html.setAttribute("data-theme", value ? "dark" : "light");
+  html.setAttribute("data-theme", enterTheme);
 
   textColor.value = window
     .getComputedStyle(document.documentElement)
     .getPropertyValue("--color-text-1");
+
+  localStorage.setItem("theme", theme.value);
 });
 
 provide("appToaster", appToaster);
 
 onMounted(() => {
-  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  let enterTheme = localStorage.getItem("theme");
+  enterTheme ??= "system";
 
-  if (isDark) theme.value = true;
+  theme.value = enterTheme as Theme;
 });
 </script>
 
@@ -39,7 +53,12 @@ onMounted(() => {
         <span class="text-accent-0 italic"> Finances </span>
       </h1>
 
-      <AppSwitch v-model="theme" class="ml-auto" :label="themeName"></AppSwitch>
+      <AppSwitch
+        v-model="theme"
+        class="ml-auto"
+        :label="themeName"
+        :steps-values="{ start: 'light', middle: 'system', end: 'dark' }"
+      ></AppSwitch>
     </header>
 
     <div class="max-w-6xl mx-4 lg:mx-auto pt-5">
