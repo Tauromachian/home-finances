@@ -1,13 +1,40 @@
 <script lang="ts" setup>
-defineProps<{ label?: string }>();
+const {
+  label = "",
+  stepsValues = { start: "start", middle: "middle", end: "end" },
+} = defineProps<{
+  label?: string;
+  stepsValues?: { start: string; middle?: string; end: string };
+}>();
 
-const model = defineModel<boolean>();
+const step = defineModel<string>();
 
-const classes = computed(() => {
-  const inactiveClasses = ["bg-text-0"];
-  const activeClasses = ["translate-x-6", "bg-accent-0"];
+function nextStep() {
+  if (step.value === stepsValues.start) {
+    step.value = stepsValues.middle;
+  }
 
-  return model.value ? activeClasses : inactiveClasses;
+  if (step.value === stepsValues.middle) {
+    step.value = stepsValues.end;
+  }
+
+  if (step.value === stepsValues.end) {
+    step.value = stepsValues.start;
+  }
+}
+
+const classes = computed<string[]>(() => {
+  const finalClasses = ["bg-text-0"];
+
+  const classesByStep = {
+    [stepsValues.start]: [],
+    [stepsValues.middle]: ["translate-x-3"],
+    [stepsValues.end]: ["translate-x-6"],
+  };
+
+  finalClasses.push(...classesByStep[step.value]);
+
+  return finalClasses;
 });
 </script>
 
@@ -16,21 +43,16 @@ const classes = computed(() => {
     <button
       type="button"
       class="rounded-full bg-neutral-1 w-12 h-6 cursor-pointer"
-      @click="model = !model"
+      @click="nextStep"
     >
       <div
         class="rounded-full h-4 w-4 transition duration-200 ease-in-out cursor-pointer ml-1"
         :class="classes"
       >
-        <input v-model="model" type="checkbox" class="opacity-0" />
+        <input v-model="step" type="checkbox" class="opacity-0" />
       </div>
     </button>
-    <label
-      v-if="label"
-      for=""
-      class="cursor-pointer pl-1"
-      @click="model = !model"
-    >
+    <label v-if="label" for="" class="cursor-pointer pl-1" @click="nextStep">
       {{ label }}
     </label>
   </div>
