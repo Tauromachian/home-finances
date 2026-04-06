@@ -49,7 +49,7 @@ const classes = computed<string[]>(() => {
         class="rounded-full h-4 w-4 transition duration-200 ease-in-out cursor-pointer ml-1"
         :class="classes"
       >
-        <input v-model="step" type="checkbox" class="opacity-0" />
+        <input type="checkbox" class="opacity-0" />
       </div>
     </button>
     <label v-if="label" for="" class="cursor-pointer pl-1" @click="nextStep">
