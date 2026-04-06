@@ -5,6 +5,10 @@ const links = [
     to: "/",
   },
   {
+    name: "Income",
+    to: "/income",
+  },
+  {
     name: "Investments",
     to: "/investments",
   },
