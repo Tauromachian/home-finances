@@ -1,16 +1,12 @@
 <script setup lang="ts">
 const series = [
   {
-    name: "Net Profit",
+    name: "Income",
     data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
   },
   {
-    name: "Revenue",
+    name: "Expenses",
     data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
-  },
-  {
-    name: "Free Cash Flow",
-    data: [35, 41, 36, 26, 45, 48, 52, 53, 41],
   },
 ];
 
@@ -32,7 +28,7 @@ const options = {
     colors: ["transparent"],
   },
   xaxis: {
-    categories: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct"],
+    categories: months,
   },
   yaxis: {
     title: {
@@ -48,7 +44,7 @@ const options = {
 <template>
   <AppCard>
     <AppCardBody>
-      <p class="text-sm">Expense vs Gains</p>
+      <p class="text-sm">Expenses vs Gains</p>
       <ClientOnly>
         <apexchart type="bar" :options="options" :series="series"> </apexchart>
       </ClientOnly>
