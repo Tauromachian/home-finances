@@ -1,8 +1,12 @@
 <script setup>
 const links = [
   {
-    name: "Expenses Tracker",
+    name: "Dashboard",
     to: "/",
+  },
+  {
+    name: "Expenses Tracker",
+    to: "/expenses",
   },
   {
     name: "Income",
