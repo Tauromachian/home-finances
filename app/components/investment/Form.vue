@@ -51,10 +51,7 @@ function onSubmit(investment: Investment) {
         :error="errors.amountInvested"
       >
         <template #prepend>
-          <Icon
-            name="material-symbols-light:paid-outline"
-            class="text-xl"
-          ></Icon>
+          <Icon name="material-symbols-light:euro" class="text-xl"></Icon>
         </template>
       </AppInput>
 
@@ -67,10 +64,7 @@ function onSubmit(investment: Investment) {
         :error="errors.currentValue"
       >
         <template #prepend>
-          <Icon
-            name="material-symbols-light:paid-outline"
-            class="text-xl"
-          ></Icon>
+          <Icon name="material-symbols-light:euro" class="text-xl"></Icon>
         </template>
       </AppInput>
 
