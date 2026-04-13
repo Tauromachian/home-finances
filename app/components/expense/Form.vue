@@ -63,10 +63,7 @@ defineExpose({ internalRef: formRef });
         :error="errors.expense"
       >
         <template #prepend>
-          <Icon
-            name="material-symbols-light:paid-outline"
-            class="text-xl"
-          ></Icon>
+          <Icon name="material-symbols-light:euro" class="text-xl"></Icon>
         </template>
       </AppInput>
 
