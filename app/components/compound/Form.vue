@@ -17,12 +17,16 @@ const form = defineModel({
     <form class="mx-7 mb-2 pt-3">
       <AppInput
         v-model.number="form.percent"
-        label="Percent(%)"
+        label="Percent"
         name="percent"
         min="1"
         :rules="positiveNumber"
         type="number"
-      ></AppInput>
+      >
+        <template #prepend>
+          <Icon name="material-symbols-light:percent" class="text-xl"></Icon>
+        </template>
+      </AppInput>
 
       <AppInput
         v-model.number="form.years"
