@@ -6,4 +6,5 @@ export const expensesTable = pgTable("users", {
   name: varchar({ length: 255 }).notNull(),
   category: varchar({ length: 255 }).notNull(),
   fequency: varchar({ length: 255 }).notNull().unique(),
+  description: varchar({ length: 255 }),
 });
