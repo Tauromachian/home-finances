@@ -3,19 +3,15 @@ import { expensesCategories } from "~/utils/categories";
 
 import type { Expense } from "~/types/expense";
 
-import { useExpenseStore } from "../stores/expenses";
-
-type Frequency = "All" | "One time" | "Monthly" | "Annual";
 type FormMode = "edit" | "insert";
 
-const expenseStore = useExpenseStore();
+const expenses = ref<Expense[]>([]);
 
 const formRef = useTemplateRef("formRef");
 
 const appToaster = inject<Ref>("appToaster");
 
 const expenseForm = ref<Partial<Expense>>();
-const selectedExpenseType = ref<Frequency>("All");
 const isOpen = ref(false);
 const isConfirmationDialogOpen = ref(false);
 
@@ -38,12 +34,26 @@ function showMessage(message: string) {
   appToaster.value.openToast(message);
 }
 
-function submitForm(form: Expense) {
+async function submitForm(form: Expense) {
   if (formMode === "insert") {
-    expenseStore.addExpense(form);
+    await fetch("/api/expenses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
     showMessage("New expense added!");
   } else {
-    expenseStore.editExpense(selectedId, form);
+    await fetch("/api/expenses", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
     showMessage("Expense edited");
   }
 }
@@ -56,12 +66,7 @@ function openForm(mode: FormMode, id?: string | number) {
 
     formRef.value.internalRef.resetForm();
   } else {
-    const expenseToEdit: Expense = expenseStore.expenses.find(
-      (expense: Expense) => expense.id === id,
-    );
-
-    selectedId = expenseToEdit.id;
-    expenseForm.value = { ...expenseToEdit };
+    selectedId = id;
   }
 
   isOpen.value = true;
@@ -72,22 +77,13 @@ function openDeleteConfirmationDialog(id: string | number) {
   isConfirmationDialogOpen.value = true;
 }
 
-function deleteExpense() {
-  expenseStore.removeExpense(selectedId);
+async function deleteExpense() {
+  await fetch(`/api/expenses/${selectedId}`, { method: "DELETE" });
   isConfirmationDialogOpen.value = false;
 }
 
-const filteredExpenses = computed<Expense[]>(() => {
-  const allExpenses = expenseStore.expenses;
-
-  return allExpenses.filter((expense) => {
-    if (selectedExpenseType.value === "All") return true;
-    return expense.types === selectedExpenseType.value;
-  });
-});
-
 const totalExpenses = computed(() => {
-  return filteredExpenses.value.reduce((acum: number, next: Expense) => {
+  return expenses.value.reduce((acum: number, next: Expense) => {
     acum += Number(next.amount);
 
     return acum;
@@ -95,7 +91,7 @@ const totalExpenses = computed(() => {
 });
 
 const monthlyExpenses = computed(() => {
-  return filteredExpenses.value.reduce((acum: number, next: Expense) => {
+  return expenses.value.reduce((acum: number, next: Expense) => {
     if (next.frequency === "Monthly") {
       const monthly = (next.amount / 12).toFixed(2);
       acum += Number(monthly);
@@ -108,7 +104,7 @@ const monthlyExpenses = computed(() => {
 });
 
 const categoriesCount = computed(() => {
-  const categoriesObj = filteredExpenses.value.reduce(
+  const categoriesObj = expenses.value.reduce(
     (acum: Record<string, boolean>, next: Expense) => {
       acum[next.category] = true;
       return acum;
@@ -119,7 +115,13 @@ const categoriesCount = computed(() => {
   return Object.keys(categoriesObj).length;
 });
 
-onMounted(() => expenseStore.loadExpenses());
+async function loadData() {
+  const res = await fetch("/api/expenses");
+  const data = await res.json();
+  expenses.value = data.data;
+}
+
+onBeforeMount(() => loadData());
 </script>
 
 <template>
@@ -162,7 +164,7 @@ onMounted(() => expenseStore.loadExpenses());
           </AppCardBody>
 
           <div
-            v-if="!filteredExpenses?.length"
+            v-if="!expenses?.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
@@ -172,8 +174,8 @@ onMounted(() => expenseStore.loadExpenses());
 
           <AppCardBody>
             <ExpenseDonutChart
-              v-if="filteredExpenses?.length"
-              :expenses="filteredExpenses"
+              v-if="expenses?.length"
+              :expenses="expenses"
               :categories="expensesCategories"
             ></ExpenseDonutChart>
           </AppCardBody>
@@ -187,7 +189,7 @@ onMounted(() => expenseStore.loadExpenses());
               data-testid="expenses-items"
             >
               <ExpenseItem
-                v-for="expense in filteredExpenses"
+                v-for="expense in expenses"
                 :key="expense.id"
                 :expense="expense"
                 variant="outlined"
@@ -200,7 +202,7 @@ onMounted(() => expenseStore.loadExpenses());
             </div>
 
             <div
-              v-if="!filteredExpenses?.length"
+              v-if="!expenses?.length"
               class="flex flex-col items-center gap-5 justify-center my-6"
             >
               <Icon size="48" name="material-symbols-light:note-outline"></Icon>
