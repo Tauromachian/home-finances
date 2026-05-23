@@ -7,7 +7,6 @@ export default defineNuxtConfig({
 
   modules: [
     "@vee-validate/nuxt",
-    "@pinia/nuxt",
     "@nuxt/icon",
     "@nuxt/eslint",
     "@nuxt/test-utils/module",
