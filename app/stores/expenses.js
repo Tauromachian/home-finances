@@ -4,7 +4,8 @@ export const useExpenseStore = defineStore("expenses", () => {
 
   // actions
   function addExpense(expense) {
-    expense.id = calcMEX();
+    if (!expense.id) expense.id = calcMEX();
+
     expenses.value.push(expense);
     saveExpenses();
     loadExpenses();
