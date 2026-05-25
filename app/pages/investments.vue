@@ -79,7 +79,7 @@ async function submitForm(form: Investment) {
 function openForm(mode: FormMode, id?: string | number) {
   formMode = mode;
 
-  selectedId = id;
+  if (id) selectedId = id;
 
   isOpen.value = true;
 }
