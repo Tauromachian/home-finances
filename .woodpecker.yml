@@ -3,44 +3,48 @@ when:
     branch: main
 
 steps:
-  - name: checkout
-    image: woodpeckerci/plugin-git
+  - name: Deploy project over SSH
+    image: appleboy/drone-ssh
     settings:
-      depth: 50 # optional, fetches more history if needed
+      host:
+        from_secret: SSH_HOST
+      username:
+        from_secret: SSH_USERNAME
+      password:
+        from_secret: SSH_PASSWORD
+      port: 22
+      envs:
+        - DB_USER
+        - DB_PASSWORD
+        - DB_NAME
+      script:
+        - |
+          if [ -d home-finances ]; then
+            cd home-finances
+            git pull --rebase -Xours
+          else
+            git clone https://github.com/Tauromachian/home-finances.git
+            cd home-finances
+          fi
 
-  - name: enable-corepack-and-install
-    image: node:lts
-    commands:
-      - corepack enable
-      - corepack prepare pnpm@latest --activate # optional but ensures latest pnpm
-      - pnpm install --frozen-lockfile # safer for CI
-      - pnpm dlx nuxt generate
+          cat > .env << EOF
+          APP_ENV=production
+          DB_USER=$DB_USER
+          DB_PASSWORD=$DB_PASSWORD
+          DB_PORT=5432
+          DB_NAME=$DB_NAME
+          DB_HOST=db
+          EOF
 
-  - name: publish to build branch
-    image: alpine/git
+          docker compose down
+          docker compose build --no-cache
+          docker compose up -d
+
+          docker exec home-finances-web-1 deno run db:push
     environment:
-      GIT_TOKEN:
-        from_secret: git_token
-    commands:
-      # - echo "== WORKSPACE =="
-      # - pwd
-      # - ls /
-      # - echo "== FIND DIST =="
-      # - find / -type d -name .output 2>/dev/null || echo "No dist folder found anywhere"
-      # - echo "== WOODPECKER SRC =="
-      # - ls /woodpecker/src || echo "No /woodpecker/src"
-
-      - git config --global user.email "54786476+Tauromachian@users.noreply.github.com"
-      - git config --global user.name "Tauromachian"
-
-      - git clone https://github.com/Tauromachian/home-finances.git repo
-      - cd repo
-      - git checkout build || git checkout -b build
-      - find . -mindepth 1 -not -path './.git*' -delete
-
-      - cp -r /woodpecker/src/github.com/Tauromachian/home-finances/.output/public/. .
-
-      - git remote set-url origin https://$GIT_TOKEN@github.com/Tauromachian/home-finances.git
-      - git add .
-      - git diff --cached --quiet || git commit -m "Build ${CI_COMMIT_SHA} - ${CI_COMMIT_MESSAGE}"
-      - git push --force origin build
+      DB_USER:
+        from_secret: DB_USER
+      DB_PASSWORD:
+        from_secret: DB_PASSWORD
+      DB_NAME:
+        from_secret: DB_NAME
