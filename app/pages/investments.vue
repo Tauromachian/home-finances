@@ -1,13 +1,21 @@
 <script setup lang="ts">
 import type { Investment } from "~/types/investment";
 
-const investmentsStore = useInvestmentStore();
+type FormMode = "edit" | "insert";
+
+const investments = ref<Investment[]>([]);
+
 const isOpen = ref(false);
+const isConfirmationDialogOpen = ref(false);
 
 const appToaster = inject<Ref>("appToaster");
 
+let selectedId: number | string = "";
+
+let formMode: FormMode;
+
 const portfolioValue = computed(() => {
-  const total = investmentsStore.investments.reduce(
+  const total = investments.value.reduce(
     (acum: number, nextValue: Investment) => {
       acum += nextValue.currentValue;
       return acum;
@@ -36,21 +44,68 @@ const formattedResume = computed(() => {
   };
 });
 
-function submitForm(form: Investment) {
-  investmentsStore.addInvestment(form);
+function showMessage(message: string) {
   isOpen.value = false;
 
   if (!appToaster?.value) return;
 
-  appToaster.value.openToast("New investment added!");
+  appToaster.value.openToast(message);
 }
 
-onMounted(() => investmentsStore.loadInvestments());
+async function submitForm(form: Investment) {
+  if (formMode === "insert") {
+    await fetch("/api/investments", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    showMessage("New investment added!");
+  } else {
+    await fetch("/api/investments", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    });
+
+    showMessage("Investment edited");
+  }
+}
+
+function openForm(mode: FormMode, id?: string | number) {
+  formMode = mode;
+
+  selectedId = id;
+
+  isOpen.value = true;
+}
+
+function openDeleteConfirmationDialog(id: string | number) {
+  selectedId = id;
+  isConfirmationDialogOpen.value = true;
+}
+
+async function deleteInvestment() {
+  await fetch(`/api/expenses/${selectedId}`, { method: "DELETE" });
+  isConfirmationDialogOpen.value = false;
+}
+
+async function loadData() {
+  const res = await fetch("/api/investments");
+  const data = await res.json();
+  investments.value = data.data;
+}
+
+onBeforeMount(() => loadData());
 </script>
 
 <template>
   <div>
-    <BaseButton class="mb-5" @click="isOpen = true">
+    <BaseButton class="mb-5" @click="openForm('insert')">
       <span class="text-xl">+</span> Add Investment
     </BaseButton>
 
@@ -62,9 +117,7 @@ onMounted(() => investmentsStore.loadInvestments());
             <p class="text-5xl font-serif text-accent-4">
               {{ portfolioValue }}
             </p>
-            <p class="opacity-60">
-              {{ investmentsStore.investments.length }} investments
-            </p>
+            <p class="opacity-60">{{ investments.length }} investments.value</p>
           </div>
           <div class="ml-auto flex align-middle items-center gap-8">
             <div>
@@ -85,9 +138,9 @@ onMounted(() => investmentsStore.loadInvestments());
             <p class="text-md font-bold">Allocation</p>
           </AppCardBody>
 
-          <AppCardBody v-if="investmentsStore.investments.length">
+          <AppCardBody v-if="investments.length">
             <InvestmentDonutChart
-              :investments="investmentsStore.investments"
+              :investments="investments"
             ></InvestmentDonutChart>
           </AppCardBody>
 
@@ -106,10 +159,8 @@ onMounted(() => investmentsStore.loadInvestments());
             <p class="text-md font-bold">Growth Overview</p>
           </AppCardBody>
 
-          <AppCardBody v-if="investmentsStore.investments.length">
-            <InvestmentLineChart
-              :investments="investmentsStore.investments"
-            ></InvestmentLineChart>
+          <AppCardBody v-if="investments.length">
+            <InvestmentLineChart :investments></InvestmentLineChart>
           </AppCardBody>
 
           <div
@@ -124,10 +175,15 @@ onMounted(() => investmentsStore.loadInvestments());
       </div>
 
       <InvestmentHoldings
-        :investments="investmentsStore.investments"
-        @remove="(id) => investmentsStore.removeInvestment(id)"
+        :investments
+        @remove="(id) => openDeleteConfirmationDialog(id)"
       ></InvestmentHoldings>
     </div>
+
+    <DialogConfirmDelete
+      v-model="isConfirmationDialogOpen"
+      @click:delete="deleteInvestment"
+    ></DialogConfirmDelete>
 
     <AppDialog v-model="isOpen">
       <InvestmentForm @submit="submitForm"></InvestmentForm>
