@@ -13,9 +13,9 @@ const calculatedSeries = computed(() => {
     };
     series.push(serie);
 
-    const gains = investment.currentValue - investment.amountInvested;
+    const gains = investment.currentValue - investment.amount;
     const monthlyGains = gains / 12;
-    let growingAmount = investment.amountInvested;
+    let growingAmount = investment.amount;
 
     for (let i = 0; i < 12; i++) {
       growingAmount += monthlyGains;
