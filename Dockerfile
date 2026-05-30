@@ -9,6 +9,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm run build
 
+# === Production stage ===
 FROM node:24-alpine
 
 WORKDIR /app
