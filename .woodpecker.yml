@@ -34,6 +34,7 @@ steps:
           DB_PORT=5432
           DB_NAME=$DB_NAME
           DB_HOST=db
+          APP_COMPOSE_PORT=8091
           EOF
 
           docker compose down
