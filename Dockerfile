@@ -19,6 +19,7 @@ RUN pnpm install dotenv
 
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
+COPY --from=builder /app/server/db/schema.ts ./server/db/schema.ts
 
 EXPOSE 3000
 
