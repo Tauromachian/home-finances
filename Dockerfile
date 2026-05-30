@@ -19,4 +19,4 @@ COPY --from=builder /app/.output ./.output
 
 EXPOSE 3000
 
-CMD ["node", ".output/server/index.mjs"]
+CMD ["sh","-c","npx drizzle-kit push && node .output/server/index.mjs"]
