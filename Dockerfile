@@ -16,7 +16,8 @@ FROM node:24-alpine
 WORKDIR /app
 
 COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
 
 EXPOSE 3000
 
-CMD ["sh","-c","npx drizzle-kit push && node .output/server/index.mjs"]
+CMD ["node", ".output/server/index.mjs"]
