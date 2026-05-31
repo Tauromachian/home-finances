@@ -41,6 +41,8 @@ steps:
           docker compose build --no-cache
           docker compose up -d
 
+          docker exec home-finances-web-1 pnpm drizzle-kit push
+
     environment:
       DB_USER:
         from_secret: DB_USER
