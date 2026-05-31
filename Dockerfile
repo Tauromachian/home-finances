@@ -17,7 +17,7 @@ WORKDIR /app
 
 RUN corepack enable
 COPY package.json pnpm-lock.yaml .
-RUN pnpm install dotenv drizzle-kit drizzle-orm && pnpm approve-builds esbuild
+RUN pnpm install --frozen-lockfile
 
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
