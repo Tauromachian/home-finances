@@ -15,7 +15,7 @@ FROM node:24-alpine
 
 RUN corepack enable
 WORKDIR /app
-RUN pnpm install dotenv
+RUN pnpm install dotenv drizzle-kit
 
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
