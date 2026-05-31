@@ -13,10 +13,11 @@ RUN pnpm run build
 # === Production stage ===
 FROM node:24-alpine
 
+WORKDIR /app
+
 COPY package.json pnpm-lock.yaml .
 
 RUN corepack enable
-WORKDIR /app
 RUN pnpm approve-builds esbuild && \
     pnpm install dotenv drizzle-kit drizzle-orm
 
