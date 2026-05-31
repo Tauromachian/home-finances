@@ -11,7 +11,7 @@ RUN pnpm postinstall
 RUN pnpm run build
 
 # === Production stage ===
-FROM node:24-alpine
+FROM node:24-alpine AS prod
 
 WORKDIR /app
 
