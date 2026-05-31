@@ -15,12 +15,9 @@ FROM node:24-alpine
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml .
-
 RUN corepack enable
-RUN pnpm approve-builds esbuild && \
-    pnpm install dotenv drizzle-kit drizzle-orm
-
+COPY package.json pnpm-lock.yaml .
+RUN pnpm install dotenv drizzle-kit drizzle-orm
 
 COPY --from=builder /app/.output ./.output
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
