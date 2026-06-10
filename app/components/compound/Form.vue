@@ -21,6 +21,7 @@ const form = defineModel({
         name="percent"
         min="1"
         :rules="positiveNumber"
+        input-class="pl-12"
         type="number"
       >
         <template #prepend>
