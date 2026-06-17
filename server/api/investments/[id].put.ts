@@ -2,14 +2,14 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@@/server/orm";
 
-import { expensesTable } from "@@/server/db/schema";
+import { investmentsTable } from "@@/server/db/schema";
 
 export default defineEventHandler(async (event) => {
-  const expense = await readBody(event);
+  const investment = await readBody(event);
   await db
-    .update(expensesTable)
-    .set(expense)
-    .where(eq(expensesTable.id, expense.id));
+    .update(investmentsTable)
+    .set(investment)
+    .where(eq(investmentsTable.id, investment.id));
 
   return { msg: "Success" };
 });
