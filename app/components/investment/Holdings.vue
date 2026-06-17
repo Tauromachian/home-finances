@@ -9,7 +9,7 @@ defineEmits<{ remove: [id: number | string] }>();
   <AppCard>
     <AppCardBody>
       <p class="text-md font-bold mb-4">Holdings</p>
-      <template v-if="investments.length">
+      <div v-if="investments.length" class="flex flex-col gap-2">
         <InvestmentItem
           v-for="(investment, index) in investments"
           :key="`investment-${index}`"
@@ -17,7 +17,7 @@ defineEmits<{ remove: [id: number | string] }>();
           :category="getCategoryByName(investment.category, assetsCategories)"
           @remove="$emit('remove', investment.id)"
         ></InvestmentItem>
-      </template>
+      </div>
       <EmptyState v-else></EmptyState>
     </AppCardBody>
   </AppCard>
