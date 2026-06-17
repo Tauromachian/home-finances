@@ -19,14 +19,14 @@ const signInWithOtp = async () => {
 
 <template>
   <AppCard class="max-w-96 m-auto">
-    <AppCardBody>
+    <form class="card-body" @submit.prevent="signInWithOtp">
       <AppInput v-model="form.email" type="email" label="Email" />
       <AppInput v-model="form.password" type="password" label="Password" />
       <div class="flex w-full">
-        <BaseButton class="ml-auto" @click="signInWithOtp">
+        <BaseButton class="ml-auto" type="submit">
           Sign In with E-Mail
         </BaseButton>
       </div>
-    </AppCardBody>
+    </form>
   </AppCard>
 </template>
