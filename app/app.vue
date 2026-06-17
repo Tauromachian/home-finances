@@ -2,9 +2,10 @@
 import "@fontsource-variable/dm-sans";
 import "@fontsource/dm-serif-display";
 
-const appToaster = useTemplateRef("appToaster");
-
 type Theme = "light" | "system" | "dark";
+
+const appToaster = useTemplateRef("appToaster");
+const route = useRoute();
 
 const theme = ref<Theme>("system");
 const textColor = ref();
@@ -14,10 +15,6 @@ function getSystemTheme(): "dark" | "light" {
 
   return isDark ? "dark" : "light";
 }
-
-const themeName = computed(() => {
-  return theme.value[0].toUpperCase() + theme.value.slice(1);
-});
 
 provide("donutChartTextColor", textColor);
 
@@ -36,6 +33,7 @@ watch(theme, (value) => {
 });
 
 provide("appToaster", appToaster);
+provide("theme", theme);
 
 onMounted(() => {
   let enterTheme = localStorage.getItem("theme");
@@ -43,32 +41,24 @@ onMounted(() => {
 
   theme.value = enterTheme as Theme;
 });
+
+watchEffect(() => {
+  console.log(route.name);
+});
+
+const isAuthRoute = computed(() => {
+  if (route.name === "login") return true;
+
+  return false;
+});
+const layoutName = computed(() => (isAuthRoute.value ? "auth" : "default"));
 </script>
 
 <template>
-  <main class="font-sans min-h-screen bg-neutral-0 text-text-0">
-    <header class="flex items-center max-w-6xl mx-4 lg:mx-auto pt-5">
-      <h1 class="font-serif text-4xl font-bold text-text-1">
-        Home
-        <span class="text-accent-0 italic"> Finances </span>
-      </h1>
-
-      <AppSwitch
-        v-model="theme"
-        class="ml-auto"
-        :label="themeName"
-        :steps-values="{ start: 'light', middle: 'system', end: 'dark' }"
-      ></AppSwitch>
-    </header>
-
-    <div class="max-w-6xl mx-4 lg:mx-auto pt-5">
-      <NavBar class="mb-8"></NavBar>
-
-      <NuxtPage />
-    </div>
-
+  <NuxtLayout :name="layoutName">
+    <NuxtPage />
     <AppToaster ref="appToaster"></AppToaster>
-  </main>
+  </NuxtLayout>
 </template>
 
 <style>
