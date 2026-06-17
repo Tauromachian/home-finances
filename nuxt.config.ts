@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     "@nuxt/eslint",
     "@nuxt/test-utils/module",
+    "@nuxtjs/supabase",
   ],
 
   vite: {
