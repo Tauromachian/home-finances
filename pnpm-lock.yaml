@@ -30,8 +30,8 @@ importers:
         specifier: ^4.15.0
         version: 4.15.1(magicast@0.5.2)(vue@3.5.29(typescript@5.9.3))
       apexcharts:
-        specifier: ^5.6.0
-        version: 5.6.0
+        specifier: ^5.10.0
+        version: 5.15.0
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
@@ -57,8 +57,8 @@ importers:
         specifier: ^4.5.0
         version: 4.6.4(vue@3.5.29(typescript@5.9.3))
       vue3-apexcharts:
-        specifier: ^1.8.0
-        version: 1.10.0(apexcharts@5.6.0)(vue@3.5.29(typescript@5.9.3))
+        specifier: ^1.11.1
+        version: 1.11.1(apexcharts@5.15.0)(vue@3.5.29(typescript@5.9.3))
     devDependencies:
       '@iconify-json/material-symbols-light':
         specifier: ^1.2.15
@@ -2429,9 +2429,6 @@ packages:
   '@vue/typescript-plugin@3.2.5':
     resolution: {integrity: sha512-efEFD1QEq4tQhLpsVOdPXNiJlhQU4Z4yG52ggvuXK8r+wrLLNMAlrM47lfzk7Mua7HCeVzxXL1r401JcCVVNMw==}
 
-  '@yr/monotone-cubic-spline@1.0.3':
-    resolution: {integrity: sha512-FQXkOta0XBSUPHndIKON2Y9JeQz5ZeMqLYZVVK93FliNBFm7LNMIZmY6FrMEB9XPcDbE2bekMbZD6kzDkxwYjA==}
-
   abbrev@2.0.0:
     resolution: {integrity: sha512-6/mh1E2u2YgEsCHdY0Yx5oW+61gZU+1vXaoiHHrpKeuRNNgFvS+/jrwHiQhB5apAf5oB7UB7E19ol2R2LKH8hQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -2493,8 +2490,8 @@ packages:
     resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
 
-  apexcharts@5.6.0:
-    resolution: {integrity: sha512-BZua59yedRsaDfnxkzNrkyLCvluq2c3ZDBIz4joxSKtgr0xDQXQ5dzceMhf/TpTbAjaF+2NYIpLP3BEEIG2s/w==}
+  apexcharts@5.15.0:
+    resolution: {integrity: sha512-ATswoiZi8wynKcwqf0eyE0Is5mBQoDpxZN3PlSVy41OrD+9GMBp2kZQRjyGK+5/j0GFjHkuAd7GKOrt5VMoPrw==}
 
   archiver-utils@5.0.2:
     resolution: {integrity: sha512-wuLJMmIBQYCsGZgYLTy5FIB2pF6Lfb6cXMSF8Qywwk3t20zWnAi7zLcQFdKQmIB8wyZpY5ER38x08GbwtR2cLA==}
@@ -5331,10 +5328,10 @@ packages:
     peerDependencies:
       typescript: '>=5.0.0'
 
-  vue3-apexcharts@1.10.0:
-    resolution: {integrity: sha512-sBma2In4rU5n/JBrv8KVb8if+IoY019Dse2yRDD/eRU1WGZHK07zuy9erefKzbJ7T3wP9+Jsy9bH6Vdjy85HZg==}
+  vue3-apexcharts@1.11.1:
+    resolution: {integrity: sha512-MbN3vg8bMG19wc0Lm1HkeQvODgLm56DgpIxtNUO0xpf/JCzYWVGE4jzXp2JISzy2s3Kul1yOxNQUYsLvKQ5L9g==}
     peerDependencies:
-      apexcharts: '>=4.0.0'
+      apexcharts: '>=5.10.0'
       vue: '>=3.0.0'
 
   vue@3.5.29:
@@ -7645,8 +7642,6 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@yr/monotone-cubic-spline@1.0.3': {}
-
   abbrev@2.0.0: {}
 
   abbrev@3.0.1: {}
@@ -7693,9 +7688,7 @@ snapshots:
       normalize-path: 3.0.0
       picomatch: 2.3.1
 
-  apexcharts@5.6.0:
-    dependencies:
-      '@yr/monotone-cubic-spline': 1.0.3
+  apexcharts@5.15.0: {}
 
   archiver-utils@5.0.2:
     dependencies:
@@ -10703,9 +10696,9 @@ snapshots:
       '@vue/language-core': 3.2.5
       typescript: 5.9.3
 
-  vue3-apexcharts@1.10.0(apexcharts@5.6.0)(vue@3.5.29(typescript@5.9.3)):
+  vue3-apexcharts@1.11.1(apexcharts@5.15.0)(vue@3.5.29(typescript@5.9.3)):
     dependencies:
-      apexcharts: 5.6.0
+      apexcharts: 5.15.0
       vue: 3.5.29(typescript@5.9.3)
 
   vue@3.5.29(typescript@5.9.3):
