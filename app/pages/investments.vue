@@ -74,6 +74,8 @@ async function submitForm(form: Investment) {
 
     showMessage("Investment edited");
   }
+
+  loadData();
 }
 
 function openForm(mode: FormMode, id?: string | number) {

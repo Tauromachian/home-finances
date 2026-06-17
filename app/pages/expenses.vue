@@ -56,6 +56,8 @@ async function submitForm(form: Expense) {
 
     showMessage("Expense edited");
   }
+
+  loadData();
 }
 
 function openForm(mode: FormMode, id?: string | number) {
