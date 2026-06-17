@@ -90,7 +90,7 @@ function openDeleteConfirmationDialog(id: string | number) {
 }
 
 async function deleteInvestment() {
-  await fetch(`/api/expenses/${selectedId}`, { method: "DELETE" });
+  await fetch(`/api/investments/${selectedId}`, { method: "DELETE" });
   isConfirmationDialogOpen.value = false;
 }
 
