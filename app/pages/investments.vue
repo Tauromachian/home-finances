@@ -178,7 +178,7 @@ onBeforeMount(() => loadData());
 
       <InvestmentHoldings
         :investments
-        @remove="(id) => openDeleteConfirmationDialog(id)"
+        @remove="openDeleteConfirmationDialog"
       ></InvestmentHoldings>
     </div>
 
