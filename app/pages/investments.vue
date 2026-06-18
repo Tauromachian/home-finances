@@ -94,6 +94,7 @@ function openDeleteConfirmationDialog(id: string | number) {
 async function deleteInvestment() {
   await fetch(`/api/investments/${selectedId}`, { method: "DELETE" });
   isConfirmationDialogOpen.value = false;
+  loadData();
 }
 
 async function loadData() {
@@ -176,10 +177,23 @@ onBeforeMount(() => loadData());
         </AppCard>
       </div>
 
-      <InvestmentHoldings
-        :investments
-        @remove="openDeleteConfirmationDialog"
-      ></InvestmentHoldings>
+      <AppCard>
+        <AppCardBody>
+          <p class="text-md font-bold mb-4">Holdings</p>
+          <div v-if="investments.length" class="flex flex-col gap-2">
+            <InvestmentItem
+              v-for="(investment, index) in investments"
+              :key="`investment-${index}`"
+              :investment
+              :category="
+                getCategoryByName(investment.category, assetsCategories)
+              "
+              @click:delete="openDeleteConfirmationDialog(investment.id)"
+            ></InvestmentItem>
+          </div>
+          <EmptyState v-else></EmptyState>
+        </AppCardBody>
+      </AppCard>
     </div>
 
     <DialogConfirmDelete

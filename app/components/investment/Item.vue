@@ -3,9 +3,9 @@ import type { Category } from "~/types/category";
 import type { Investment } from "~/types/investment";
 
 defineProps<{ investment: Investment; category: Category }>();
-defineEmits<{ remove: [] }>();
-
-const isConfirmationDialogOpen = ref(false);
+defineEmits<{
+  "click:delete": [id: number | string];
+}>();
 </script>
 
 <template>
@@ -47,7 +47,7 @@ const isConfirmationDialogOpen = ref(false);
         <BaseButton
           variant="text"
           class="flex items-center"
-          @click="isConfirmationDialogOpen = true"
+          @click="$emit('click:delete', investment.id)"
         >
           <Icon
             name="material-symbols-light:delete-outline"
@@ -56,10 +56,5 @@ const isConfirmationDialogOpen = ref(false);
         </BaseButton>
       </div>
     </AppCardBody>
-
-    <DialogConfirmDelete
-      v-model="isConfirmationDialogOpen"
-      @click:delete="$emit('remove')"
-    ></DialogConfirmDelete>
   </AppCard>
 </template>
