@@ -1,14 +1,9 @@
 <script setup>
 defineEmits(["click:delete"]);
-
-const model = defineModel({
-  type: Boolean,
-  default: false,
-});
 </script>
 
 <template>
-  <AppDialog v-model="model">
+  <AppDialog>
     <AppCard>
       <div class="flex gap-4 mobile:rounded-t-md pt-4 px-7 text-text-1">
         <div class="my-auto">
