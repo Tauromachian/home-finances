@@ -102,12 +102,10 @@ const options = computed(() => {
 </script>
 
 <template>
-  <ClientOnly>
-    <apexchart
-      type="donut"
-      :options="options"
-      :series="chartData.series"
-      class="mx-5 mb-5"
-    ></apexchart>
-  </ClientOnly>
+  <apexchart
+    type="donut"
+    :options="options"
+    :series="chartData.series"
+    class="mx-5 mb-5"
+  ></apexchart>
 </template>

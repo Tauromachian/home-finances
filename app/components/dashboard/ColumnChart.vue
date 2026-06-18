@@ -45,9 +45,7 @@ const options = {
   <AppCard>
     <AppCardBody>
       <p class="text-sm">Expenses vs Gains</p>
-      <ClientOnly>
-        <apexchart type="bar" :options="options" :series="series"> </apexchart>
-      </ClientOnly>
+      <apexchart type="bar" :options="options" :series="series"> </apexchart>
     </AppCardBody>
   </AppCard>
 </template>
