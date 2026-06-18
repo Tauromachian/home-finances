@@ -142,9 +142,11 @@ onBeforeMount(() => loadData());
           </AppCardBody>
 
           <AppCardBody v-if="investments.length">
-            <InvestmentDonutChart
-              :investments="investments"
-            ></InvestmentDonutChart>
+            <ClientOnly>
+              <InvestmentDonutChart
+                :investments="investments"
+              ></InvestmentDonutChart>
+            </ClientOnly>
           </AppCardBody>
 
           <div
@@ -163,7 +165,9 @@ onBeforeMount(() => loadData());
           </AppCardBody>
 
           <AppCardBody v-if="investments.length">
-            <InvestmentLineChart :investments></InvestmentLineChart>
+            <ClientOnly>
+              <InvestmentLineChart :investments></InvestmentLineChart>
+            </ClientOnly>
           </AppCardBody>
 
           <div
