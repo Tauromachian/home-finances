@@ -82,6 +82,7 @@ function openDeleteConfirmationDialog(id: string | number) {
 async function deleteExpense() {
   await fetch(`/api/expenses/${selectedId}`, { method: "DELETE" });
   isConfirmationDialogOpen.value = false;
+  loadData();
 }
 
 const totalExpenses = computed(() => {
