@@ -5,11 +5,11 @@ import { db } from "@@/server/orm";
 import { investmentsTable } from "@@/server/db/schema";
 
 export default defineEventHandler(async (event) => {
-  const query = getQuery(event);
+  const id = event.context.params?.id;
 
-  await db
-    .delete(investmentsTable)
-    .where(eq(investmentsTable.id, query.id as number));
+  if (!id) throw createError({ status: 400, statusText: "ID needed" });
+
+  await db.delete(investmentsTable).where(eq(investmentsTable.id, Number(id)));
 
   return { msg: "Success" };
 });
