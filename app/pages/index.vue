@@ -37,6 +37,8 @@
       </AppCard>
     </div>
 
-    <DashboardColumnChart></DashboardColumnChart>
+    <ClientOnly>
+      <DashboardColumnChart></DashboardColumnChart>
+    </ClientOnly>
   </div>
 </template>

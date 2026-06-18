@@ -176,11 +176,13 @@ onBeforeMount(() => loadData());
           </div>
 
           <AppCardBody>
-            <ExpenseDonutChart
-              v-if="expenses?.length"
-              :expenses="expenses"
-              :categories="expensesCategories"
-            ></ExpenseDonutChart>
+            <ClientOnly>
+              <ExpenseDonutChart
+                v-if="expenses?.length"
+                :expenses="expenses"
+                :categories="expensesCategories"
+              ></ExpenseDonutChart>
+            </ClientOnly>
           </AppCardBody>
         </AppCard>
 
