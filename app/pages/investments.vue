@@ -141,22 +141,23 @@ onBeforeMount(() => loadData());
             <p class="text-md font-bold">Allocation</p>
           </AppCardBody>
 
-          <AppCardBody v-if="investments.length">
-            <ClientOnly>
-              <InvestmentDonutChart
-                :investments="investments"
-              ></InvestmentDonutChart>
-            </ClientOnly>
-          </AppCardBody>
-
           <div
-            v-else
+            v-if="!investments.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
             <p>No Investments! Add one</p>
           </div>
+
+          <AppCardBody>
+            <ClientOnly>
+              <InvestmentDonutChart
+                v-if="investments.length"
+                :investments="investments"
+              ></InvestmentDonutChart>
+            </ClientOnly>
+          </AppCardBody>
         </AppCard>
 
         <AppCard>
@@ -164,20 +165,23 @@ onBeforeMount(() => loadData());
             <p class="text-md font-bold">Growth Overview</p>
           </AppCardBody>
 
-          <AppCardBody v-if="investments.length">
-            <ClientOnly>
-              <InvestmentLineChart :investments></InvestmentLineChart>
-            </ClientOnly>
-          </AppCardBody>
-
           <div
-            v-else
+            v-if="!investments.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
             <p>No Investments! Add one</p>
           </div>
+
+          <AppCardBody>
+            <ClientOnly>
+              <InvestmentLineChart
+                v-if="investments.length"
+                :investments
+              ></InvestmentLineChart>
+            </ClientOnly>
+          </AppCardBody>
         </AppCard>
       </div>
 
