@@ -74,9 +74,7 @@ const options = computed(() => {
 </script>
 
 <template>
-  <ClientOnly>
-    <apexchart type="line" :options :series="calculatedSeries"> </apexchart>
-  </ClientOnly>
+  <apexchart type="line" :options :series="calculatedSeries"> </apexchart>
 </template>
 
 <style scoped></style>
