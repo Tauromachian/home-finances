@@ -18,7 +18,7 @@ const signInWithOtp = async () => {
 </script>
 
 <template>
-  <AppCard class="max-w-96 m-auto">
+  <AppCard class="max-w-96 mb-auto mx-auto">
     <form class="card-body" @submit.prevent="signInWithOtp">
       <AppInput v-model="form.email" type="email" label="Email" />
       <AppInput v-model="form.password" type="password" label="Password" />
