@@ -42,10 +42,6 @@ onMounted(() => {
   theme.value = enterTheme as Theme;
 });
 
-watchEffect(() => {
-  console.log(route.name);
-});
-
 const isAuthRoute = computed(() => {
   if (route.name === "login") return true;
 
