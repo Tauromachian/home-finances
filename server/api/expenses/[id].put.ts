@@ -1,17 +1,14 @@
 import { eq } from "drizzle-orm";
-import { serverSupabaseUser } from "#supabase/server";
 
 import { db } from "@@/server/orm";
 
 import { expensesTable } from "@@/server/db/schema";
 
 export default defineEventHandler(async (event) => {
-  const user = await serverSupabaseUser(event);
+  const user = event.context.user;
 
   const expense = await readBody(event);
-
-  if (!user) throw createError({ status: 401 });
-  expense.userId = user.sub;
+  expense.userId = user.id;
 
   await db
     .update(expensesTable)
