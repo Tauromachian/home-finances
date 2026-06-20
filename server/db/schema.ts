@@ -36,6 +36,6 @@ export const investmentsTable = pgTable("investments", {
   name: varchar({ length: 255 }).notNull(),
   category: varchar({ length: 255 }).notNull(),
   amount: numeric({ mode: "number" }).notNull(),
-  currentValue: numeric({ mode: "number" }).notNull(),
+  currentValue: numeric("current_value", { mode: "number" }).notNull(),
   description: varchar({ length: 255 }),
 });
