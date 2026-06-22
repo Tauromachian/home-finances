@@ -29,7 +29,7 @@ steps:
           fi
 
           cat > .env << EOF
-          APP_ENV=production
+          NODE_ENV=production
           DB_USER=$DB_USER
           DB_PASSWORD=$DB_PASSWORD
           DB_PORT=5432
