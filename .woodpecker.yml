@@ -22,8 +22,6 @@ steps:
         - NUXT_PUBLIC_SUPABASE_URL
       script:
         - |
-          NODE_OPTIONS="--max-old-space-size=4096" npm run build
-
           if [ -d home-finances ]; then
             cd home-finances
             git pull --rebase -Xours
@@ -51,6 +49,7 @@ steps:
           docker exec home-finances-web-1 pnpm drizzle-kit push
 
     environment:
+      NODE_OPTIONS: "--max-old-space-size=4096"
       DB_HOST:
         from_secret: DB_HOST
       DB_USER:
