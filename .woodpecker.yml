@@ -33,7 +33,7 @@ steps:
           DB_PASSWORD=$DB_PASSWORD
           DB_PORT=5432
           DB_NAME=$DB_NAME
-          DB_HOST=db
+          DB_HOST=$DB_HOST
           APP_COMPOSE_PORT=8091
           EOF
 
@@ -44,6 +44,8 @@ steps:
           docker exec home-finances-web-1 pnpm drizzle-kit push
 
     environment:
+      DB_HOST:
+        from_secret: DB_HOST
       DB_USER:
         from_secret: DB_USER
       DB_PASSWORD:
