@@ -39,3 +39,14 @@ export const investmentsTable = pgTable("investments", {
   currentValue: numeric("current_value", { mode: "number" }).notNull(),
   description: varchar({ length: 255 }),
 });
+
+export const incomeTable = pgTable("income", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => usersTable.id),
+  name: varchar({ length: 255 }).notNull(),
+  amount: numeric({ mode: "number" }).notNull(),
+  frequency: varchar({ length: 255 }).notNull(),
+  description: varchar({ length: 255 }),
+});
