@@ -22,6 +22,8 @@ steps:
         - NUXT_PUBLIC_SUPABASE_URL
       script:
         - |
+          NODE_OPTIONS="--max-old-space-size=4096" npm run build
+
           if [ -d home-finances ]; then
             cd home-finances
             git pull --rebase -Xours
