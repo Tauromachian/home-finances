@@ -49,7 +49,8 @@ steps:
           docker exec home-finances-web-1 pnpm drizzle-kit push
 
     environment:
-      NODE_OPTIONS: "--max-old-space-size=4096"
+      NODE_OPTIONS: "--max-old-space-size=2048"
+      NUXT_TELEMETRY_DISABLED: "1"
       DB_HOST:
         from_secret: DB_HOST
       DB_USER:
