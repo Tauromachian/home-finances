@@ -1,4 +1,4 @@
 allowBuilds:
   "@parcel/watcher": true
   esbuild: true
-  unrs-resolver: false
+  unrs-resolver: true
