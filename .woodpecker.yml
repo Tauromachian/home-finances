@@ -18,6 +18,8 @@ steps:
         - DB_PASSWORD
         - DB_NAME
         - DB_HOST
+        - NUXT_PUBLIC_SUPABASE_KEY
+        - NUXT_PUBLIC_SUPABASE_URL
       script:
         - |
           if [ -d home-finances ]; then
@@ -36,6 +38,8 @@ steps:
           DB_NAME=$DB_NAME
           DB_HOST=$DB_HOST
           APP_COMPOSE_PORT=8091
+          NUXT_PUBLIC_SUPABASE_URL=$NUXT_PUBLIC_SUPABASE_URL
+          NUXT_PUBLIC_SUPABASE_KEY=$NUXT_PUBLIC_SUPABASE_KEY
           EOF
 
           docker compose down
@@ -53,3 +57,7 @@ steps:
         from_secret: DB_PASSWORD
       DB_NAME:
         from_secret: DB_NAME
+      NUXT_PUBLIC_SUPABASE_URL:
+        from_secret: NUXT_PUBLIC_SUPABASE_URL
+      NUXT_PUBLIC_SUPABASE_KEY:
+        from_secret: NUXT_PUBLIC_SUPABASE_KEY
