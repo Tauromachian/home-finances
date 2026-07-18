@@ -9,7 +9,7 @@ const form = reactive({
 const signInWithOtp = async () => {
   const { error } = await supabase.auth.signInWithPassword({
     email: form.email,
-    password: "123",
+    password: form.password,
   });
   if (error) console.log(error);
 
