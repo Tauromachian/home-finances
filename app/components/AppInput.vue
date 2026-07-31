@@ -33,6 +33,12 @@ const name = computed<string>(() => {
       >
         <slot name="prepend"></slot>
       </div>
+      <div
+        v-if="$slots.append"
+        class="bg-neutral-1 text-text-1 absolute inset-y-0 right-0 px-2 flex items-center pointer-events-none rounded-r-xl border border-neutral-1 peer-focus:border-teal-800"
+      >
+        <slot name="append"></slot>
+      </div>
       <Field
         v-bind="$attrs"
         v-model="model"
