@@ -18,6 +18,11 @@ const [model, modifiers] = defineModel<number | string>({
   },
 });
 
+const emit = defineEmits<{
+  "click:prepend": [];
+  "click:append": [];
+}>();
+
 const name = computed<string>(() => {
   return String(attrs?.name ?? "");
 });
@@ -30,12 +35,14 @@ const name = computed<string>(() => {
       <div
         v-if="$slots.prepend"
         class="bg-neutral-1 text-text-1 absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none rounded-l-xl border border-neutral-1"
+        @click="emit('click:prepend')"
       >
         <slot name="prepend"></slot>
       </div>
       <div
         v-if="$slots.append"
         class="bg-neutral-1 text-text-1 absolute inset-y-0 right-0 px-2 flex items-center pointer-events-none rounded-r-xl border border-neutral-1"
+        @click="emit('click:append')"
       >
         <slot name="append"></slot>
       </div>
