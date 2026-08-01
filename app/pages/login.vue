@@ -6,6 +6,8 @@ const form = reactive({
   password: "",
 });
 
+const isPasswordVisible = ref(false);
+
 const signInWithOtp = async () => {
   const { error } = await supabase.auth.signInWithPassword({
     email: form.email,
@@ -22,7 +24,23 @@ const signInWithOtp = async () => {
     <AppCard class="mb-5">
       <form class="card-body" @submit.prevent="signInWithOtp">
         <AppInput v-model="form.email" type="email" label="Email" />
-        <AppInput v-model="form.password" type="password" label="Password" />
+        <AppInput
+          v-model="form.password"
+          :type="isPasswordVisible ? 'test' : 'password'"
+          label="Password"
+          @click:append="isPasswordVisible = !isPasswordVisible"
+        >
+          <template #append>
+            <Icon
+              :name="
+                isPasswordVisible
+                  ? 'material-symbols-light:visibility-off'
+                  : 'material-symbols-light:visibility'
+              "
+              class="text-xl cursor-pointer"
+            ></Icon>
+          </template>
+        </AppInput>
         <div class="flex w-full">
           <BaseButton class="ml-auto" type="submit">
             Sign In with E-Mail
