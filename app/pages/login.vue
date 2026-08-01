@@ -7,13 +7,18 @@ const form = reactive({
 });
 
 const isPasswordVisible = ref(false);
+const errorMsg = ref("");
 
 const signInWithOtp = async () => {
   const { error } = await supabase.auth.signInWithPassword({
     email: form.email,
     password: form.password,
   });
-  if (error) console.log(error);
+
+  if (error) {
+    errorMsg.value = error.message;
+    return;
+  }
 
   navigateTo("/confirm");
 };
@@ -22,6 +27,9 @@ const signInWithOtp = async () => {
 <template>
   <div class="max-w-96 mb-auto mx-auto">
     <AppCard class="mb-5">
+      <div v-if="errorMsg" class="card-body bg-red-200 font-bold rounded-t-2xl">
+        {{ errorMsg }}
+      </div>
       <form class="card-body" @submit.prevent="signInWithOtp">
         <AppInput v-model="form.email" type="email" label="Email" />
         <AppInput
