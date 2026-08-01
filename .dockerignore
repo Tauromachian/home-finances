@@ -1,0 +1,9 @@
+.output/
+node_modules/
+test-results/
+test/
+
+.woodpecker.yml
+README.md
+playwright.config.ts
+.git*
