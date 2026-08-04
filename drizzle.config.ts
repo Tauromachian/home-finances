@@ -1,9 +1,15 @@
 import "dotenv/config";
 import { defineConfig } from "drizzle-kit";
 
-const { DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD } = process.env;
+const {
+  NUXT_DB_HOST,
+  NUXT_DB_PORT,
+  NUXT_DB_NAME,
+  NUXT_DB_USER,
+  NUXT_DB_PASSWORD,
+} = process.env;
 
-const DB_URL = `postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
+const DB_URL = `postgresql://${NUXT_DB_USER}:${NUXT_DB_PASSWORD}@${NUXT_DB_HOST}:${NUXT_DB_PORT}/${NUXT_DB_NAME}`;
 
 export default defineConfig({
   out: "./server/drizzle",
