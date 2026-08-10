@@ -12,7 +12,7 @@ defineProps({
       <p class="opacity-60">Total</p>
       <p class="text-5xl font-serif text-accent-4">{{ compoundValue }}</p>
       <span class="flex gap-2 opacity-60">
-        <p>Interest Earned: {{ interestEarned }}</p>
+        <p>Interest Earned: {{ interestEarned.toFixed(2) }}</p>
         <p>||</p>
         <p>Total Invested: {{ totalInvested }}</p>
       </span>
