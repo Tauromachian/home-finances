@@ -60,7 +60,7 @@ async function submitForm(form: Expense) {
   loadData();
 }
 
-function openForm(mode: FormMode, id?: string | number) {
+function openForm(mode: FormMode, expense?: Expense) {
   formMode.value = mode;
 
   if (mode === "insert") {
@@ -68,7 +68,13 @@ function openForm(mode: FormMode, id?: string | number) {
 
     formRef.value.internalRef.resetForm();
   } else {
-    selectedId = id;
+    if (!expense) throw new Error("You need to pass an expense for the edit");
+
+    selectedId = expense.id;
+
+    expenseForm.value = {
+      ...expense,
+    };
   }
 
   isOpen.value = true;
@@ -202,7 +208,7 @@ onBeforeMount(() => loadData());
                   getCategoryByName(expense.category, expensesCategories)
                 "
                 @delete="openDeleteConfirmationDialog"
-                @edit="(id: string | number) => openForm('edit', id)"
+                @edit="openForm('edit', expense)"
               ></ExpenseItem>
             </div>
 
