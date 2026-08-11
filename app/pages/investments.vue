@@ -12,7 +12,7 @@ const appToaster = inject<Ref>("appToaster");
 
 let selectedId: number | string = "";
 
-let formMode: FormMode;
+const formMode = ref<FormMode>("insert");
 
 const portfolioValue = computed(() => {
   const total = investments.value.reduce(
@@ -53,7 +53,7 @@ function showMessage(message: string) {
 }
 
 async function submitForm(form: Investment) {
-  if (formMode === "insert") {
+  if (formMode.value === "insert") {
     await fetch("/api/investments", {
       method: "POST",
       headers: {
@@ -79,7 +79,7 @@ async function submitForm(form: Investment) {
 }
 
 function openForm(mode: FormMode, id?: string | number) {
-  formMode = mode;
+  formMode.value = mode;
 
   if (id) selectedId = id;
 
@@ -210,7 +210,10 @@ onBeforeMount(() => loadData());
     ></DialogConfirmDelete>
 
     <AppDialog v-model="isOpen">
-      <InvestmentForm @submit="submitForm"></InvestmentForm>
+      <InvestmentForm
+        :form-mode="formMode"
+        @submit="submitForm"
+      ></InvestmentForm>
     </AppDialog>
   </div>
 </template>

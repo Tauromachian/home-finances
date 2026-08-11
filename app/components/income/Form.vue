@@ -6,6 +6,10 @@ import { frequencies } from "@/utils/frequencies";
 
 import type { Income } from "~/types/income";
 
+type FormMode = "edit" | "insert";
+
+defineProps<{ formMode: FormMode }>();
+
 defineModel<Partial<Income>>();
 
 const emit = defineEmits<{ submit: [income: Income] }>();
@@ -23,7 +27,9 @@ defineExpose({ internalRef: formRef });
 <template>
   <AppCard>
     <AppCardBody>
-      <p class="font-serif text-2xl font-bold text-text-1">New Income</p>
+      <p class="font-serif text-2xl font-bold text-text-1">
+        {{ formMode === "insert" ? "New Income" : "Edit Income" }}
+      </p>
     </AppCardBody>
     <Form
       v-slot="{ errors }"

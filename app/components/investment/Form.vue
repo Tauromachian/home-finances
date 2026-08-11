@@ -5,6 +5,10 @@ import { required, positiveNumber } from "@/utils/rules";
 import { assetsCategories } from "@/utils/categories";
 import type { Investment } from "~/types/investment";
 
+type FormMode = "edit" | "insert";
+
+defineProps<{ formMode: FormMode }>();
+
 const emit = defineEmits<{ submit: [investment: Investment] }>();
 const formattedCategories = assetsCategories.map((item) => ({
   title: item.name,
@@ -26,7 +30,9 @@ function onSubmit(investment: Investment) {
 <template>
   <AppCard>
     <AppCardBody>
-      <p class="font-serif text-2xl font-bold text-text-1">New Investment</p>
+      <p class="font-serif text-2xl font-bold text-text-1">
+        {{ formMode === "insert" ? "New Investment" : "Edit Investment" }}
+      </p>
     </AppCardBody>
     <Form
       v-slot="{ errors }"

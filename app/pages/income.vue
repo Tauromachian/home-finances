@@ -19,7 +19,7 @@ const EMPTY_INCOME: Income = {
 const incomeForm = ref<Income>({ ...EMPTY_INCOME });
 
 const isOpen = ref(false);
-let formMode: FormMode = "insert";
+const formMode = ref<FormMode>("insert");
 let selectedId: number | string = "";
 
 function deleteIncome() {
@@ -37,7 +37,7 @@ function openDeleteConfirmationDialog(id: string | number) {
 }
 
 function openForm(mode: FormMode, id?: string | number) {
-  formMode = mode;
+  formMode.value = mode;
 
   if (mode === "insert") {
     incomeForm.value = { ...EMPTY_INCOME };
@@ -63,7 +63,7 @@ function showMessage(message: string) {
 }
 
 function submitForm(form: Income) {
-  if (formMode === "insert") {
+  if (formMode.value === "insert") {
     incomeStreams.value.push(form);
     showMessage("New expense added!");
   } else {
@@ -142,6 +142,7 @@ const totalIncome = computed<number>(() => {
       <IncomeForm
         ref="formRef"
         v-model="incomeForm"
+        :form-mode="formMode"
         @submit="submitForm"
       ></IncomeForm>
     </AppDialog>

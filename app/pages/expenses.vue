@@ -24,7 +24,7 @@ const EMPTY_EXPENSE: Expense = {
 };
 
 let selectedId: number | string = "";
-let formMode: FormMode;
+const formMode = ref<FormMode>("insert");
 
 function showMessage(message: string) {
   isOpen.value = false;
@@ -35,7 +35,7 @@ function showMessage(message: string) {
 }
 
 async function submitForm(form: Expense) {
-  if (formMode === "insert") {
+  if (formMode.value === "insert") {
     await fetch("/api/expenses", {
       method: "POST",
       headers: {
@@ -61,7 +61,7 @@ async function submitForm(form: Expense) {
 }
 
 function openForm(mode: FormMode, id?: string | number) {
-  formMode = mode;
+  formMode.value = mode;
 
   if (mode === "insert") {
     expenseForm.value = { ...EMPTY_EXPENSE };
@@ -227,6 +227,7 @@ onBeforeMount(() => loadData());
       <ExpenseForm
         ref="formRef"
         v-model="expenseForm"
+        :form-mode="formMode"
         @submit="submitForm"
       ></ExpenseForm>
     </AppDialog>
