@@ -139,7 +139,7 @@ onBeforeMount(() => loadData());
       <span class="text-xl">+</span> Add Expense
     </BaseButton>
 
-    <div class="grid gap-5">
+    <div class="flex flex-col gap-5">
       <div class="grid md:grid-cols-3 gap-5">
         <AppCard>
           <AppCardBody>

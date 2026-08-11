@@ -112,7 +112,7 @@ onBeforeMount(() => loadData());
       <span class="text-xl">+</span> Add Investment
     </BaseButton>
 
-    <div class="grid gap-5">
+    <div class="flex flex-col gap-5">
       <AppCard color="accent-3" class="text-text-inverse">
         <AppCardBody class="flex gap-2">
           <div class="flex flex-col gap-3">
