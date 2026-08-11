@@ -31,15 +31,17 @@ async function signOut() {
 
       <AppSwitch
         v-model="theme"
-        class="ml-auto"
+        class="ml-auto hidden lg:flex"
         :label="themeName"
         :steps-values="{ start: 'light', middle: 'system', end: 'dark' }"
       ></AppSwitch>
 
-      <BaseButton class="ml-6" @click="signOut">Logout</BaseButton>
+      <BaseButton class="ml-6 hidden lg:inline-flex" @click="signOut">
+        Logout
+      </BaseButton>
     </header>
 
-    <div class="max-w-6xl mx-4 lg:mx-auto pt-5">
+    <div class="max-w-6xl mx-4 lg:mx-auto pt-5 pb-64 lg:pb-0">
       <NavBar class="mb-8"></NavBar>
 
       <slot />
