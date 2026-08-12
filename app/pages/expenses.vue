@@ -181,7 +181,7 @@ onBeforeMount(() => loadData());
             <p>No expenses! Add one</p>
           </div>
 
-          <AppCardBody>
+          <div class="py-4 md:px-6">
             <ClientOnly>
               <ExpenseDonutChart
                 v-if="expenses?.length"
@@ -189,7 +189,7 @@ onBeforeMount(() => loadData());
                 :categories="expensesCategories"
               ></ExpenseDonutChart>
             </ClientOnly>
-          </AppCardBody>
+          </div>
         </AppCard>
 
         <AppCard class="h-full max-h-[inherit]">

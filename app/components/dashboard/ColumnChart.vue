@@ -10,7 +10,34 @@ const series = [
   },
 ];
 
-const options = {
+const options = computed(() => ({
+  chart: {
+    height: 320,
+    responsive: [
+      {
+        breakpoint: 640,
+        options: {
+          chart: {
+            height: 220,
+          },
+          xaxis: {
+            labels: {
+              style: {
+                fontSize: "10px",
+              },
+              rotate: -30,
+              rotateAlways: true,
+            },
+          },
+          yaxis: {
+            title: {
+              text: "",
+            },
+          },
+        },
+      },
+    ],
+  },
   plotOptions: {
     bar: {
       horizontal: false,
@@ -38,7 +65,7 @@ const options = {
   fill: {
     opacity: 1,
   },
-};
+}));
 </script>
 
 <template>

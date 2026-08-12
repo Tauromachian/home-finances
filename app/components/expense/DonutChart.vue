@@ -9,6 +9,8 @@ const props = defineProps({
   },
 });
 
+const { isLGAndUp } = useDisplay();
+
 const textColor = inject<Ref<string | undefined>>("donutChartTextColor");
 
 const expensesByCategory = computed(() => {
@@ -62,9 +64,33 @@ const chartData = computed<{
 
 const options = computed(() => {
   return {
+    chart: {
+      responsive: [
+        {
+          breakpoint: 640,
+          options: {
+            plotOptions: {
+              pie: {
+                donut: {
+                  labels: {
+                    value: {
+                      fontSize: "20px",
+                    },
+                    total: {
+                      fontSize: 14,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
     labels: chartData.value.labels,
     colors: chartData.value.colors,
     legend: {
+      position: isLGAndUp.value ? "right" : "bottom",
       formatter: function (val: string) {
         const [firstSection, secondSection] = val.split("€");
 
@@ -106,6 +132,6 @@ const options = computed(() => {
     type="donut"
     :options="options"
     :series="chartData.series"
-    class="mx-5 mb-5"
+    class="md:mx-5 md:mb-5"
   ></apexchart>
 </template>

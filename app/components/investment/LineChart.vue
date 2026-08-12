@@ -54,6 +54,29 @@ const options = computed(() => {
   ];
 
   return {
+    chart: {
+      height: 320,
+      responsive: [
+        {
+          breakpoint: 640,
+          options: {
+            chart: {
+              height: 220,
+            },
+            stroke: {
+              width: 2,
+            },
+            xaxis: {
+              labels: {
+                style: {
+                  fontSize: "10px",
+                },
+              },
+            },
+          },
+        },
+      ],
+    },
     legend: {
       formatter: function (val: string) {
         const [firstSection, secondSection] = val.split("€");
@@ -66,6 +89,9 @@ const options = computed(() => {
       },
     },
     colors: [...colors.value],
+    stroke: {
+      width: 3,
+    },
     xaxis: {
       categories: months,
     },
