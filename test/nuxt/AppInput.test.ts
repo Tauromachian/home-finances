@@ -37,4 +37,17 @@ describe("AppInput", () => {
       wrapper.find('[data-testid="append-icon-el"]').exists(),
     ).toBeTruthy();
   });
+  it("adds reactive classes to icons when events are listened to", () => {
+    const wrapper = mount(AppInput, {
+      slots: { prepend: () => "test", append: () => "test" },
+      props: { "onClick:prepend": () => {}, "onClick:append": () => {} },
+    });
+
+    expect(wrapper.find('[data-testid="prepend-icon-el"]').classes()).toContain(
+      "cursor-pointer",
+    );
+    expect(wrapper.find('[data-testid="append-icon-el"]').classes()).toContain(
+      "cursor-pointer",
+    );
+  });
 });
