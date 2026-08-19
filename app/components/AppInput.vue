@@ -32,7 +32,7 @@ const name = computed<string>(() => {
 
 <template>
   <div>
-    <label :for="name" class="text-text-0">{{ label }}</label>
+    <label v-if="label" :for="name" class="text-text-0">{{ label }}</label>
     <div class="mt-1 relative" :class="{ 'mb-5': !noError, 'mb-1': noError }">
       <div
         v-if="$slots.prepend"
