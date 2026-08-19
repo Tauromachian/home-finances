@@ -13,4 +13,9 @@ describe("AppInput", () => {
 
     expect(wrapper.find("label")).to.not.toBeFalsy();
   });
+  it("renders label", () => {
+    const wrapper = mount(AppInput, { props: { error: "Test error msg" } });
+
+    expect(wrapper.html()).toContain("Test error msg");
+  });
 });
