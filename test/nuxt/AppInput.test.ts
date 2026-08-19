@@ -25,4 +25,16 @@ describe("AppInput", () => {
 
     expect(wrapper.findComponent(ErrorText).exists()).toBeFalsy();
   });
+  it("renders prepend and append slots", () => {
+    const wrapper = mount(AppInput, {
+      slots: { prepend: () => "test", append: () => "test" },
+    });
+
+    expect(
+      wrapper.find('[data-testid="prepend-icon-el"]').exists(),
+    ).toBeTruthy();
+    expect(
+      wrapper.find('[data-testid="append-icon-el"]').exists(),
+    ).toBeTruthy();
+  });
 });

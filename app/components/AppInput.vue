@@ -36,6 +36,7 @@ const name = computed<string>(() => {
     <div class="mt-1 relative" :class="{ 'mb-5': !noError, 'mb-1': noError }">
       <div
         v-if="$slots.prepend"
+        data-testid="prepend-icon-el"
         class="bg-neutral-1 text-text-1 absolute inset-y-0 left-0 px-2 flex items-center rounded-l-xl border border-neutral-1"
         :class="{
           'pointer-events-none': !props['onClick:prepend'],
@@ -47,6 +48,7 @@ const name = computed<string>(() => {
       </div>
       <div
         v-if="$slots.append"
+        data-testid="append-icon-el"
         class="bg-neutral-1 text-text-1 absolute inset-y-0 right-0 px-2 flex items-center rounded-r-xl border border-neutral-1"
         :class="{
           'pointer-events-none': !props['onClick:append'],
