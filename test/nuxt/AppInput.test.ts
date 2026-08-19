@@ -25,6 +25,13 @@ describe("AppInput", () => {
 
     expect(wrapper.findComponent(ErrorText).exists()).toBeFalsy();
   });
+  it("remove margin if noError prop is passed", () => {
+    const wrapper = mount(AppInput, { props: { noError: true } });
+
+    expect(
+      wrapper.find('[data-testid="input-wrapper-el"]').classes(),
+    ).toContain("mb-1");
+  });
   it("renders prepend and append slots", () => {
     const wrapper = mount(AppInput, {
       slots: { prepend: () => "test", append: () => "test" },
