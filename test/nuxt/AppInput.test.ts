@@ -1,6 +1,8 @@
 import { mount } from "@vue/test-utils";
 import { describe, it, expect } from "vitest";
+
 import AppInput from "~/components/AppInput.vue";
+import ErrorText from "~/components/ErrorText.vue";
 
 describe("AppInput", () => {
   it("renders label", () => {
@@ -17,5 +19,10 @@ describe("AppInput", () => {
     const wrapper = mount(AppInput, { props: { error: "Test error msg" } });
 
     expect(wrapper.html()).toContain("Test error msg");
+  });
+  it("hides error if noError is passed as true", () => {
+    const wrapper = mount(AppInput, { props: { noError: true } });
+
+    expect(wrapper.findComponent(ErrorText).exists()).toBeFalsy();
   });
 });
