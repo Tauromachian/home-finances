@@ -11,7 +11,7 @@ describe("AppInput", () => {
   it("hides label if label props is not passed", () => {
     const wrapper = mount(AppInput);
 
-    expect(wrapper.find("label")).to.not.toBeFalsy();
+    expect(wrapper.find("label").exists()).toBeFalsy();
   });
   it("renders label", () => {
     const wrapper = mount(AppInput, { props: { error: "Test error msg" } });
