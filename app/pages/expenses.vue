@@ -188,6 +188,9 @@ onBeforeMount(() => loadData());
                 :expenses="expenses"
                 :categories="expensesCategories"
               ></ExpenseDonutChart>
+              <template #fallback>
+                <AppLoader size="80" class="my-40"></AppLoader>
+              </template>
             </ClientOnly>
           </div>
         </AppCard>

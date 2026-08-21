@@ -156,6 +156,9 @@ onBeforeMount(() => loadData());
                 v-if="investments.length"
                 :investments="investments"
               ></InvestmentDonutChart>
+              <template #fallback>
+                <AppLoader size="80" class="my-40"></AppLoader>
+              </template>
             </ClientOnly>
           </AppCardBody>
         </AppCard>
@@ -180,6 +183,9 @@ onBeforeMount(() => loadData());
                 v-if="investments.length"
                 :investments
               ></InvestmentLineChart>
+              <template #fallback>
+                <AppLoader size="80" class="my-40"></AppLoader>
+              </template>
             </ClientOnly>
           </AppCardBody>
         </AppCard>
