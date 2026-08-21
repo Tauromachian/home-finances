@@ -1,5 +1,5 @@
 <script setup>
-defineEmits(["click:delete"]);
+defineEmits(["click:delete", "update:model-value"]);
 </script>
 
 <template>
@@ -19,7 +19,11 @@ defineEmits(["click:delete"]);
         </p>
 
         <div class="flex gap-1 mt-4">
-          <BaseButton class="ml-auto" variant="outlined" @click="model = false">
+          <BaseButton
+            class="ml-auto"
+            variant="outlined"
+            @click="$emit('update:model-value', false)"
+          >
             Cancel
           </BaseButton>
           <BaseButton
