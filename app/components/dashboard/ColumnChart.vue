@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ApexOptions } from "apexcharts";
+
 const series = [
   {
     name: "Income",
@@ -10,34 +12,34 @@ const series = [
   },
 ];
 
-const options = computed(() => ({
+const options = computed<ApexOptions>(() => ({
   chart: {
     height: 320,
-    responsive: [
-      {
-        breakpoint: 640,
-        options: {
-          chart: {
-            height: 220,
-          },
-          xaxis: {
-            labels: {
-              style: {
-                fontSize: "10px",
-              },
-              rotate: -30,
-              rotateAlways: true,
+  },
+  responsive: [
+    {
+      breakpoint: 640,
+      options: {
+        chart: {
+          height: 220,
+        },
+        xaxis: {
+          labels: {
+            style: {
+              fontSize: "10px",
             },
+            rotate: -30,
+            rotateAlways: true,
           },
-          yaxis: {
-            title: {
-              text: "",
-            },
+        },
+        yaxis: {
+          title: {
+            text: "",
           },
         },
       },
-    ],
-  },
+    },
+  ],
   plotOptions: {
     bar: {
       horizontal: false,
@@ -72,7 +74,8 @@ const options = computed(() => ({
   <AppCard>
     <AppCardBody>
       <p class="text-sm">Expenses vs Gains</p>
-      <apexchart type="bar" :options="options" :series="series"> </apexchart>
+      <BaseApexChart type="bar" :options="options" :series="series">
+      </BaseApexChart>
     </AppCardBody>
   </AppCard>
 </template>

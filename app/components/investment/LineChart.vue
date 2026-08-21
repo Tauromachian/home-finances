@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ApexOptions } from "apexcharts";
 import type { Investment } from "~/types/investment";
 
 const { investments = [] } = defineProps<{ investments?: Investment[] }>();
@@ -37,7 +38,7 @@ const colors = computed(() => {
   return colors;
 });
 
-const options = computed(() => {
+const options = computed<ApexOptions>(() => {
   const months = [
     "Jan",
     "Feb",
@@ -56,27 +57,27 @@ const options = computed(() => {
   return {
     chart: {
       height: 320,
-      responsive: [
-        {
-          breakpoint: 640,
-          options: {
-            chart: {
-              height: 220,
-            },
-            stroke: {
-              width: 2,
-            },
-            xaxis: {
-              labels: {
-                style: {
-                  fontSize: "10px",
-                },
+    },
+    responsive: [
+      {
+        breakpoint: 640,
+        options: {
+          chart: {
+            height: 220,
+          },
+          stroke: {
+            width: 2,
+          },
+          xaxis: {
+            labels: {
+              style: {
+                fontSize: "10px",
               },
             },
           },
         },
-      ],
-    },
+      },
+    ],
     legend: {
       formatter: function (val: string) {
         const [firstSection, secondSection] = val.split("€");
@@ -100,7 +101,8 @@ const options = computed(() => {
 </script>
 
 <template>
-  <apexchart type="line" :options :series="calculatedSeries"> </apexchart>
+  <BaseApexChart type="line" :options :series="calculatedSeries">
+  </BaseApexChart>
 </template>
 
 <style scoped></style>

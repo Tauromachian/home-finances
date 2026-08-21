@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { assetsCategories } from "@/utils/categories";
+import type { ApexOptions } from "apexcharts";
 
 import type { Investment } from "~/types/investment";
 
@@ -64,31 +65,29 @@ const chartData = computed<{
   return { labels: chartLabels, colors: chartColors, series: chartSeries };
 });
 
-const options = computed(() => {
+const options = computed<ApexOptions>(() => {
   return {
-    chart: {
-      responsive: [
-        {
-          breakpoint: 640,
-          options: {
-            plotOptions: {
-              pie: {
-                donut: {
-                  labels: {
-                    value: {
-                      fontSize: "20px",
-                    },
-                    total: {
-                      fontSize: 14,
-                    },
+    responsive: [
+      {
+        breakpoint: 640,
+        options: {
+          plotOptions: {
+            pie: {
+              donut: {
+                labels: {
+                  value: {
+                    fontSize: "20px",
+                  },
+                  total: {
+                    fontSize: "14px",
                   },
                 },
               },
             },
           },
         },
-      ],
-    },
+      },
+    ],
     labels: chartData.value.labels,
     colors: chartData.value.colors,
     legend: {
@@ -117,7 +116,7 @@ const options = computed(() => {
             },
             total: {
               show: true,
-              fontSize: 18,
+              fontSize: "18px",
               color: textColor.value,
               fontFamily: '"DM Sans", sans-serif',
             },
@@ -130,10 +129,10 @@ const options = computed(() => {
 </script>
 
 <template>
-  <apexchart
+  <BaseApexChart
     type="donut"
     :options="options"
     :series="chartData.series"
     class="md:mx-5 md:mb-5"
-  ></apexchart>
+  ></BaseApexChart>
 </template>
