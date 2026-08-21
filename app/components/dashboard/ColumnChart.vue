@@ -71,11 +71,6 @@ const options = computed<ApexOptions>(() => ({
 </script>
 
 <template>
-  <AppCard>
-    <AppCardBody>
-      <p class="text-sm">Expenses vs Gains</p>
-      <BaseApexChart type="bar" :options="options" :series="series">
-      </BaseApexChart>
-    </AppCardBody>
-  </AppCard>
+  <BaseApexChart type="bar" :options="options" :series="series">
+  </BaseApexChart>
 </template>

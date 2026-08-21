@@ -35,8 +35,16 @@
       </AppCard>
     </div>
 
-    <ClientOnly>
-      <DashboardColumnChart></DashboardColumnChart>
-    </ClientOnly>
+    <AppCard>
+      <AppCardBody>
+        <p class="text-sm">Expenses vs Gains</p>
+        <ClientOnly>
+          <DashboardColumnChart></DashboardColumnChart>
+          <template #fallback>
+            <AppLoader size="80" class="my-40"></AppLoader>
+          </template>
+        </ClientOnly>
+      </AppCardBody>
+    </AppCard>
   </div>
 </template>
