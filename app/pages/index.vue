@@ -1,5 +1,3 @@
-<script setup lang="ts"></script>
-
 <template>
   <div class="flex flex-col gap-3 md:gap-4">
     <AppCard color="accent-3" class="text-text-inverse">
