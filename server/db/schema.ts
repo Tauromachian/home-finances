@@ -24,7 +24,7 @@ export const expensesTable = pgTable("expenses", {
   amount: numeric({ mode: "number" }).notNull(),
   name: varchar({ length: 255 }).notNull(),
   category: varchar({ length: 255 }).notNull(),
-  frequency: varchar({ length: 255 }).notNull().unique(),
+  frequency: varchar({ length: 255 }).notNull(),
   description: varchar({ length: 255 }),
 });
 
