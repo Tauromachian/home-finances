@@ -101,11 +101,11 @@ const totalExpenses = computed(() => {
 
 const monthlyExpenses = computed(() => {
   return expenses.value.reduce((acum: number, next: Expense) => {
-    if (next.frequency === "Monthly") {
+    if (next.frequency === "Monthly" || next.frequency === "One Time") {
+      acum += next.amount;
+    } else if (next) {
       const monthly = (next.amount / 12).toFixed(2);
       acum += Number(monthly);
-    } else {
-      acum += next.amount;
     }
 
     return acum;
