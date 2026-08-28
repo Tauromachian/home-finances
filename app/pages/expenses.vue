@@ -158,7 +158,7 @@ onBeforeMount(() => loadData());
         </AppCard>
         <AppCard>
           <AppCardBody>
-            <p class="text-sm">Monthly</p>
+            <p class="text-sm">Monthly Expenses</p>
             <p class="text-3xl font-serif mt-2 text-text-1">
               €{{ monthlyExpenses.toFixed(2) }}
             </p>
