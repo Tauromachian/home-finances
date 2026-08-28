@@ -6,9 +6,19 @@ import {
   text,
   pgSchema,
   uuid,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 
+import { Frequency } from "@/types/frequency";
+
 const auth = pgSchema("auth");
+
+export const frequencyValues = [...Object.values(Frequency)] as [
+  string,
+  ...string[],
+];
+
+export const frequencyEnum = pgEnum("frequency", frequencyValues);
 
 export const usersTable = auth.table("users", {
   id: uuid("id").primaryKey(),
@@ -24,7 +34,7 @@ export const expensesTable = pgTable("expenses", {
   amount: numeric({ mode: "number" }).notNull(),
   name: varchar({ length: 255 }).notNull(),
   category: varchar({ length: 255 }).notNull(),
-  frequency: varchar({ length: 255 }).notNull(),
+  frequency: frequencyEnum(),
   description: varchar({ length: 255 }),
 });
 
