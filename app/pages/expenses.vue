@@ -91,9 +91,16 @@ async function deleteExpense() {
   loadData();
 }
 
-const totalExpenses = computed(() => {
+const yearlyExpenses = computed(() => {
   return expenses.value.reduce((acum: number, next: Expense) => {
-    acum += Number(next.amount);
+    if (next.frequency === "Yearly") {
+      acum += Number(next.amount);
+    } else if (next.frequency === "Monthly") {
+      const yearly = next.amount * 12;
+      acum += yearly;
+    } else {
+      acum += next.amount;
+    }
 
     return acum;
   }, 0);
@@ -143,9 +150,9 @@ onBeforeMount(() => loadData());
       <div class="grid md:grid-cols-3 gap-5">
         <AppCard>
           <AppCardBody>
-            <p class="text-sm">Total Expenses</p>
+            <p class="text-sm">Yearly Expenses</p>
             <p class="text-3xl font-serif text-accent-0 mt-2">
-              €{{ totalExpenses }}
+              €{{ yearlyExpenses }}
             </p>
           </AppCardBody>
         </AppCard>
