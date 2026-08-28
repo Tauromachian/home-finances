@@ -1,11 +1,13 @@
-export const frequencies = [
+import type { Frequency } from "~/types/frequency";
+
+export const frequencies: { title: string; value: Frequency }[] = [
   { title: "One Time", value: "one_time" },
   {
     title: "Monthly",
     value: "monthly",
   },
   {
-    title: "Annual",
-    value: "annual",
+    title: "Yearly",
+    value: "yearly",
   },
 ];
