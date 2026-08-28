@@ -48,15 +48,15 @@ provide("theme", theme);
 onMounted(() => {
   darkMode = window.matchMedia("(prefers-color-scheme: dark)");
 
+  let enterTheme = localStorage.getItem("theme");
+  enterTheme ??= "system";
+
   darkMode.addEventListener("change", () => {
-    if (theme.value !== "system") return;
+    if (enterTheme !== "system") return;
 
     const systemTheme = getSystemTheme();
     changeTheme(systemTheme);
   });
-
-  let enterTheme = localStorage.getItem("theme");
-  enterTheme ??= "system";
 
   theme.value = enterTheme as Theme;
 });
