@@ -47,7 +47,7 @@ async function submitForm(form: Expense) {
 
     showMessage("New expense added!");
   } else {
-    await fetch("/api/expenses", {
+    await fetch(`/api/expenses/${selectedId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
