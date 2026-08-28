@@ -25,8 +25,6 @@ function changeTheme(theme: "dark" | "light") {
   textColor.value = window
     .getComputedStyle(document.documentElement)
     .getPropertyValue("--color-text-1");
-
-  localStorage.setItem("theme", theme);
 }
 
 watch(theme, (enterTheme: Theme) => {
@@ -36,6 +34,7 @@ watch(theme, (enterTheme: Theme) => {
   else appliableTheme = enterTheme;
 
   changeTheme(appliableTheme);
+  localStorage.setItem("theme", enterTheme);
 });
 
 const isAuthRoute = computed(() => route.name === "login");
