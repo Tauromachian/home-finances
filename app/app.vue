@@ -33,18 +33,12 @@ watch(theme, (enterTheme: Theme) => {
   let appliableTheme: "light" | "dark";
 
   if (enterTheme === "system") appliableTheme = getSystemTheme();
-  else {
-    appliableTheme = enterTheme;
-  }
+  else appliableTheme = enterTheme;
 
   changeTheme(appliableTheme);
 });
 
-const isAuthRoute = computed(() => {
-  if (route.name === "login") return true;
-
-  return false;
-});
+const isAuthRoute = computed(() => route.name === "login");
 const layoutName = computed(() => (isAuthRoute.value ? "auth" : "default"));
 
 provide("donutChartTextColor", textColor);
