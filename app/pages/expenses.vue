@@ -2,6 +2,7 @@
 import { expensesCategories } from "~/utils/categories";
 
 import type { Expense } from "~/types/expense";
+import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
 
@@ -19,7 +20,7 @@ const EMPTY_EXPENSE: Expense = {
   name: "",
   amount: 0,
   category: "",
-  frequency: "",
+  frequency: Frequency.MONTHLY,
   description: "",
 };
 
@@ -93,9 +94,9 @@ async function deleteExpense() {
 
 const yearlyExpenses = computed(() => {
   return expenses.value.reduce((acum: number, next: Expense) => {
-    if (next.frequency === "Yearly") {
+    if (next.frequency === Frequency.YEARLY) {
       acum += Number(next.amount);
-    } else if (next.frequency === "Monthly") {
+    } else if (next.frequency === Frequency.MONTHLY) {
       const yearly = next.amount * 12;
       acum += yearly;
     } else {
@@ -108,9 +109,12 @@ const yearlyExpenses = computed(() => {
 
 const monthlyExpenses = computed(() => {
   return expenses.value.reduce((acum: number, next: Expense) => {
-    if (next.frequency === "Monthly" || next.frequency === "One Time") {
+    if (
+      next.frequency === Frequency.MONTHLY ||
+      next.frequency === Frequency.ONE_TIME
+    ) {
       acum += next.amount;
-    } else if (next) {
+    } else if (next.frequency === Frequency.YEARLY) {
       const monthly = (next.amount / 12).toFixed(2);
       acum += Number(monthly);
     }
