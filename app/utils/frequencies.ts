@@ -1,11 +1,11 @@
 export const frequencies = [
-  { title: "One Time", value: "One Time" },
+  { title: "One Time", value: "one_time" },
   {
     title: "Monthly",
-    value: "Monthly",
+    value: "monthly",
   },
   {
     title: "Annual",
-    value: "Annual",
+    value: "annual",
   },
 ];
