@@ -6,7 +6,13 @@ import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
 
-const expenses = ref<Expense[]>([]);
+const {
+  expenses,
+  yearlyExpenses,
+  monthlyExpenses,
+  categoriesCount,
+  loadExpenses,
+} = useExpenses();
 
 const formRef = useTemplateRef("formRef");
 
@@ -58,7 +64,7 @@ async function submitForm(form: Expense) {
     showMessage("Expense edited");
   }
 
-  loadData();
+  loadExpenses();
 }
 
 function openForm(mode: FormMode, expense?: Expense) {
@@ -89,59 +95,10 @@ function openDeleteConfirmationDialog(id: string | number) {
 async function deleteExpense() {
   await fetch(`/api/expenses/${selectedId}`, { method: "DELETE" });
   isConfirmationDialogOpen.value = false;
-  loadData();
+  loadExpenses();
 }
 
-const yearlyExpenses = computed(() => {
-  return expenses.value.reduce((acum: number, next: Expense) => {
-    if (next.frequency === Frequency.YEARLY) {
-      acum += Number(next.amount);
-    } else if (next.frequency === Frequency.MONTHLY) {
-      const yearly = next.amount * 12;
-      acum += yearly;
-    } else {
-      acum += next.amount;
-    }
-
-    return acum;
-  }, 0);
-});
-
-const monthlyExpenses = computed(() => {
-  return expenses.value.reduce((acum: number, next: Expense) => {
-    if (
-      next.frequency === Frequency.MONTHLY ||
-      next.frequency === Frequency.ONE_TIME
-    ) {
-      acum += next.amount;
-    } else if (next.frequency === Frequency.YEARLY) {
-      const monthly = (next.amount / 12).toFixed(2);
-      acum += Number(monthly);
-    }
-
-    return acum;
-  }, 0);
-});
-
-const categoriesCount = computed(() => {
-  const categoriesObj = expenses.value.reduce(
-    (acum: Record<string, boolean>, next: Expense) => {
-      acum[next.category] = true;
-      return acum;
-    },
-    {},
-  );
-
-  return Object.keys(categoriesObj).length;
-});
-
-async function loadData() {
-  const res = await fetch("/api/expenses");
-  const data = await res.json();
-  expenses.value = data.data;
-}
-
-onBeforeMount(() => loadData());
+onBeforeMount(() => loadExpenses());
 </script>
 
 <template>

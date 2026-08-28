@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const { yearlyExpenses, loadExpenses } = useExpenses();
+
+onBeforeMount(() => loadExpenses());
+</script>
+
 <template>
   <div class="flex flex-col gap-3 md:gap-4">
     <AppCard color="accent-3" class="text-text-inverse">
@@ -24,7 +30,9 @@
       <AppCard>
         <AppCardBody>
           <p class="text-sm">Expenses</p>
-          <p class="text-2xl md:text-3xl font-serif text-accent-0">10000</p>
+          <p class="text-2xl md:text-3xl font-serif text-accent-0">
+            €{{ yearlyExpenses }}
+          </p>
         </AppCardBody>
       </AppCard>
       <AppCard>
