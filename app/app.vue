@@ -10,36 +10,34 @@ const route = useRoute();
 const theme = ref<Theme>("system");
 const textColor = ref();
 
+let darkMode: MediaQueryList;
+
 function getSystemTheme(): "dark" | "light" {
-  const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDark = darkMode.matches;
 
   return isDark ? "dark" : "light";
 }
 
-provide("donutChartTextColor", textColor);
-
-watch(theme, (value) => {
-  let enterTheme = value;
-  if (value === "system") enterTheme = getSystemTheme();
-
+function changeTheme(theme: "dark" | "light") {
   const html = document.querySelector("html");
-  html.setAttribute("data-theme", enterTheme);
+  html.setAttribute("data-theme", theme);
 
   textColor.value = window
     .getComputedStyle(document.documentElement)
     .getPropertyValue("--color-text-1");
 
-  localStorage.setItem("theme", theme.value);
-});
+  localStorage.setItem("theme", theme);
+}
 
-provide("appToaster", appToaster);
-provide("theme", theme);
+watch(theme, (enterTheme: Theme) => {
+  let appliableTheme: "light" | "dark";
 
-onMounted(() => {
-  let enterTheme = localStorage.getItem("theme");
-  enterTheme ??= "system";
+  if (enterTheme === "system") appliableTheme = getSystemTheme();
+  else {
+    appliableTheme = enterTheme;
+  }
 
-  theme.value = enterTheme as Theme;
+  changeTheme(appliableTheme);
 });
 
 const isAuthRoute = computed(() => {
@@ -48,6 +46,26 @@ const isAuthRoute = computed(() => {
   return false;
 });
 const layoutName = computed(() => (isAuthRoute.value ? "auth" : "default"));
+
+provide("donutChartTextColor", textColor);
+provide("appToaster", appToaster);
+provide("theme", theme);
+
+onMounted(() => {
+  darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+  darkMode.addEventListener("change", () => {
+    if (theme.value !== "system") return;
+
+    const systemTheme = getSystemTheme();
+    changeTheme(systemTheme);
+  });
+
+  let enterTheme = localStorage.getItem("theme");
+  enterTheme ??= "system";
+
+  theme.value = enterTheme as Theme;
+});
 </script>
 
 <template>
