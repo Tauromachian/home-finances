@@ -27,7 +27,7 @@ function changeTheme(theme: "dark" | "light") {
     .getPropertyValue("--color-text-1");
 }
 
-watch(theme, (enterTheme: ThemeName) => {
+function applyTheme(enterTheme: ThemeName) {
   let appliableTheme: "light" | "dark";
 
   if (enterTheme === "system") appliableTheme = getSystemTheme();
@@ -35,7 +35,9 @@ watch(theme, (enterTheme: ThemeName) => {
 
   changeTheme(appliableTheme);
   localStorage.setItem("theme", enterTheme);
-});
+}
+
+watch(theme, applyTheme);
 
 const isAuthRoute = computed(() => route.name === "login");
 const layoutName = computed(() => (isAuthRoute.value ? "auth" : "default"));
@@ -58,6 +60,7 @@ onMounted(() => {
   });
 
   theme.value = enterTheme;
+  applyTheme(enterTheme);
 });
 </script>
 
