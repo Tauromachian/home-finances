@@ -22,8 +22,8 @@ const expensesByCategory = computed(() => {
     return acum;
   }, {});
 
-  for (const item of props.expenses) {
-    const { category, amount } = item;
+  for (const expense of props.expenses) {
+    const { category, amount } = expense;
 
     if (!totalByCategory[category]) totalByCategory[category] = 0;
     totalByCategory[category] = totalByCategory[category] += Number(amount);
