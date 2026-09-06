@@ -2,6 +2,7 @@
 import { expensesCategories } from "@/utils/categories";
 import type { ApexOptions } from "apexcharts";
 import type { Expense } from "~/types/expense";
+import { Frequency } from "~/types/frequency";
 
 const props = defineProps({
   expenses: {
@@ -23,10 +24,19 @@ const expensesByCategory = computed(() => {
   }, {});
 
   for (const expense of props.expenses) {
-    const { category, amount } = expense;
+    const { category, amount, frequency } = expense;
 
     if (!totalByCategory[category]) totalByCategory[category] = 0;
-    totalByCategory[category] = totalByCategory[category] += Number(amount);
+
+    let amountByFreq = 0;
+    if (frequency === Frequency.YEARLY) {
+      amountByFreq = Math.floor(amount / 12);
+    } else {
+      amountByFreq = amount;
+    }
+
+    totalByCategory[category] = totalByCategory[category] +=
+      Number(amountByFreq);
   }
 
   const expensesPerCategory = [];
