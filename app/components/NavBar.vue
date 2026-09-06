@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type Theme = "light" | "system" | "dark";
+import type { ThemeName } from "~/types/theme";
 
 const links = [
   {
@@ -29,7 +29,7 @@ const links = [
   },
 ];
 
-const theme = inject<Ref<Theme>>("theme", ref("system"));
+const theme = inject<Ref<ThemeName>>("theme", ref("system"));
 const supabase = useSupabaseClient();
 
 const isMenuOpen = ref(false);

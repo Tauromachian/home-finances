@@ -2,12 +2,12 @@
 import "@fontsource-variable/dm-sans";
 import "@fontsource/dm-serif-display";
 
-type Theme = "light" | "system" | "dark";
+import type { ThemeName } from "~/types/theme";
 
 const appToaster = useTemplateRef("appToaster");
 const route = useRoute();
 
-const theme = ref<Theme>("system");
+const theme = ref<ThemeName>("system");
 const textColor = ref();
 
 let darkMode: MediaQueryList;
@@ -27,7 +27,7 @@ function changeTheme(theme: "dark" | "light") {
     .getPropertyValue("--color-text-1");
 }
 
-watch(theme, (enterTheme: Theme) => {
+watch(theme, (enterTheme: ThemeName) => {
   let appliableTheme: "light" | "dark";
 
   if (enterTheme === "system") appliableTheme = getSystemTheme();
@@ -57,7 +57,7 @@ onMounted(() => {
     changeTheme(systemTheme);
   });
 
-  theme.value = enterTheme as Theme;
+  theme.value = enterTheme as ThemeName;
 });
 </script>
 

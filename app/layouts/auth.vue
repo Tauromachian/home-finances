@@ -1,7 +1,7 @@
 <script setup lang="ts">
-type Theme = "light" | "system" | "dark";
+import type { ThemeName } from "~/types/theme";
 
-const theme = inject<Ref<Theme>>("theme", ref("system"));
+const theme = inject<Ref<ThemeName>>("theme", ref("system"));
 
 const themeName = computed(() => {
   return theme.value[0].toUpperCase() + theme.value.slice(1);
