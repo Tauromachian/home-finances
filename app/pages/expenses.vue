@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { expensesCategories } from "~/utils/categories";
+import { loadExpenses as fetchExpenses } from "~/services/expenses/loadExpenses";
 
 import type { Expense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
 
-const {
-  expenses,
-  yearlyExpenses,
-  monthlyExpenses,
-  categoriesCount,
-  loadExpenses,
-} = useExpenses();
+const expenses = ref<Expense[]>([]);
+
+const { yearlyExpenses, monthlyExpenses, categoriesCount } =
+  useExpenses(expenses);
+
+async function loadExpenses() {
+  expenses.value = await fetchExpenses();
+}
 
 const formRef = useTemplateRef("formRef");
 

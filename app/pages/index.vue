@@ -1,5 +1,15 @@
 <script setup lang="ts">
-const { yearlyExpenses, loadExpenses } = useExpenses();
+import { loadExpenses as fetchExpenses } from "~/services/expenses/loadExpenses";
+
+import type { Expense } from "~/types/expense";
+
+const expenses = ref<Expense[]>([]);
+
+const { yearlyExpenses } = useExpenses(expenses);
+
+async function loadExpenses() {
+  expenses.value = await fetchExpenses();
+}
 
 onBeforeMount(() => loadExpenses());
 </script>

@@ -1,11 +1,9 @@
 import type { Expense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
 
-export const useExpenses = () => {
-  const expenses = ref<Expense[]>([]);
-
+export const useExpenses = (expenses: MaybeRefOrGetter<Expense[]>) => {
   const yearlyExpenses = computed(() => {
-    return expenses.value.reduce((acum: number, next: Expense) => {
+    return toValue(expenses).reduce((acum: number, next: Expense) => {
       if (next.frequency === Frequency.YEARLY) {
         acum += Number(next.amount);
       } else if (next.frequency === Frequency.MONTHLY) {
@@ -19,7 +17,7 @@ export const useExpenses = () => {
   });
 
   const monthlyExpenses = computed(() => {
-    return expenses.value.reduce((acum: number, next: Expense) => {
+    return toValue(expenses).reduce((acum: number, next: Expense) => {
       if (
         next.frequency === Frequency.MONTHLY ||
         next.frequency === Frequency.ONE_TIME
@@ -35,7 +33,7 @@ export const useExpenses = () => {
   });
 
   const categoriesCount = computed(() => {
-    const categoriesObj = expenses.value.reduce(
+    const categoriesObj = toValue(expenses).reduce(
       (acum: Record<string, boolean>, next: Expense) => {
         acum[next.category] = true;
         return acum;
@@ -46,17 +44,9 @@ export const useExpenses = () => {
     return Object.keys(categoriesObj).length;
   });
 
-  async function loadExpenses() {
-    const res = await fetch("/api/expenses");
-    const data = await res.json();
-    expenses.value = data.data;
-  }
-
   return {
-    expenses,
     yearlyExpenses,
     monthlyExpenses,
     categoriesCount,
-    loadExpenses,
   };
 };
