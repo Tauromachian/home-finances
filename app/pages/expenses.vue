@@ -169,7 +169,7 @@ onBeforeMount(() => loadExpenses());
 
         <AppCard class="h-full max-h-[inherit]">
           <AppCardBody>
-            <p class="text-md font-bold">Breakdown</p>
+            <p class="text-md font-bold">Breakdown (Monthly)</p>
           </AppCardBody>
 
           <div
