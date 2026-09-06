@@ -65,6 +65,7 @@ defineExpose({ internalRef: formRef });
         name="amount"
         input-class="pl-12"
         :min="0"
+        step="10"
         :rules="positiveNumber"
         :error="errors.expense"
       >
