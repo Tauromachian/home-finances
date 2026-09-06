@@ -2,7 +2,7 @@
 import "@fontsource-variable/dm-sans";
 import "@fontsource/dm-serif-display";
 
-import type { ThemeName } from "~/types/theme";
+import { ensureTheme, type ThemeName } from "~/types/theme";
 
 const appToaster = useTemplateRef("appToaster");
 const route = useRoute();
@@ -47,8 +47,8 @@ provide("theme", theme);
 onMounted(() => {
   darkMode = window.matchMedia("(prefers-color-scheme: dark)");
 
-  let enterTheme = localStorage.getItem("theme");
-  enterTheme ??= "system";
+  const themeString = localStorage.getItem("theme");
+  const enterTheme = ensureTheme(themeString);
 
   darkMode.addEventListener("change", () => {
     if (enterTheme !== "system") return;
@@ -57,7 +57,7 @@ onMounted(() => {
     changeTheme(systemTheme);
   });
 
-  theme.value = enterTheme as ThemeName;
+  theme.value = enterTheme;
 });
 </script>
 
