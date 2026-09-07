@@ -1,11 +1,13 @@
 export const themes = ["light", "system", "dark"] as const;
 
-export function ensureTheme(possibleTheme: string): ThemeName {
-  if ((themes as readonly string[]).includes(possibleTheme)) {
-    return possibleTheme as ThemeName;
-  }
+export type ThemeName = (typeof themes)[number];
 
-  return "system";
+export function isTheme(possibleTheme: string): possibleTheme is ThemeName {
+  return (themes as readonly string[]).includes(possibleTheme);
 }
 
-export type ThemeName = (typeof themes)[number];
+export function ensureTheme(possibleTheme: string): ThemeName {
+  if (!isTheme(possibleTheme)) return "system";
+
+  return possibleTheme;
+}
