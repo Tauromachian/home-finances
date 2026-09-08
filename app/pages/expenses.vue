@@ -131,7 +131,7 @@ onBeforeMount(() => loadExpenses());
     <div v-if="activeView === 'manage'" class="flex flex-col gap-5">
       <AppCard>
         <AppCardBody>
-          <BaseButton @click="openForm('insert')">
+          <BaseButton class="mb-5" @click="openForm('insert')">
             <span class="text-xl">+</span> Add Expense
           </BaseButton>
           <div class="flex flex-col gap-3" data-testid="expenses-items">
