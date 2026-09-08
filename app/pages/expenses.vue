@@ -109,29 +109,23 @@ onBeforeMount(() => loadExpenses());
 <template>
   <div>
     <div class="flex items-center mb-5">
-      <div
-        class="flex gap-1"
-        role="tablist"
+      <BaseButtonGroup
         aria-label="Expenses view"
         data-testid="expenses-view-toggle"
       >
         <BaseButton
           :variant="activeView === 'manage' ? 'regular' : 'outlined'"
-          role="tab"
-          :aria-selected="activeView === 'manage'"
           @click="activeView = 'manage'"
         >
           Manage
         </BaseButton>
         <BaseButton
           :variant="activeView === 'reports' ? 'regular' : 'outlined'"
-          role="tab"
-          :aria-selected="activeView === 'reports'"
           @click="activeView = 'reports'"
         >
           Reports
         </BaseButton>
-      </div>
+      </BaseButtonGroup>
     </div>
 
     <div v-if="activeView === 'manage'" class="flex flex-col gap-5">
