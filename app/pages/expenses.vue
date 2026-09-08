@@ -142,10 +142,7 @@ onBeforeMount(() => loadExpenses());
       <AppCard>
         <AppCardBody>
           <p class="text-md font-bold mb-4">Expenses</p>
-          <div
-            class="flex flex-col gap-3 max-h-96 overflow-y-scroll"
-            data-testid="expenses-items"
-          >
+          <div class="flex flex-col gap-3" data-testid="expenses-items">
             <ExpenseItem
               v-for="expense in expenses"
               :key="expense.id"
