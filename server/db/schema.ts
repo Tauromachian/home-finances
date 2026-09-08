@@ -10,7 +10,7 @@ import {
   date,
 } from "drizzle-orm/pg-core";
 
-import { Frequency } from "@/types/frequency";
+import { Frequency } from "../../app/types/frequency";
 
 const auth = pgSchema("auth");
 
