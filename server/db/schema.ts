@@ -7,6 +7,7 @@ import {
   pgSchema,
   uuid,
   pgEnum,
+  date,
 } from "drizzle-orm/pg-core";
 
 import { Frequency } from "@/types/frequency";
@@ -36,6 +37,8 @@ export const expensesTable = pgTable("expenses", {
   category: varchar({ length: 255 }).notNull(),
   frequency: frequencyEnum(),
   description: varchar({ length: 255 }),
+  startDate: date("start_date"),
+  endDate: date("end_date"),
 });
 
 export const investmentsTable = pgTable("investments", {
