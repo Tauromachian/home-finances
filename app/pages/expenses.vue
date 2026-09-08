@@ -6,6 +6,9 @@ import type { Expense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
+type ExpensesView = "manage" | "reports";
+
+const activeView = ref<ExpensesView>("manage");
 
 const expenses = ref<Expense[]>([]);
 
@@ -105,11 +108,69 @@ onBeforeMount(() => loadExpenses());
 
 <template>
   <div>
-    <BaseButton class="mb-5" @click="openForm('insert')">
-      <span class="text-xl">+</span> Add Expense
-    </BaseButton>
+    <div class="flex items-center justify-between mb-5">
+      <div
+        class="flex gap-1"
+        role="tablist"
+        aria-label="Expenses view"
+        data-testid="expenses-view-toggle"
+      >
+        <BaseButton
+          :variant="activeView === 'manage' ? 'regular' : 'outlined'"
+          role="tab"
+          :aria-selected="activeView === 'manage'"
+          @click="activeView = 'manage'"
+        >
+          Manage
+        </BaseButton>
+        <BaseButton
+          :variant="activeView === 'reports' ? 'regular' : 'outlined'"
+          role="tab"
+          :aria-selected="activeView === 'reports'"
+          @click="activeView = 'reports'"
+        >
+          Reports
+        </BaseButton>
+      </div>
 
-    <div class="flex flex-col gap-5">
+      <BaseButton v-if="activeView === 'manage'" @click="openForm('insert')">
+        <span class="text-xl">+</span> Add Expense
+      </BaseButton>
+    </div>
+
+    <div v-if="activeView === 'manage'" class="flex flex-col gap-5">
+      <AppCard>
+        <AppCardBody>
+          <p class="text-md font-bold mb-4">Expenses</p>
+          <div
+            class="flex flex-col gap-3 max-h-96 overflow-y-scroll"
+            data-testid="expenses-items"
+          >
+            <ExpenseItem
+              v-for="expense in expenses"
+              :key="expense.id"
+              :expense="expense"
+              variant="outlined"
+              :category="
+                getCategoryByName(expense.category, expensesCategories)
+              "
+              @delete="openDeleteConfirmationDialog"
+              @edit="openForm('edit', expense)"
+            ></ExpenseItem>
+          </div>
+
+          <div
+            v-if="!expenses?.length"
+            class="flex flex-col items-center gap-5 justify-center my-6"
+          >
+            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
+            <p>No expenses! Add one</p>
+          </div>
+        </AppCardBody>
+      </AppCard>
+    </div>
+
+    <div v-else class="flex flex-col gap-5">
       <div class="grid md:grid-cols-3 gap-5">
         <AppCard>
           <AppCardBody>
@@ -136,65 +197,34 @@ onBeforeMount(() => loadExpenses());
           </AppCardBody>
         </AppCard>
       </div>
-      <div class="grid md:grid-cols-2 gap-5 max-h-120">
-        <AppCard class="h-full max-h-[inherit]">
-          <AppCardBody class="max-h-full">
-            <p class="text-md font-bold mb-4">Expenses</p>
-            <div
-              class="flex flex-col gap-3 max-h-96 overflow-y-scroll"
-              data-testid="expenses-items"
-            >
-              <ExpenseItem
-                v-for="expense in expenses"
-                :key="expense.id"
-                :expense="expense"
-                variant="outlined"
-                :category="
-                  getCategoryByName(expense.category, expensesCategories)
-                "
-                @delete="openDeleteConfirmationDialog"
-                @edit="openForm('edit', expense)"
-              ></ExpenseItem>
-            </div>
 
-            <div
-              v-if="!expenses?.length"
-              class="flex flex-col items-center gap-5 justify-center my-6"
-            >
-              <Icon size="48" name="material-symbols-light:note-outline"></Icon>
-              <p>No expenses! Add one</p>
-            </div>
-          </AppCardBody>
-        </AppCard>
+      <AppCard>
+        <AppCardBody>
+          <p class="text-md font-bold">Breakdown (Monthly)</p>
+        </AppCardBody>
 
-        <AppCard class="h-full max-h-[inherit]">
-          <AppCardBody>
-            <p class="text-md font-bold">Breakdown (Monthly)</p>
-          </AppCardBody>
+        <div
+          v-if="!expenses?.length"
+          class="flex flex-col items-center gap-5 justify-center my-6"
+        >
+          <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
-          <div
-            v-if="!expenses?.length"
-            class="flex flex-col items-center gap-5 justify-center my-6"
-          >
-            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
+          <p>No expenses! Add one</p>
+        </div>
 
-            <p>No expenses! Add one</p>
-          </div>
-
-          <div class="py-4 md:px-6">
-            <ClientOnly>
-              <ExpenseDonutChart
-                v-if="expenses?.length"
-                :expenses="expenses"
-                :categories="expensesCategories"
-              ></ExpenseDonutChart>
-              <template #fallback>
-                <AppLoader size="80" class="my-40"></AppLoader>
-              </template>
-            </ClientOnly>
-          </div>
-        </AppCard>
-      </div>
+        <div class="py-4 md:px-6">
+          <ClientOnly>
+            <ExpenseDonutChart
+              v-if="expenses?.length"
+              :expenses="expenses"
+              :categories="expensesCategories"
+            ></ExpenseDonutChart>
+            <template #fallback>
+              <AppLoader size="80" class="my-40"></AppLoader>
+            </template>
+          </ClientOnly>
+        </div>
+      </AppCard>
     </div>
 
     <DialogConfirmDelete
