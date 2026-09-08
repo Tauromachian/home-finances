@@ -20,10 +20,6 @@ const formRef = useTemplateRef("formRef");
 
 const appToaster = inject<Ref>("appToaster");
 
-const expenseForm = ref<Partial<Expense>>();
-const isOpen = ref(false);
-const isConfirmationDialogOpen = ref(false);
-
 const EMPTY_EXPENSE: Expense = {
   name: "",
   amount: 0,
@@ -31,6 +27,10 @@ const EMPTY_EXPENSE: Expense = {
   frequency: Frequency.MONTHLY,
   description: "",
 };
+
+const expenseForm = ref<Expense>({ ...EMPTY_EXPENSE });
+const isOpen = ref(false);
+const isConfirmationDialogOpen = ref(false);
 
 let selectedId: number | string = "";
 const formMode = ref<FormMode>("insert");
