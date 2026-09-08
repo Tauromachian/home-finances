@@ -254,7 +254,7 @@ onUnmounted(() => {
         <div class="mt-2 flex justify-end">
           <button
             type="button"
-            class="text-sm text-accent-0 hover:underline"
+            class="text-sm text-accent-0 hover:underline cursor-pointer"
             @click="goToday"
           >
             Today
