@@ -108,7 +108,7 @@ onBeforeMount(() => loadExpenses());
 
 <template>
   <div>
-    <div class="flex items-center justify-between mb-5">
+    <div class="flex items-center mb-5">
       <div
         class="flex gap-1"
         role="tablist"
@@ -132,16 +132,17 @@ onBeforeMount(() => loadExpenses());
           Reports
         </BaseButton>
       </div>
-
-      <BaseButton v-if="activeView === 'manage'" @click="openForm('insert')">
-        <span class="text-xl">+</span> Add Expense
-      </BaseButton>
     </div>
 
     <div v-if="activeView === 'manage'" class="flex flex-col gap-5">
       <AppCard>
         <AppCardBody>
-          <p class="text-md font-bold mb-4">Expenses</p>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-md font-bold">Expenses</p>
+            <BaseButton @click="openForm('insert')">
+              <span class="text-xl">+</span> Add Expense
+            </BaseButton>
+          </div>
           <div class="flex flex-col gap-3" data-testid="expenses-items">
             <ExpenseItem
               v-for="expense in expenses"
