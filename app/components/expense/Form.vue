@@ -11,7 +11,7 @@ type FormMode = "edit" | "insert";
 
 defineProps<{ formMode: FormMode }>();
 
-defineModel<Partial<Expense>>();
+defineModel<Expense>();
 
 const emit = defineEmits<{ submit: [expense: Expense] }>();
 
@@ -50,7 +50,7 @@ defineExpose({ internalRef: formRef });
       @submit="onSubmit"
     >
       <AppInput
-        :model-value="modelValue?.name ?? ''"
+        :model-value="modelValue.name"
         label="Name"
         name="name"
         :error="errors.name"
@@ -59,7 +59,7 @@ defineExpose({ internalRef: formRef });
       ></AppInput>
 
       <AppInput
-        :model-value="modelValue?.amount ?? ''"
+        :model-value="modelValue.amount"
         label="Amount"
         type="number"
         name="amount"
@@ -75,7 +75,7 @@ defineExpose({ internalRef: formRef });
       </AppInput>
 
       <AppAutocomplete
-        :model-value="modelValue?.frequency ?? ''"
+        :model-value="modelValue.frequency"
         :error="errors.frequency"
         :items="frequencies"
         :rules="required"
@@ -84,7 +84,7 @@ defineExpose({ internalRef: formRef });
       ></AppAutocomplete>
 
       <AppAutocomplete
-        :model-value="modelValue?.category ?? ''"
+        :model-value="modelValue.category"
         :error="errors.categories"
         :items="formattedCategories"
         :rules="required"
@@ -93,7 +93,7 @@ defineExpose({ internalRef: formRef });
       ></AppAutocomplete>
 
       <AppInput
-        :model-value="modelValue?.description ?? ''"
+        :model-value="modelValue.description"
         label="Description (optional)"
         as="textarea"
         type="text"
