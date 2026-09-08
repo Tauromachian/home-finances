@@ -59,6 +59,9 @@ importers:
       vue3-apexcharts:
         specifier: ^1.11.1
         version: 1.11.1(apexcharts@5.15.2)(vue@3.5.40(typescript@5.9.3))
+      vue3-easy-data-table:
+        specifier: ^1.5.47
+        version: 1.5.47(typescript@5.9.3)
     devDependencies:
       '@iconify-json/material-symbols-light':
         specifier: ^1.2.15
@@ -5344,6 +5347,9 @@ packages:
     peerDependencies:
       apexcharts: '>=5.10.0'
       vue: '>=3.0.0'
+
+  vue3-easy-data-table@1.5.47:
+    resolution: {integrity: sha512-q0bZBlWIwQ3FIhB+F98ylFPfBJWiS3Xv7QqBe3xS5MbRNZP96RFjaQn7C0Pi0J/aaucNW8gFWxPyh9NESS1ehw==}
 
   vue@3.5.40:
     resolution: {integrity: sha512-+8PJ4SJXdn/cHGImF4CKdxlWHIN5Dkt7DoufRREM6h6uVCx2m7QxgcEQmmzyOK8A9mcafg7sFbJFYsdFVubTig==}
@@ -10882,6 +10888,12 @@ snapshots:
     dependencies:
       apexcharts: 5.15.2
       vue: 3.5.40(typescript@5.9.3)
+
+  vue3-easy-data-table@1.5.47(typescript@5.9.3):
+    dependencies:
+      vue: 3.5.40(typescript@5.9.3)
+    transitivePeerDependencies:
+      - typescript
 
   vue@3.5.40(typescript@5.9.3):
     dependencies:
