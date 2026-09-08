@@ -34,7 +34,7 @@ function onToggle() {
       :id="dialogID"
       ref="dialog"
       popover
-      class="backdrop:bg-black w-sm rounded-2xl left-1/2 top-1/2 -translate-1/2 transition bg-neutral-0"
+      class="backdrop:bg-black w-sm rounded-2xl left-1/2 top-1/2 -translate-1/2 transition bg-neutral-0 overflow-visible"
       :class="[...classes, `duration-${DURATION}`]"
       @toggle="onToggle"
     >
