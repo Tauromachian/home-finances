@@ -12,6 +12,8 @@ const activeView = ref<ExpensesView>("manage");
 
 const expenses = ref<Expense[]>([]);
 
+const currentYear = new Date().getFullYear();
+
 const { yearlyExpenses, monthlyExpenses, categoriesCount } =
   useExpenses(expenses);
 
@@ -187,33 +189,51 @@ onBeforeMount(() => loadExpenses());
         </AppCard>
       </div>
 
-      <AppCard>
-        <AppCardBody>
-          <p class="text-md font-bold">Breakdown (Monthly)</p>
-        </AppCardBody>
+      <div
+        v-if="!expenses?.length"
+        class="flex flex-col items-center gap-5 justify-center my-6"
+      >
+        <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
-        <div
-          v-if="!expenses?.length"
-          class="flex flex-col items-center gap-5 justify-center my-6"
-        >
-          <Icon size="48" name="material-symbols-light:note-outline"></Icon>
+        <p>No expenses! Add one</p>
+      </div>
 
-          <p>No expenses! Add one</p>
-        </div>
+      <div v-else class="grid md:grid-cols-2 gap-5">
+        <AppCard>
+          <AppCardBody>
+            <p class="text-md font-bold">Breakdown (Monthly)</p>
+          </AppCardBody>
 
-        <div class="py-4 md:px-6">
-          <ClientOnly>
-            <ExpenseDonutChart
-              v-if="expenses?.length"
-              :expenses="expenses"
-              :categories="expensesCategories"
-            ></ExpenseDonutChart>
-            <template #fallback>
-              <AppLoader size="80" class="my-40"></AppLoader>
-            </template>
-          </ClientOnly>
-        </div>
-      </AppCard>
+          <div class="py-4 md:px-6">
+            <ClientOnly>
+              <ExpenseDonutChart
+                :expenses="expenses"
+                :categories="expensesCategories"
+              ></ExpenseDonutChart>
+              <template #fallback>
+                <AppLoader size="80" class="my-40"></AppLoader>
+              </template>
+            </ClientOnly>
+          </div>
+        </AppCard>
+
+        <AppCard>
+          <AppCardBody>
+            <p class="text-md font-bold">
+              Expenses by Month ({{ currentYear }})
+            </p>
+          </AppCardBody>
+
+          <div class="py-4 md:px-6">
+            <ClientOnly>
+              <ExpenseLineChart :expenses="expenses"></ExpenseLineChart>
+              <template #fallback>
+                <AppLoader size="80" class="my-40"></AppLoader>
+              </template>
+            </ClientOnly>
+          </div>
+        </AppCard>
+      </div>
     </div>
 
     <DialogConfirmDelete
