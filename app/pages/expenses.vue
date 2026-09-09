@@ -6,9 +6,27 @@ import type { Expense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
-type ExpensesView = "manage" | "reports";
+type ExpensesTab = "manage" | "reports";
 
-const activeView = ref<ExpensesView>("manage");
+const route = useRoute();
+const router = useRouter();
+
+// Sub-view is persisted in the query string (?tab=reports), so it
+// survives reloads and can be shared. Defaults to "manage".
+const activeTab = computed<ExpensesTab>({
+  get: () => (route.query.tab === "reports" ? "reports" : "manage"),
+  set: (tab: ExpensesTab) => {
+    const query = { ...route.query };
+
+    if (tab === "reports") {
+      query.tab = "reports";
+    } else {
+      delete query.tab;
+    }
+
+    router.replace({ query });
+  },
+});
 
 const expenses = ref<Expense[]>([]);
 
@@ -116,21 +134,21 @@ onBeforeMount(() => loadExpenses());
         data-testid="expenses-view-toggle"
       >
         <BaseButton
-          :variant="activeView === 'manage' ? 'regular' : 'outlined'"
-          @click="activeView = 'manage'"
+          :variant="activeTab === 'manage' ? 'regular' : 'outlined'"
+          @click="activeTab = 'manage'"
         >
           Manage
         </BaseButton>
         <BaseButton
-          :variant="activeView === 'reports' ? 'regular' : 'outlined'"
-          @click="activeView = 'reports'"
+          :variant="activeTab === 'reports' ? 'regular' : 'outlined'"
+          @click="activeTab = 'reports'"
         >
           Reports
         </BaseButton>
       </BaseButtonGroup>
     </div>
 
-    <div v-if="activeView === 'manage'" class="flex flex-col gap-5">
+    <div v-if="activeTab === 'manage'" class="flex flex-col gap-5">
       <AppCard>
         <AppCardBody>
           <BaseButton class="mb-5" @click="openForm('insert')">
