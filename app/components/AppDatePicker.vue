@@ -141,6 +141,7 @@ function goToday() {
   const now = new Date();
   viewYear.value = now.getFullYear();
   viewMonth.value = now.getMonth();
+  selectDay(todayISO());
 }
 
 function handleClickOutside(event: MouseEvent) {
