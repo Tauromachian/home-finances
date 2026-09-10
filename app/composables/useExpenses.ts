@@ -1,52 +1,44 @@
-import type { Expense } from "~/types/expense";
-import { Frequency } from "~/types/frequency";
+import { computed, toValue } from "vue";
 
-export const useExpenses = (expenses: MaybeRefOrGetter<Expense[]>) => {
-  const yearlyExpenses = computed(() => {
-    return toValue(expenses).reduce((acum: number, next: Expense) => {
-      if (next.frequency === Frequency.YEARLY) {
-        acum += Number(next.amount);
-      } else if (next.frequency === Frequency.MONTHLY) {
-        acum += next.amount * 12;
-      } else {
-        acum += next.amount;
-      }
+import type { Expense } from "../types/expense";
+import { elapsedMonths, isInYearToDate, round2 } from "../utils/expensePeriod";
 
-      return acum;
-    }, 0);
-  });
+export const useExpenses = (
+  expenses: MaybeRefOrGetter<Expense[]>,
+  now: Date = new Date(),
+) => {
+  const yearToDateExpenses = computed(() =>
+    (toValue(expenses) ?? []).filter((expense) =>
+      isInYearToDate(expense.date, now),
+    ),
+  );
+
+  const yearlyExpenses = computed(() =>
+    round2(
+      yearToDateExpenses.value.reduce(
+        (sum: number, expense: Expense) => sum + Number(expense.amount),
+        0,
+      ),
+    ),
+  );
 
   const monthlyExpenses = computed(() => {
-    return toValue(expenses).reduce((acum: number, next: Expense) => {
-      if (
-        next.frequency === Frequency.MONTHLY ||
-        next.frequency === Frequency.ONE_TIME
-      ) {
-        acum += next.amount;
-      } else if (next.frequency === Frequency.YEARLY) {
-        const monthly = (next.amount / 12).toFixed(2);
-        acum += Number(monthly);
-      }
+    const elapsed = elapsedMonths(now);
 
-      return acum;
-    }, 0);
+    if (!elapsed) return 0;
+
+    return round2(yearlyExpenses.value / elapsed);
   });
 
-  const categoriesCount = computed(() => {
-    const categoriesObj = toValue(expenses).reduce(
-      (acum: Record<string, boolean>, next: Expense) => {
-        acum[next.category] = true;
-        return acum;
-      },
-      {},
-    );
-
-    return Object.keys(categoriesObj).length;
-  });
+  const categoriesCount = computed(
+    () =>
+      new Set(yearToDateExpenses.value.map((expense) => expense.category)).size,
+  );
 
   return {
     yearlyExpenses,
     monthlyExpenses,
     categoriesCount,
+    yearToDateExpenses,
   };
 };
