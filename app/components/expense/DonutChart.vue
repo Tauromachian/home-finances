@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { expensesCategories } from "@/utils/categories";
+import { round2 } from "@/utils/expensePeriod";
 import type { ApexOptions } from "apexcharts";
 import type { Expense } from "~/types/expense";
-import { Frequency } from "~/types/frequency";
 
 const props = defineProps({
   expenses: {
@@ -16,7 +16,7 @@ const { isLGAndUp } = useDisplay();
 const textColor = inject<Ref<string | undefined>>("donutChartTextColor");
 
 const expensesByCategory = computed(() => {
-  const totalByCategory = {};
+  const totalByCategory: Record<string, number> = {};
 
   const categoryByName = expensesCategories.reduce((acum, category) => {
     acum[category.name] = category;
@@ -24,19 +24,11 @@ const expensesByCategory = computed(() => {
   }, {});
 
   for (const expense of props.expenses) {
-    const { category, amount, frequency } = expense;
+    const { category, amount } = expense;
 
-    if (!totalByCategory[category]) totalByCategory[category] = 0;
-
-    let amountByFreq = 0;
-    if (frequency === Frequency.YEARLY) {
-      amountByFreq = Math.floor(amount / 12);
-    } else {
-      amountByFreq = amount;
-    }
-
-    totalByCategory[category] = totalByCategory[category] +=
-      Number(amountByFreq);
+    totalByCategory[category] = round2(
+      (totalByCategory[category] ?? 0) + Number(amount),
+    );
   }
 
   const expensesPerCategory = [];
