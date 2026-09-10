@@ -242,7 +242,7 @@ onBeforeMount(() => {
             class="flex flex-col gap-3"
             data-testid="frequent-expenses-items"
           >
-            <ExpenseItem
+            <ExpenseProgrammedItem
               v-for="expense in programmedExpenses"
               :key="expense.id"
               :expense="expense"
@@ -252,7 +252,7 @@ onBeforeMount(() => {
               "
               @delete="(id) => openDeleteConfirmationDialog(id, 'programmed')"
               @edit="openForm('edit', expense)"
-            ></ExpenseItem>
+            ></ExpenseProgrammedItem>
           </div>
 
           <div
