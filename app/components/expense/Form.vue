@@ -1,21 +1,33 @@
 <script setup lang="ts">
 import { Form } from "vee-validate";
 
-import { required, positiveNumber } from "@/utils/rules";
+import { required, positiveNumber, chargeDay } from "@/utils/rules";
 import { expensesCategories } from "@/utils/categories";
-import { frequencies } from "@/utils/frequencies";
+import { frequentFrequencies } from "@/utils/frequencies";
+import { monthItems, getMonthTitle, parseMonthValue } from "@/utils/months";
 
-import type { Expense } from "~/types/expense";
+import type { Item } from "@/types/item";
+import type { Frequency } from "~/types/frequency";
+import { Frequency as FrequencyValues } from "~/types/frequency";
+import type { Expense, ProgrammedExpense } from "~/types/expense";
 
 type FormMode = "edit" | "insert";
+type FormKind = "actual" | "programmed";
 
-defineProps<{ formMode: FormMode }>();
+const props = defineProps<{
+  formMode: FormMode;
+  kind: FormKind;
+}>();
 
-defineModel<Expense>();
+const modelValue = defineModel<Expense | ProgrammedExpense>();
 
-const emit = defineEmits<{ submit: [expense: Expense] }>();
+const emit = defineEmits<{
+  submit: [expense: Expense | ProgrammedExpense];
+}>();
 
 const formRef = useTemplateRef<typeof Form>("formRef");
+
+const dateError = ref("");
 
 const formattedCategories = computed(() => {
   return expensesCategories.map((item) => ({
@@ -28,12 +40,98 @@ const formattedCategories = computed(() => {
   }));
 });
 
-function onSubmit(expense: Expense) {
-  emit("submit", expense);
+// Actual expenses carry their date outside vee-validate state,
+// through the date picker bound below.
+const actualDate = computed({
+  get: () => (modelValue.value as Expense)?.date ?? "",
+  set: (value: string) => {
+    if (modelValue.value) (modelValue.value as Expense).date = value;
+  },
+});
+
+watch(actualDate, (date) => {
+  if (date) dateError.value = "";
+});
+
+const programmedModel = computed(() => modelValue.value as ProgrammedExpense);
+
+// The frequency autocomplete only flows one-way into vee-validate state,
+// so track the selection locally to drive the conditional charge fields.
+const selectedFrequency = ref<Frequency>(
+  modelValue.value && "frequency" in modelValue.value
+    ? modelValue.value.frequency
+    : FrequencyValues.MONTHLY,
+);
+
+watch(
+  () => modelValue.value && "frequency" in modelValue.value,
+  (hasFrequency) => {
+    if (hasFrequency && modelValue.value && "frequency" in modelValue.value) {
+      selectedFrequency.value = modelValue.value.frequency;
+    }
+  },
+);
+
+const showChargeMonth = computed(
+  () => selectedFrequency.value === FrequencyValues.YEARLY,
+);
+
+const chargeMonthLabel = computed(() =>
+  getMonthTitle(
+    modelValue.value && "chargeMonth" in modelValue.value
+      ? modelValue.value.chargeMonth
+      : null,
+  ),
+);
+
+function onSelectFrequency(item: Item) {
+  selectedFrequency.value = item.value as Frequency;
+}
+
+function onSubmit(values: Expense | ProgrammedExpense) {
+  if (props.kind === "actual") {
+    if (!actualDate.value) {
+      dateError.value = "Date is required";
+      return;
+    }
+
+    dateError.value = "";
+    emit("submit", { ...values, date: actualDate.value } as Expense);
+  } else {
+    const normalized = { ...values } as ProgrammedExpense;
+
+    if (normalized.frequency === FrequencyValues.YEARLY) {
+      const day = Number(normalized.chargeDay);
+      normalized.chargeDay =
+        Number.isInteger(day) && day >= 1 && day <= 31 ? day : null;
+      normalized.chargeMonth = parseMonthValue(normalized.chargeMonth);
+    } else {
+      const day = Number(normalized.chargeDay);
+      normalized.chargeDay =
+        Number.isInteger(day) && day >= 1 && day <= 31 ? day : null;
+      normalized.chargeMonth = null;
+    }
+
+    emit("submit", normalized);
+  }
+
   formRef.value.resetForm();
 }
 
-defineExpose({ internalRef: formRef });
+function resetForm() {
+  if (
+    props.kind === "programmed" &&
+    modelValue.value &&
+    "frequency" in modelValue.value
+  ) {
+    selectedFrequency.value = modelValue.value.frequency;
+  }
+
+  dateError.value = "";
+  formRef.value?.resetForm();
+}
+
+defineExpose({ internalRef: formRef, resetForm });
 </script>
 
 <template>
@@ -74,14 +172,45 @@ defineExpose({ internalRef: formRef });
         </template>
       </AppInput>
 
-      <AppAutocomplete
-        :model-value="modelValue.frequency"
-        :error="errors.frequency"
-        :items="frequencies"
-        :rules="required"
-        label="Frequency"
-        name="frequency"
-      ></AppAutocomplete>
+      <div v-if="kind === 'actual'" class="mt-1 mb-5">
+        <p class="text-text-0">Date</p>
+        <AppDatePicker v-model="actualDate" class="mt-1"></AppDatePicker>
+        <ErrorText v-if="dateError">{{ dateError }}</ErrorText>
+      </div>
+
+      <template v-else>
+        <AppAutocomplete
+          :model-value="programmedModel.frequency"
+          :error="errors.frequency"
+          :items="frequentFrequencies"
+          :rules="required"
+          label="Frequency"
+          name="frequency"
+          @selected="onSelectFrequency"
+        ></AppAutocomplete>
+
+        <AppInput
+          :model-value="programmedModel.chargeDay"
+          label="Charge day (1-31)"
+          type="number"
+          name="chargeDay"
+          :min="1"
+          :max="31"
+          step="1"
+          :rules="chargeDay"
+          :error="errors.chargeDay"
+        ></AppInput>
+
+        <AppAutocomplete
+          v-if="showChargeMonth"
+          :model-value="chargeMonthLabel"
+          :error="errors.chargeMonth"
+          :items="monthItems"
+          :rules="required"
+          label="Charge month"
+          name="chargeMonth"
+        ></AppAutocomplete>
+      </template>
 
       <AppAutocomplete
         :model-value="modelValue.category"
