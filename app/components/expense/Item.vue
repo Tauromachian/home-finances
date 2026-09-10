@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { formatExpenseDate } from "~/utils/expensePeriod";
 import type { Category } from "~/types/category";
 import type { Expense } from "~/types/expense";
 
@@ -16,8 +15,6 @@ const emit = defineEmits<{
 const buttonRef = useTemplateRef("buttonRef");
 
 const isActionsMenuOpen = ref(false);
-
-const expenseDate = computed(() => formatExpenseDate(expense.date));
 
 function executeAction(action: "delete" | "edit") {
   if (action === "delete") {
@@ -53,8 +50,8 @@ function executeAction(action: "delete" | "edit") {
           </p>
         </div>
 
-        <p v-if="expenseDate" class="ml-auto text-sm text-text-0 mr-3">
-          {{ expenseDate }}
+        <p class="ml-auto text-sm text-text-0 mr-3">
+          {{ expense.expenseDate }}
         </p>
 
         <p class="font-serif text-text-1 mr-4 text-lg">€{{ expense.amount }}</p>
