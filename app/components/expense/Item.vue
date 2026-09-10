@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import { formatExpenseDate } from "~/utils/expensePeriod";
+import { getMonthTitle } from "~/utils/months";
 import type { Category } from "~/types/category";
-import type { Expense } from "~/types/expense";
+import type { Expense, ProgrammedExpense } from "~/types/expense";
+import { Frequency } from "~/types/frequency";
 
-const { expense } = defineProps<{ expense: Expense; category: Category }>();
+const { expense } = defineProps<{
+  expense: Expense | ProgrammedExpense;
+  category: Category;
+}>();
 const emit = defineEmits<{
   delete: [id: number | string];
   edit: [id: number | string];
@@ -11,6 +17,32 @@ const emit = defineEmits<{
 const buttonRef = useTemplateRef("buttonRef");
 
 const isActionsMenuOpen = ref(false);
+
+const frequencyLabel = computed(() =>
+  "frequency" in expense ? expense.frequency : "",
+);
+
+const expenseDate = computed(() =>
+  "date" in expense ? formatExpenseDate(expense.date) : "",
+);
+
+const chargeSchedule = computed(() => {
+  if (!("chargeDay" in expense) || expense.chargeDay == null) return "";
+
+  if (expense.frequency === Frequency.YEARLY && expense.chargeMonth != null) {
+    const month = getMonthTitle(expense.chargeMonth);
+
+    if (month) return `Charged yearly on ${month} ${expense.chargeDay}`;
+
+    return `Charged yearly on day ${expense.chargeDay}`;
+  }
+
+  if (expense.frequency === Frequency.MONTHLY) {
+    return `Charged monthly on day ${expense.chargeDay}`;
+  }
+
+  return `Charged on day ${expense.chargeDay}`;
+});
 
 function executeAction(action: "delete" | "edit") {
   if (action === "delete") {
@@ -44,12 +76,19 @@ function executeAction(action: "delete" | "edit") {
           >
             {{ expense.description }}
           </p>
+          <p v-if="chargeSchedule" class="text-sm mt-2 text-text-0">
+            {{ chargeSchedule }}
+          </p>
         </div>
 
         <p
+          v-if="frequencyLabel"
           class="ml-auto rounded-full bg-green-800 text-white px-2 text-sm uppercase mr-3"
         >
-          {{ expense.frequency }}
+          {{ frequencyLabel }}
+        </p>
+        <p v-else-if="expenseDate" class="ml-auto text-sm text-text-0 mr-3">
+          {{ expenseDate }}
         </p>
 
         <p class="font-serif text-text-1 mr-4 text-lg">€{{ expense.amount }}</p>
