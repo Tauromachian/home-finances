@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { Frequency } from "../../app/types/frequency";
-import { getMonthlyExpensesSeries } from "../../app/services/expenses/getMonthlyExpensesSeries";
+import { getMonthlyExpensesSeries } from "../../app/services/expenses";
 
 import type { Expense } from "../../app/types/expense";
 
@@ -10,17 +9,23 @@ function buildExpense(overrides: Partial<Expense> = {}): Expense {
     name: "Test",
     amount: 100,
     category: "Food",
-    frequency: Frequency.MONTHLY,
+    date: "2026-01-15",
     description: "",
     ...overrides,
   };
 }
 
 describe("getMonthlyExpensesSeries", () => {
-  it("Adds monthly expenses to each month from January to the previous month", () => {
+  it("Buckets actual expenses by month up to the previous month", () => {
     const { labels, totals } = getMonthlyExpensesSeries(
-      [buildExpense({ amount: 100 })],
-      new Date(2026, 8, 15),
+      [
+        buildExpense({ amount: 100, date: "2026-01-10" }),
+        buildExpense({ amount: 50, date: "2026-01-20" }),
+        buildExpense({ amount: 200, date: "2026-03-05" }),
+        buildExpense({ amount: 999, date: "2026-09-01" }),
+        buildExpense({ amount: 999, date: "2025-02-10" }),
+      ],
+      new Date(2026, 8, 10),
     );
 
     expect(labels).toEqual([
@@ -33,34 +38,12 @@ describe("getMonthlyExpensesSeries", () => {
       "Jul",
       "Aug",
     ]);
-    expect(totals).toEqual([100, 100, 100, 100, 100, 100, 100, 100]);
+    expect(totals).toEqual([150, 0, 200, 0, 0, 0, 0, 0]);
   });
 
-  it("Splits yearly expenses into floored twelfths", () => {
-    const { totals } = getMonthlyExpensesSeries(
-      [buildExpense({ amount: 1000, frequency: Frequency.YEARLY })],
-      new Date(2026, 2, 1),
-    );
-
-    expect(totals).toEqual([83, 83]);
-  });
-
-  it("Sums expenses of different frequencies", () => {
+  it("Returns an empty series in January", () => {
     const { labels, totals } = getMonthlyExpensesSeries(
-      [
-        buildExpense({ amount: 100 }),
-        buildExpense({ amount: 1200, frequency: Frequency.YEARLY }),
-      ],
-      new Date(2026, 2, 1),
-    );
-
-    expect(labels).toEqual(["Jan", "Feb"]);
-    expect(totals).toEqual([200, 200]);
-  });
-
-  it("Returns an empty series in January (no previous month yet)", () => {
-    const { labels, totals } = getMonthlyExpensesSeries(
-      [buildExpense({ amount: 100 })],
+      [buildExpense({ date: "2026-01-05" })],
       new Date(2026, 0, 20),
     );
 
@@ -68,14 +51,12 @@ describe("getMonthlyExpensesSeries", () => {
     expect(totals).toEqual([]);
   });
 
-  it("Covers eleven months in December", () => {
-    const { labels, totals } = getMonthlyExpensesSeries(
-      [buildExpense({ amount: 50 })],
-      new Date(2026, 11, 31),
+  it("Skips expenses without a valid date", () => {
+    const { totals } = getMonthlyExpensesSeries(
+      [buildExpense({ amount: 100, date: "" })],
+      new Date(2026, 2, 1),
     );
 
-    expect(labels).toHaveLength(11);
-    expect(labels[10]).toBe("Nov");
-    expect(totals).toEqual(new Array(11).fill(50));
+    expect(totals).toEqual([0, 0]);
   });
 });
