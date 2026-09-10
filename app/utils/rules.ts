@@ -22,3 +22,16 @@ export function positiveNumber(value: string | number | unknown) {
   if (parseFloat(normalized) > 0) return true;
   return "This field needs to be positive number";
 }
+
+export function chargeDay(value: string | number | unknown) {
+  if (value === undefined || value === null || value === "")
+    return "This field is required";
+
+  const day = typeof value === "number" ? value : Number(String(value).trim());
+
+  if (!Number.isInteger(day) || day < 1 || day > 31) {
+    return "This field needs to be a day between 1 and 31";
+  }
+
+  return true;
+}
