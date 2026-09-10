@@ -49,8 +49,8 @@ export const expensesTable = pgTable("expenses", {
   amount: numeric({ mode: "number" }).notNull(),
   name: varchar({ length: 150 }).notNull(),
   category: varchar({ length: 20 }).notNull(),
+  expenseDate: date("expense_date").notNull(),
   description: varchar({ length: 255 }),
-  expenseDate: date("expense_date"),
 });
 
 export const investmentsTable = pgTable("investments", {
