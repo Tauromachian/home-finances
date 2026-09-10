@@ -8,7 +8,7 @@ const props = defineProps({
   label: { type: String, default: "" },
   error: { type: String, default: "" },
   items: {
-    type: Array as PropType<Item[]>,
+    type: Array as PropType<readonly Item[]>,
     default: () => [],
   },
 });
