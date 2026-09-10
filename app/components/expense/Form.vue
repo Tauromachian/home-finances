@@ -3,7 +3,7 @@ import { Form } from "vee-validate";
 
 import { required, positiveNumber, chargeDay } from "@/utils/rules";
 import { expensesCategories } from "@/utils/categories";
-import { frequentFrequencies } from "@/utils/frequencies";
+import { frequencies } from "@/utils/frequencies";
 import { monthItems, getMonthTitle, parseMonthValue } from "@/utils/months";
 
 import type { Item } from "@/types/item";
@@ -182,7 +182,7 @@ defineExpose({ internalRef: formRef, resetForm });
         <AppAutocomplete
           :model-value="programmedModel.frequency"
           :error="errors.frequency"
-          :items="frequentFrequencies"
+          :items="frequencies"
           :rules="required"
           label="Frequency"
           name="frequency"
