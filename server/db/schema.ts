@@ -34,7 +34,7 @@ export const programmedExpensesTable = pgTable("programmed_expenses", {
     .references(() => usersTable.id),
   amount: numeric({ mode: "number" }).notNull(),
   name: varchar({ length: 150 }).notNull(),
-  category: varchar({ length: 255 }).notNull(),
+  category: varchar({ length: 20 }).notNull(),
   frequency: frequencyEnum(),
   description: varchar({ length: 255 }),
   chargeDay: integer("charge_day"),
@@ -48,7 +48,7 @@ export const expensesTable = pgTable("expenses", {
     .references(() => usersTable.id),
   amount: numeric({ mode: "number" }).notNull(),
   name: varchar({ length: 150 }).notNull(),
-  category: varchar({ length: 255 }).notNull(),
+  category: varchar({ length: 20 }).notNull(),
   description: varchar({ length: 255 }),
   date: date(),
 });
