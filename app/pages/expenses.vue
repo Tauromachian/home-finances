@@ -236,7 +236,7 @@ onBeforeMount(() => {
       <AppCard>
         <AppCardBody>
           <BaseButton class="mb-5" @click="openForm('insert')">
-            <span class="text-xl">+</span> Add Expense
+            <span class="text-xl">+</span> Program Expense
           </BaseButton>
           <div
             class="flex flex-col gap-3"
