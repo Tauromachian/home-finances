@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { expensesCategories } from "~/utils/categories";
-import { loadExpenses as fetchExpenses } from "~/services/expenses/loadExpenses";
+import { loadExpenses as fetchExpenses } from "~/services/expenses";
+import { loadProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
 
-import type { Expense } from "~/types/expense";
+import type { Expense, ProgrammedExpense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
-type ExpensesTab = "manage" | "reports";
+type FormKind = "actual" | "programmed";
+type ExpensesTab = "manage" | "frequent" | "reports";
 
 const route = useRoute();
 const router = useRouter();
@@ -14,14 +16,19 @@ const router = useRouter();
 // Sub-view is persisted in the query string (?tab=reports), so it
 // survives reloads and can be shared. Defaults to "manage".
 const activeTab = computed<ExpensesTab>({
-  get: () => (route.query.tab === "reports" ? "reports" : "manage"),
+  get: () =>
+    route.query.tab === "reports"
+      ? "reports"
+      : route.query.tab === "frequent"
+        ? "frequent"
+        : "manage",
   set: (tab: ExpensesTab) => {
     const query = { ...route.query };
 
-    if (tab === "reports") {
-      query.tab = "reports";
-    } else {
+    if (tab === "manage") {
       delete query.tab;
+    } else {
+      query.tab = tab;
     }
 
     router.replace({ query });
@@ -29,14 +36,19 @@ const activeTab = computed<ExpensesTab>({
 });
 
 const expenses = ref<Expense[]>([]);
+const programmedExpenses = ref<ProgrammedExpense[]>([]);
 
 const currentYear = new Date().getFullYear();
 
-const { yearlyExpenses, monthlyExpenses, categoriesCount } =
+const { yearlyExpenses, monthlyExpenses, categoriesCount, yearToDateExpenses } =
   useExpenses(expenses);
 
 async function loadExpenses() {
   expenses.value = await fetchExpenses();
+}
+
+async function loadProgrammedExpenses() {
+  programmedExpenses.value = await fetchProgrammedExpenses();
 }
 
 const formRef = useTemplateRef("formRef");
@@ -47,11 +59,23 @@ const EMPTY_EXPENSE: Expense = {
   name: "",
   amount: 0,
   category: "",
-  frequency: Frequency.MONTHLY,
+  date: "",
   description: "",
 };
 
-const expenseForm = ref<Expense>({ ...EMPTY_EXPENSE });
+const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
+  name: "",
+  amount: 0,
+  category: "",
+  frequency: Frequency.MONTHLY,
+  description: "",
+  chargeDay: null,
+  chargeMonth: null,
+};
+
+const expenseForm = ref<Expense | ProgrammedExpense>({ ...EMPTY_EXPENSE });
+const formKind = ref<FormKind>("actual");
+const deleteKind = ref<FormKind>("actual");
 const isOpen = ref(false);
 const isConfirmationDialogOpen = ref(false);
 
@@ -66,9 +90,12 @@ function showMessage(message: string) {
   appToaster.value.openToast(message);
 }
 
-async function submitForm(form: Expense) {
+async function submitForm(form: Expense | ProgrammedExpense) {
+  const isProgrammed = formKind.value === "programmed";
+  const url = isProgrammed ? "/api/programmed-expenses" : "/api/expenses";
+
   if (formMode.value === "insert") {
-    await fetch("/api/expenses", {
+    await fetch(url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +105,7 @@ async function submitForm(form: Expense) {
 
     showMessage("New expense added!");
   } else {
-    await fetch(`/api/expenses/${selectedId}`, {
+    await fetch(`${url}/${selectedId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -89,16 +116,24 @@ async function submitForm(form: Expense) {
     showMessage("Expense edited");
   }
 
-  loadExpenses();
+  if (isProgrammed) {
+    loadProgrammedExpenses();
+  } else {
+    loadExpenses();
+  }
 }
 
-function openForm(mode: FormMode, expense?: Expense) {
+function openForm(mode: FormMode, expense?: Expense | ProgrammedExpense) {
   formMode.value = mode;
+  formKind.value = activeTab.value === "frequent" ? "programmed" : "actual";
 
   if (mode === "insert") {
-    expenseForm.value = { ...EMPTY_EXPENSE };
+    expenseForm.value =
+      formKind.value === "programmed"
+        ? { ...EMPTY_PROGRAMMED_EXPENSE }
+        : { ...EMPTY_EXPENSE };
 
-    formRef.value.internalRef.resetForm();
+    formRef.value.resetForm();
   } else {
     if (!expense) throw new Error("You need to pass an expense for the edit");
 
@@ -112,18 +147,30 @@ function openForm(mode: FormMode, expense?: Expense) {
   isOpen.value = true;
 }
 
-function openDeleteConfirmationDialog(id: string | number) {
+function openDeleteConfirmationDialog(id: string | number, kind: FormKind) {
   selectedId = id;
+  deleteKind.value = kind;
   isConfirmationDialogOpen.value = true;
 }
 
 async function deleteExpense() {
-  await fetch(`/api/expenses/${selectedId}`, { method: "DELETE" });
+  const isProgrammed = deleteKind.value === "programmed";
+  const url = isProgrammed ? "/api/programmed-expenses" : "/api/expenses";
+
+  await fetch(`${url}/${selectedId}`, { method: "DELETE" });
   isConfirmationDialogOpen.value = false;
-  loadExpenses();
+
+  if (isProgrammed) {
+    loadProgrammedExpenses();
+  } else {
+    loadExpenses();
+  }
 }
 
-onBeforeMount(() => loadExpenses());
+onBeforeMount(() => {
+  loadExpenses();
+  loadProgrammedExpenses();
+});
 </script>
 
 <template>
@@ -138,6 +185,12 @@ onBeforeMount(() => loadExpenses());
           @click="activeTab = 'manage'"
         >
           Manage
+        </BaseButton>
+        <BaseButton
+          :variant="activeTab === 'frequent' ? 'regular' : 'outlined'"
+          @click="activeTab = 'frequent'"
+        >
+          Frequent
         </BaseButton>
         <BaseButton
           :variant="activeTab === 'reports' ? 'regular' : 'outlined'"
@@ -163,7 +216,7 @@ onBeforeMount(() => loadExpenses());
               :category="
                 getCategoryByName(expense.category, expensesCategories)
               "
-              @delete="openDeleteConfirmationDialog"
+              @delete="(id) => openDeleteConfirmationDialog(id, 'actual')"
               @edit="openForm('edit', expense)"
             ></ExpenseItem>
           </div>
@@ -179,13 +232,47 @@ onBeforeMount(() => loadExpenses());
       </AppCard>
     </div>
 
+    <div v-else-if="activeTab === 'frequent'" class="flex flex-col gap-5">
+      <AppCard>
+        <AppCardBody>
+          <BaseButton class="mb-5" @click="openForm('insert')">
+            <span class="text-xl">+</span> Add Expense
+          </BaseButton>
+          <div
+            class="flex flex-col gap-3"
+            data-testid="frequent-expenses-items"
+          >
+            <ExpenseItem
+              v-for="expense in programmedExpenses"
+              :key="expense.id"
+              :expense="expense"
+              variant="outlined"
+              :category="
+                getCategoryByName(expense.category, expensesCategories)
+              "
+              @delete="(id) => openDeleteConfirmationDialog(id, 'programmed')"
+              @edit="openForm('edit', expense)"
+            ></ExpenseItem>
+          </div>
+
+          <div
+            v-if="!programmedExpenses?.length"
+            class="flex flex-col items-center gap-5 justify-center my-6"
+          >
+            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
+            <p>No frequent expenses! Add one</p>
+          </div>
+        </AppCardBody>
+      </AppCard>
+    </div>
+
     <div v-else class="flex flex-col gap-5">
       <div class="grid md:grid-cols-3 gap-5">
         <AppCard>
           <AppCardBody>
             <p class="text-sm">Yearly Expenses</p>
             <p class="text-3xl font-serif text-accent-0 mt-2">
-              €{{ yearlyExpenses }}
+              €{{ yearlyExpenses.toFixed(2) }}
             </p>
           </AppCardBody>
         </AppCard>
@@ -219,13 +306,13 @@ onBeforeMount(() => loadExpenses());
       <div v-else class="grid md:grid-cols-2 gap-5">
         <AppCard>
           <AppCardBody>
-            <p class="text-md font-bold">Breakdown (Monthly)</p>
+            <p class="text-md font-bold">Breakdown ({{ currentYear }})</p>
           </AppCardBody>
 
           <div class="py-4 md:px-6">
             <ClientOnly>
               <ExpenseDonutChart
-                :expenses="expenses"
+                :expenses="yearToDateExpenses"
                 :categories="expensesCategories"
               ></ExpenseDonutChart>
               <template #fallback>
@@ -264,6 +351,7 @@ onBeforeMount(() => loadExpenses());
         ref="formRef"
         v-model="expenseForm"
         :form-mode="formMode"
+        :kind="formKind"
         @submit="submitForm"
       ></ExpenseForm>
     </AppDialog>
