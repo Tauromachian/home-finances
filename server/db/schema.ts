@@ -7,6 +7,7 @@ import {
   pgSchema,
   uuid,
   pgEnum,
+  date,
 } from "drizzle-orm/pg-core";
 
 import { Frequency } from "../../app/types/frequency";
@@ -26,16 +27,30 @@ export const usersTable = auth.table("users", {
   phone: varchar("phone", { length: 256 }),
 });
 
+export const programmedExpensesTable = pgTable("programmed_expenses", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => usersTable.id),
+  amount: numeric({ mode: "number" }).notNull(),
+  name: varchar({ length: 150 }).notNull(),
+  category: varchar({ length: 255 }).notNull(),
+  frequency: frequencyEnum(),
+  description: varchar({ length: 255 }),
+  chargeDay: integer("charge_day"),
+  chargeMonth: integer("charge_month"),
+});
+
 export const expensesTable = pgTable("expenses", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   userId: uuid("user_id")
     .notNull()
     .references(() => usersTable.id),
   amount: numeric({ mode: "number" }).notNull(),
-  name: varchar({ length: 255 }).notNull(),
+  name: varchar({ length: 150 }).notNull(),
   category: varchar({ length: 255 }).notNull(),
-  frequency: frequencyEnum(),
   description: varchar({ length: 255 }),
+  date: date(),
 });
 
 export const investmentsTable = pgTable("investments", {
