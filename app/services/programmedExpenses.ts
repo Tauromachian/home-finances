@@ -1,4 +1,4 @@
-import type { ProgrammedExpense } from "~/types/expense";
+import type { ProgrammedExpense } from "../types/expense";
 
 export async function loadProgrammedExpenses(): Promise<ProgrammedExpense[]> {
   const res = await fetch("/api/programmed-expenses");

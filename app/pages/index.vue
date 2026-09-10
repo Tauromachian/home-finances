@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { loadExpenses as fetchExpenses } from "~/services/expenses/loadExpenses";
+import { loadExpenses as fetchExpenses } from "~/services/expenses";
 
 import type { Expense } from "~/types/expense";
 

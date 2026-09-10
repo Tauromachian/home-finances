@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ApexOptions } from "apexcharts";
-import { getMonthlyExpensesSeries } from "~/services/expenses/getMonthlyExpensesSeries";
+import { getMonthlyExpensesSeries } from "~/services/expenses";
 import type { Expense } from "~/types/expense";
 
 const props = defineProps({
