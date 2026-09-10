@@ -31,7 +31,7 @@ test("Insert/Edit and Delete expense flow", async ({ page }) => {
 
 test("Insert and Delete programmed expense flow", async ({ page }) => {
   await page.goto("https://homefinances.jose-garcia.net/expenses?tab=frequent");
-  await page.getByRole("button", { name: "+ Add Expense" }).click();
+  await page.getByRole("button", { name: "+ Program Expense" }).click();
   await page.locator('input[name="name"]').fill("Test programmed expense");
   await page.locator('input[name="chargeDay"]').fill("15");
   await page.locator('input[name="category"]').click();

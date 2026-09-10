@@ -37,7 +37,7 @@ export function getMonthlyExpensesSeries(
   const totalsByMonth = new Array<number>(elapsed).fill(0);
 
   for (const expense of expenses ?? []) {
-    const parsed = parseIsoDate(expense.date);
+    const parsed = parseIsoDate(expense.expenseDate);
 
     if (!parsed) continue;
     if (parsed.year !== now.getFullYear()) continue;

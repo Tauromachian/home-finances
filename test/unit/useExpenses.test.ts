@@ -9,7 +9,7 @@ function buildExpense(overrides: Partial<Expense> = {}): Expense {
     name: "Test",
     amount: 100,
     category: "Food",
-    date: "2026-01-15",
+    expenseDate: "2026-01-15",
     description: "",
     ...overrides,
   };
@@ -20,10 +20,14 @@ describe("useExpenses", () => {
     const now = new Date(2026, 8, 10);
     const { yearlyExpenses, monthlyExpenses, categoriesCount } = useExpenses(
       [
-        buildExpense({ amount: 100, date: "2026-01-10" }),
-        buildExpense({ amount: 300, date: "2026-04-10", category: "House" }),
-        buildExpense({ amount: 999, date: "2026-09-01" }),
-        buildExpense({ amount: 999, date: "2025-05-01" }),
+        buildExpense({ amount: 100, expenseDate: "2026-01-10" }),
+        buildExpense({
+          amount: 300,
+          expenseDate: "2026-04-10",
+          category: "House",
+        }),
+        buildExpense({ amount: 999, expenseDate: "2026-09-01" }),
+        buildExpense({ amount: 999, expenseDate: "2025-05-01" }),
       ],
       now,
     );
@@ -35,7 +39,7 @@ describe("useExpenses", () => {
 
   it("Returns zero monthly average in January", () => {
     const { monthlyExpenses, yearlyExpenses } = useExpenses(
-      [buildExpense({ amount: 100, date: "2026-01-10" })],
+      [buildExpense({ amount: 100, expenseDate: "2026-01-10" })],
       new Date(2026, 0, 20),
     );
 

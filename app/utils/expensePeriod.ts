@@ -51,7 +51,7 @@ export function isInYearToDate(
   );
 }
 
-export function formatExpenseDate(value: string | null | undefined): string {
+export function formatExpenseDate(value: string): string {
   const parsed = parseIsoDate(value);
 
   if (!parsed) return "";

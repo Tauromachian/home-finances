@@ -9,7 +9,7 @@ export const useExpenses = (
 ) => {
   const yearToDateExpenses = computed(() =>
     (toValue(expenses) ?? []).filter((expense) =>
-      isInYearToDate(expense.date, now),
+      isInYearToDate(expense.expenseDate, now),
     ),
   );
 

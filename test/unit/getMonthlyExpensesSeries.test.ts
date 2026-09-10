@@ -9,7 +9,7 @@ function buildExpense(overrides: Partial<Expense> = {}): Expense {
     name: "Test",
     amount: 100,
     category: "Food",
-    date: "2026-01-15",
+    expenseDate: "2026-01-15",
     description: "",
     ...overrides,
   };
@@ -19,11 +19,11 @@ describe("getMonthlyExpensesSeries", () => {
   it("Buckets actual expenses by month up to the previous month", () => {
     const { labels, totals } = getMonthlyExpensesSeries(
       [
-        buildExpense({ amount: 100, date: "2026-01-10" }),
-        buildExpense({ amount: 50, date: "2026-01-20" }),
-        buildExpense({ amount: 200, date: "2026-03-05" }),
-        buildExpense({ amount: 999, date: "2026-09-01" }),
-        buildExpense({ amount: 999, date: "2025-02-10" }),
+        buildExpense({ amount: 100, expenseDate: "2026-01-10" }),
+        buildExpense({ amount: 50, expenseDate: "2026-01-20" }),
+        buildExpense({ amount: 200, expenseDate: "2026-03-05" }),
+        buildExpense({ amount: 999, expenseDate: "2026-09-01" }),
+        buildExpense({ amount: 999, expenseDate: "2025-02-10" }),
       ],
       new Date(2026, 8, 10),
     );
@@ -43,7 +43,7 @@ describe("getMonthlyExpensesSeries", () => {
 
   it("Returns an empty series in January", () => {
     const { labels, totals } = getMonthlyExpensesSeries(
-      [buildExpense({ date: "2026-01-05" })],
+      [buildExpense({ expenseDate: "2026-01-05" })],
       new Date(2026, 0, 20),
     );
 
@@ -53,7 +53,7 @@ describe("getMonthlyExpensesSeries", () => {
 
   it("Skips expenses without a valid date", () => {
     const { totals } = getMonthlyExpensesSeries(
-      [buildExpense({ amount: 100, date: "" })],
+      [buildExpense({ amount: 100, expenseDate: "" })],
       new Date(2026, 2, 1),
     );
 

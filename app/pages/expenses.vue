@@ -52,6 +52,11 @@ async function loadProgrammedExpenses() {
 }
 
 const formRef = useTemplateRef("formRef");
+const programmedFormRef = useTemplateRef("programmedFormRef");
+
+const activeFormRef = computed(() =>
+  formKind.value === "programmed" ? programmedFormRef.value : formRef.value,
+);
 
 const appToaster = inject<Ref>("appToaster");
 
@@ -59,7 +64,7 @@ const EMPTY_EXPENSE: Expense = {
   name: "",
   amount: 0,
   category: "",
-  date: "",
+  expenseDate: "",
   description: "",
 };
 
@@ -73,7 +78,10 @@ const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
   chargeMonth: null,
 };
 
-const expenseForm = ref<Expense | ProgrammedExpense>({ ...EMPTY_EXPENSE });
+const expenseForm = ref<Expense>({ ...EMPTY_EXPENSE });
+const programmedExpenseForm = ref<ProgrammedExpense>({
+  ...EMPTY_PROGRAMMED_EXPENSE,
+});
 const formKind = ref<FormKind>("actual");
 const deleteKind = ref<FormKind>("actual");
 const isOpen = ref(false);
@@ -123,25 +131,29 @@ async function submitForm(form: Expense | ProgrammedExpense) {
   }
 }
 
-function openForm(mode: FormMode, expense?: Expense | ProgrammedExpense) {
+async function openForm(mode: FormMode, expense?: Expense | ProgrammedExpense) {
   formMode.value = mode;
   formKind.value = activeTab.value === "frequent" ? "programmed" : "actual";
 
   if (mode === "insert") {
-    expenseForm.value =
-      formKind.value === "programmed"
-        ? { ...EMPTY_PROGRAMMED_EXPENSE }
-        : { ...EMPTY_EXPENSE };
+    if (formKind.value === "programmed") {
+      programmedExpenseForm.value = { ...EMPTY_PROGRAMMED_EXPENSE };
+    } else {
+      expenseForm.value = { ...EMPTY_EXPENSE };
+    }
 
-    formRef.value.resetForm();
+    await nextTick();
+    activeFormRef.value?.resetForm();
   } else {
     if (!expense) throw new Error("You need to pass an expense for the edit");
 
     selectedId = expense.id;
 
-    expenseForm.value = {
-      ...expense,
-    };
+    if (formKind.value === "programmed") {
+      programmedExpenseForm.value = { ...(expense as ProgrammedExpense) };
+    } else {
+      expenseForm.value = { ...(expense as Expense) };
+    }
   }
 
   isOpen.value = true;
@@ -348,12 +360,19 @@ onBeforeMount(() => {
 
     <AppDialog v-model="isOpen">
       <ExpenseForm
+        v-if="formKind === 'actual'"
         ref="formRef"
         v-model="expenseForm"
         :form-mode="formMode"
-        :kind="formKind"
         @submit="submitForm"
       ></ExpenseForm>
+      <ExpenseProgrammedForm
+        v-else
+        ref="programmedFormRef"
+        v-model="programmedExpenseForm"
+        :form-mode="formMode"
+        @submit="submitForm"
+      ></ExpenseProgrammedForm>
     </AppDialog>
   </div>
 </template>
