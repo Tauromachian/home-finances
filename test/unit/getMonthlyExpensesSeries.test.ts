@@ -59,4 +59,34 @@ describe("getMonthlyExpensesSeries", () => {
 
     expect(totals).toEqual([0, 0]);
   });
+
+  it("Buckets a custom range including only its months", () => {
+    const { labels, totals } = getMonthlyExpensesSeries(
+      [
+        buildExpense({ amount: 100, expenseDate: "2026-01-10" }),
+        buildExpense({ amount: 200, expenseDate: "2026-03-05" }),
+        buildExpense({ amount: 50, expenseDate: "2026-04-05" }),
+        buildExpense({ amount: 999, expenseDate: "2026-09-01" }),
+      ],
+      new Date(2026, 8, 10),
+      { start: "2026-03-01", end: "2026-08-31" },
+    );
+
+    expect(labels).toEqual(["Mar", "Apr", "May", "Jun", "Jul", "Aug"]);
+    expect(totals).toEqual([200, 50, 0, 0, 0, 0]);
+  });
+
+  it("Labels months with the year when the range spans years", () => {
+    const { labels, totals } = getMonthlyExpensesSeries(
+      [
+        buildExpense({ amount: 100, expenseDate: "2025-12-10" }),
+        buildExpense({ amount: 200, expenseDate: "2026-01-10" }),
+      ],
+      new Date(2026, 8, 10),
+      { start: "2025-12-01", end: "2026-02-28" },
+    );
+
+    expect(labels).toEqual(["Dec 25", "Jan 26", "Feb 26"]);
+    expect(totals).toEqual([100, 200, 0]);
+  });
 });

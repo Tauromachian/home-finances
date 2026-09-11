@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { expensesCategories } from "~/utils/categories";
+import {
+  defaultReportRange,
+  endOfPreviousMonth,
+  formatExpenseDate,
+  parseIsoDate,
+} from "~/utils/expensePeriod";
 import { loadExpenses as fetchExpenses } from "~/services/expenses";
 import { loadProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
 
@@ -38,10 +44,27 @@ const activeTab = computed<ExpensesTab>({
 const expenses = ref<Expense[]>([]);
 const programmedExpenses = ref<ProgrammedExpense[]>([]);
 
-const currentYear = new Date().getFullYear();
+const reportDefaults = defaultReportRange();
+const reportStart = ref(reportDefaults.start);
+const reportEnd = ref(reportDefaults.end);
+
+// Clearing a picker leaves that side empty; resolve it back to the
+// default so stats and charts always share the same range.
+const reportRange = computed(() => {
+  const end = reportEnd.value || endOfPreviousMonth();
+  const endYear = parseIsoDate(end)?.year ?? new Date().getFullYear();
+  const start = reportStart.value || `${endYear}-01-01`;
+
+  return { start, end };
+});
+
+const reportRangeLabel = computed(
+  () =>
+    `${formatExpenseDate(reportRange.value.start)} – ${formatExpenseDate(reportRange.value.end)}`,
+);
 
 const { yearlyExpenses, monthlyExpenses, categoriesCount, yearToDateExpenses } =
-  useExpenses(expenses);
+  useExpenses(expenses, new Date(), reportRange);
 
 async function loadExpenses() {
   expenses.value = await fetchExpenses();
@@ -279,6 +302,32 @@ onBeforeMount(() => {
     </div>
 
     <div v-else class="flex flex-col gap-5">
+      <AppCard>
+        <AppCardBody>
+          <div
+            class="grid sm:grid-cols-2 gap-x-5"
+            data-testid="reports-time-filter"
+          >
+            <div data-testid="reports-start-date">
+              <AppDatePicker
+                v-model="reportStart"
+                label="Start date"
+                placeholder="Select start date"
+                :max="reportRange.end"
+              />
+            </div>
+            <div data-testid="reports-end-date">
+              <AppDatePicker
+                v-model="reportEnd"
+                label="End date"
+                placeholder="Select end date"
+                :min="reportRange.start"
+              />
+            </div>
+          </div>
+        </AppCardBody>
+      </AppCard>
+
       <div class="grid md:grid-cols-3 gap-5">
         <AppCard>
           <AppCardBody>
@@ -307,18 +356,18 @@ onBeforeMount(() => {
       </div>
 
       <div
-        v-if="!expenses?.length"
+        v-if="!yearToDateExpenses?.length"
         class="flex flex-col items-center gap-5 justify-center my-6"
       >
         <Icon size="48" name="material-symbols-light:note-outline"></Icon>
 
-        <p>No expenses! Add one</p>
+        <p>No expenses in this period! Add one</p>
       </div>
 
       <div v-else class="grid md:grid-cols-2 gap-5">
         <AppCard>
           <AppCardBody>
-            <p class="text-md font-bold">Breakdown ({{ currentYear }})</p>
+            <p class="text-md font-bold">Breakdown ({{ reportRangeLabel }})</p>
           </AppCardBody>
 
           <div class="py-4 md:px-6">
@@ -337,13 +386,17 @@ onBeforeMount(() => {
         <AppCard>
           <AppCardBody>
             <p class="text-md font-bold">
-              Expenses by Month ({{ currentYear }})
+              Expenses by Month ({{ reportRangeLabel }})
             </p>
           </AppCardBody>
 
           <div class="py-4 md:px-6">
             <ClientOnly>
-              <ExpenseLineChart :expenses="expenses"></ExpenseLineChart>
+              <ExpenseLineChart
+                :expenses="yearToDateExpenses"
+                :start="reportRange.start"
+                :end="reportRange.end"
+              ></ExpenseLineChart>
               <template #fallback>
                 <AppLoader size="80" class="my-40"></AppLoader>
               </template>

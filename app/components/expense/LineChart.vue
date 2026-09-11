@@ -8,9 +8,22 @@ const props = defineProps({
     type: Array as PropType<Expense[]>,
     required: true,
   },
+  start: {
+    type: String,
+    default: "",
+  },
+  end: {
+    type: String,
+    default: "",
+  },
 });
 
-const chartData = computed(() => getMonthlyExpensesSeries(props.expenses));
+const chartData = computed(() =>
+  getMonthlyExpensesSeries(props.expenses, new Date(), {
+    start: props.start,
+    end: props.end,
+  }),
+);
 
 const options = computed<ApexOptions>(() => {
   return {

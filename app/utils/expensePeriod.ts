@@ -24,6 +24,83 @@ export function parseIsoDate(value: string | null | undefined): {
   return { year, month, day };
 }
 
+export function toISODate(year: number, month: number, day: number): string {
+  const m = String(month).padStart(2, "0");
+  const d = String(day).padStart(2, "0");
+  return `${year}-${m}-${d}`;
+}
+
+/**
+ * Last day of the month previous to `now` (September => Aug 31,
+ * January => Dec 31 of the previous year).
+ */
+export function endOfPreviousMonth(now: Date = new Date()): string {
+  const end = new Date(now.getFullYear(), now.getMonth(), 0);
+  return toISODate(end.getFullYear(), end.getMonth() + 1, end.getDate());
+}
+
+/**
+ * Default reports range: January 1st up to the end of the previous
+ * month (completed periods only).
+ */
+export function defaultReportRange(now: Date = new Date()): {
+  start: string;
+  end: string;
+} {
+  const end = endOfPreviousMonth(now);
+  const parsed = parseIsoDate(end);
+
+  return { start: `${parsed?.year ?? now.getFullYear()}-01-01`, end };
+}
+
+/**
+ * Whether an ISO date falls inside [start, end] (inclusive).
+ * Empty bounds are treated as unbounded.
+ */
+export function isInRange(
+  value: string | null | undefined,
+  start?: string | null,
+  end?: string | null,
+): boolean {
+  if (!parseIsoDate(value)) return false;
+  if (start && value! < start) return false;
+  if (end && value! > end) return false;
+
+  return true;
+}
+
+export function listMonthsInRange(
+  start?: string | null,
+  end?: string | null,
+): { year: number; month: number }[] {
+  const parsedStart = parseIsoDate(start);
+  const parsedEnd = parseIsoDate(end);
+
+  if (!parsedStart || !parsedEnd) return [];
+
+  const startIndex = parsedStart.year * 12 + (parsedStart.month - 1);
+  const endIndex = parsedEnd.year * 12 + (parsedEnd.month - 1);
+
+  if (startIndex > endIndex) return [];
+
+  const monthsInRange: { year: number; month: number }[] = [];
+  for (let index = startIndex; index <= endIndex; index++) {
+    monthsInRange.push({
+      year: Math.floor(index / 12),
+      month: (index % 12) + 1,
+    });
+  }
+
+  return monthsInRange;
+}
+
+export function countMonthsInRange(
+  start?: string | null,
+  end?: string | null,
+): number {
+  return listMonthsInRange(start, end).length;
+}
+
 /**
  * Number of completed months in the current year (January => 0,
  * September => 8 covering Jan..Aug).
