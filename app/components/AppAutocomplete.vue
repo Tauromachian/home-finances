@@ -18,11 +18,14 @@ const emit = defineEmits(["selected"]);
 const searchQuery = ref("");
 const isOpen = ref(false);
 const selectedIndex = ref(-1);
+const hasItemBeenSelected = ref(false);
 
 const inputRef = useTemplateRef("inputRef");
 const listRef = useTemplateRef("listRef");
 
 const filteredItems = computed(() => {
+  if (hasItemBeenSelected.value) return props.items;
+
   return searchQuery.value
     ? props.items.filter((item) =>
         item.value.toLowerCase().includes(searchQuery.value.toLowerCase()),
@@ -33,6 +36,7 @@ const filteredItems = computed(() => {
 const onInput = () => {
   isOpen.value = true;
   selectedIndex.value = -1;
+  hasItemBeenSelected.value = false;
 };
 
 const onKeyDown = (event: KeyboardEvent) => {
@@ -72,6 +76,7 @@ const selectItem = (item: Item) => {
   searchQuery.value = item.value;
   isOpen.value = false;
   selectedIndex.value = -1;
+  hasItemBeenSelected.value = true;
   emit("selected", item);
 };
 
