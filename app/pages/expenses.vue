@@ -3,7 +3,6 @@ import { expensesCategories } from "~/utils/categories";
 import {
   defaultReportRange,
   endOfPreviousMonth,
-  formatExpenseDate,
   parseIsoDate,
 } from "~/utils/expensePeriod";
 import { loadExpenses as fetchExpenses } from "~/services/expenses";
@@ -58,13 +57,11 @@ const reportRange = computed(() => {
   return { start, end };
 });
 
-const reportRangeLabel = computed(
-  () =>
-    `${formatExpenseDate(reportRange.value.start)} – ${formatExpenseDate(reportRange.value.end)}`,
+const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
+  expenses,
+  new Date(),
+  reportRange,
 );
-
-const { yearlyExpenses, monthlyExpenses, categoriesCount, yearToDateExpenses } =
-  useExpenses(expenses, new Date(), reportRange);
 
 async function loadExpenses() {
   expenses.value = await fetchExpenses();
@@ -328,20 +325,15 @@ onBeforeMount(() => {
         </AppCardBody>
       </AppCard>
 
-      <div class="grid md:grid-cols-3 gap-5">
+      <div class="grid md:grid-cols-2 gap-5">
         <AppCard>
           <AppCardBody>
-            <p class="text-sm">Yearly Expenses</p>
-            <p class="text-3xl font-serif text-accent-0 mt-2">
-              €{{ yearlyExpenses.toFixed(2) }}
-            </p>
-          </AppCardBody>
-        </AppCard>
-        <AppCard>
-          <AppCardBody>
-            <p class="text-sm">Monthly Expenses</p>
-            <p class="text-3xl font-serif mt-2 text-text-1">
-              €{{ monthlyExpenses.toFixed(2) }}
+            <p class="text-sm">Total Expenses</p>
+            <p
+              class="text-3xl font-serif text-accent-0 mt-2"
+              data-testid="reports-total"
+            >
+              €{{ totalExpenses.toFixed(2) }}
             </p>
           </AppCardBody>
         </AppCard>
@@ -367,7 +359,7 @@ onBeforeMount(() => {
       <div v-else class="grid md:grid-cols-2 gap-5">
         <AppCard>
           <AppCardBody>
-            <p class="text-md font-bold">Breakdown ({{ reportRangeLabel }})</p>
+            <p class="text-md font-bold">Breakdown</p>
           </AppCardBody>
 
           <div class="py-4 md:px-6">
@@ -385,9 +377,7 @@ onBeforeMount(() => {
 
         <AppCard>
           <AppCardBody>
-            <p class="text-md font-bold">
-              Expenses by Month ({{ reportRangeLabel }})
-            </p>
+            <p class="text-md font-bold">Expenses by Month</p>
           </AppCardBody>
 
           <div class="py-4 md:px-6">
