@@ -5,7 +5,7 @@ import type { Expense } from "~/types/expense";
 
 const expenses = ref<Expense[]>([]);
 
-const { yearlyExpenses } = useExpenses(expenses);
+const { totalExpenses } = useExpenses(expenses);
 
 async function loadExpenses() {
   expenses.value = await fetchExpenses();
@@ -41,7 +41,7 @@ onBeforeMount(() => loadExpenses());
         <AppCardBody>
           <p class="text-sm">Expenses</p>
           <p class="text-2xl md:text-3xl font-serif text-accent-0">
-            €{{ yearlyExpenses }}
+            €{{ totalExpenses }}
           </p>
         </AppCardBody>
       </AppCard>
