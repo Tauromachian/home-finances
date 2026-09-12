@@ -18,7 +18,7 @@ const emit = defineEmits(["selected"]);
 const searchQuery = ref("");
 const isOpen = ref(false);
 const selectedIndex = ref(-1);
-const hasItemBeenSelected = ref(false);
+const hasItemBeenSelected = ref(true);
 
 const inputRef = useTemplateRef("inputRef");
 const listRef = useTemplateRef("listRef");
