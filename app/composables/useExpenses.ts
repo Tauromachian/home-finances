@@ -1,13 +1,7 @@
 import { computed, toValue } from "vue";
 
 import type { Expense } from "../types/expense";
-import {
-  countMonthsInRange,
-  elapsedMonths,
-  isInRange,
-  isInYearToDate,
-  round2,
-} from "../utils/expensePeriod";
+import { isInRange, isInYearToDate, round2 } from "../utils/expensePeriod";
 
 export interface ExpensesRange {
   start?: string | null;
@@ -34,7 +28,7 @@ export const useExpenses = (
     );
   });
 
-  const yearlyExpenses = computed(() =>
+  const totalExpenses = computed(() =>
     round2(
       yearToDateExpenses.value.reduce(
         (sum: number, expense: Expense) => sum + Number(expense.amount),
@@ -43,35 +37,13 @@ export const useExpenses = (
     ),
   );
 
-  const monthlyExpenses = computed(() => {
-    const resolvedRange = toValue(range);
-
-    if (resolvedRange?.start || resolvedRange?.end) {
-      const months = countMonthsInRange(
-        resolvedRange?.start,
-        resolvedRange?.end,
-      );
-
-      if (!months) return 0;
-
-      return round2(yearlyExpenses.value / months);
-    }
-
-    const elapsed = elapsedMonths(now);
-
-    if (!elapsed) return 0;
-
-    return round2(yearlyExpenses.value / elapsed);
-  });
-
   const categoriesCount = computed(
     () =>
       new Set(yearToDateExpenses.value.map((expense) => expense.category)).size,
   );
 
   return {
-    yearlyExpenses,
-    monthlyExpenses,
+    totalExpenses,
     categoriesCount,
     yearToDateExpenses,
   };
