@@ -57,6 +57,15 @@ const chargeMonthLabel = computed(() =>
 
 function onSelectFrequency(item: Item) {
   selectedFrequency.value = item.value as Frequency;
+
+  // A month only applies to yearly expenses. Drop any previously picked
+  // month as soon as another frequency is chosen so the hidden field can
+  // never carry a stale value into the submitted payload.
+  if (selectedFrequency.value !== FrequencyValues.YEARLY) {
+    formRef.value?.setFieldValue("chargeMonth", null);
+
+    if (modelValue.value) modelValue.value.chargeMonth = null;
+  }
 }
 
 function onSubmit(values: ProgrammedExpense) {
