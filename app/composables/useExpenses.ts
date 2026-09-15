@@ -1,7 +1,7 @@
 import { computed, toValue } from "vue";
 
 import type { Expense } from "../types/expense";
-import { isInRange, isInYearToDate, round2 } from "../utils/expensePeriod";
+import { isInRange, isInYearToDate, round2 } from "../utils/period";
 
 export interface ExpensesRange {
   start?: string | null;
