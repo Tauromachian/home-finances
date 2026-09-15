@@ -5,14 +5,14 @@ import {
   defaultReportRange,
   elapsedMonths,
   endOfPreviousMonth,
-  formatExpenseDate,
+  formatPeriodDate,
   isInRange,
   isInYearToDate,
   listMonthsInRange,
   parseIsoDate,
   round2,
   toISODate,
-} from "../../app/utils/expensePeriod";
+} from "../../app/utils/period";
 
 describe("parseIsoDate", () => {
   it("Parses ISO dates", () => {
@@ -58,13 +58,13 @@ describe("isInYearToDate", () => {
   });
 });
 
-describe("formatExpenseDate", () => {
+describe("formatPeriodDate", () => {
   it("Formats ISO dates as day Mon year", () => {
-    expect(formatExpenseDate("2026-06-05")).toBe("5 Jun 2026");
+    expect(formatPeriodDate("2026-06-05")).toBe("5 Jun 2026");
   });
 
   it("Returns empty string for missing values", () => {
-    expect(formatExpenseDate(null)).toBe("");
+    expect(formatPeriodDate(null)).toBe("");
   });
 });
 
