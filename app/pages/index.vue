@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { loadExpenses as fetchExpenses } from "~/services/expenses";
 import { loadIncomes as fetchIncomes } from "~/services/incomes";
-import { round2 } from "~/utils/incomePeriod";
+import { round2 } from "~/utils/period";
 
 import type { Expense } from "~/types/expense";
 import type { Income } from "~/types/income";
