@@ -34,10 +34,8 @@ function executeAction(action: "delete" | "edit") {
           </p>
         </div>
 
-        <p
-          class="ml-auto rounded-full bg-green-800 text-white px-2 text-sm uppercase mr-3"
-        >
-          {{ income.frequency }}
+        <p class="ml-auto text-sm text-text-0 mr-3">
+          {{ income.incomeDate }}
         </p>
 
         <p class="font-serif text-text-1 mr-4 text-lg">€{{ income.amount }}</p>
