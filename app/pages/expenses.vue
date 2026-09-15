@@ -4,7 +4,7 @@ import {
   defaultReportRange,
   endOfPreviousMonth,
   parseIsoDate,
-} from "~/utils/expensePeriod";
+} from "~/utils/period";
 import { loadExpenses as fetchExpenses } from "~/services/expenses";
 import { loadProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
 
