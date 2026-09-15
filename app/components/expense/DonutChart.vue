@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { expensesCategories } from "@/utils/categories";
-import { round2 } from "@/utils/expensePeriod";
+import { round2 } from "@/utils/period";
 import type { ApexOptions } from "apexcharts";
 import type { Expense } from "~/types/expense";
 
