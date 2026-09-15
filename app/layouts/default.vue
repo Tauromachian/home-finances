@@ -35,7 +35,7 @@ async function signOut() {
 
       <button
         ref="avatar-button"
-        class="rounded-full cursor-pointer h-14 w-14 border flex justify-center items-center ml-auto"
+        class="rounded-full cursor-pointer h-14 w-14 border border-accent-0 flex justify-center items-center ml-auto"
         @click="isUserMenuOpen = true"
       >
         <Icon name="material-symbols-light:person" :size="26"></Icon>
