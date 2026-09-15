@@ -5,7 +5,7 @@ import {
   listMonthsInRange,
   parseIsoDate,
   round2,
-} from "../utils/expensePeriod";
+} from "../utils/period";
 
 export async function loadExpenses(): Promise<Expense[]> {
   const res = await fetch("/api/expenses");
