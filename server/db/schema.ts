@@ -9,3 +9,5 @@ export * from "./schema/programmed-expenses";
 export * from "./schema/incomes";
 export * from "./schema/programmed-incomes";
 export * from "./schema/investments";
+export * from "./schema/groups";
+export * from "./schema/users-groups";
