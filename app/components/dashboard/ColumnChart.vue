@@ -1,21 +1,51 @@
 <script setup lang="ts">
 import type { ApexOptions } from "apexcharts";
+import { getMonthlyIncomesSeries } from "~/services/incomes";
+import { getMonthlyExpensesSeries } from "~/services/expenses";
+import type { Income } from "~/types/income";
+import type { Expense } from "~/types/expense";
 
-const series = [
+const props = defineProps({
+  incomes: {
+    type: Array as PropType<Income[]>,
+    default: () => [],
+  },
+  expenses: {
+    type: Array as PropType<Expense[]>,
+    default: () => [],
+  },
+});
+
+const incomesData = computed(() =>
+  getMonthlyIncomesSeries(props.incomes, new Date()),
+);
+
+const expensesData = computed(() =>
+  getMonthlyExpensesSeries(props.expenses, new Date()),
+);
+
+const categories = computed(() =>
+  incomesData.value.labels.length
+    ? incomesData.value.labels
+    : expensesData.value.labels,
+);
+
+const series = computed(() => [
   {
     name: "Income",
-    data: [44, 55, 57, 56, 61, 58, 63, 60, 66],
+    data: incomesData.value.totals,
   },
   {
     name: "Expenses",
-    data: [76, 85, 101, 98, 87, 105, 91, 114, 94],
+    data: expensesData.value.totals,
   },
-];
+]);
 
 const options = computed<ApexOptions>(() => ({
   chart: {
     height: 320,
   },
+  colors: ["#16a34a", "#dc2626"],
   responsive: [
     {
       breakpoint: 640,
@@ -57,11 +87,14 @@ const options = computed<ApexOptions>(() => ({
     colors: ["transparent"],
   },
   xaxis: {
-    categories: months,
+    categories: categories.value,
   },
   yaxis: {
     title: {
-      text: "$ (thousands)",
+      text: "€",
+    },
+    labels: {
+      formatter: (value: number) => `€${Math.round(value)}`,
     },
   },
   fill: {
