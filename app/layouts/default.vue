@@ -4,6 +4,7 @@ import type { ThemeName } from "~/types/theme";
 const theme = inject<Ref<ThemeName>>("theme", ref("system"));
 
 const supabase = useSupabaseClient();
+const user = useSupabaseUser();
 
 const avatarButtonRef = useTemplateRef("avatar-button");
 
@@ -54,6 +55,12 @@ async function signOut() {
       location="bottom right"
     >
       <AppCardBody>
+        <p v-if="user?.email" class="text-sm text-text-1">
+          {{ user.email }}
+        </p>
+
+        <hr class="border-neutral-1 my-2" />
+
         <AppSwitch
           v-model="theme"
           class="ml-auto hidden lg:flex"
