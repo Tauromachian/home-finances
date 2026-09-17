@@ -34,9 +34,11 @@ async function signOut() {
         <span class="text-accent-0 italic"> Finances </span>
       </h1>
 
+      <GroupScopeSwitcher class="ml-auto" />
+
       <button
         ref="avatar-button"
-        class="rounded-full cursor-pointer h-14 w-14 border border-accent-0 flex justify-center items-center ml-auto"
+        class="rounded-full cursor-pointer h-14 w-14 border border-accent-0 flex justify-center items-center ml-3"
         @click="isUserMenuOpen = true"
       >
         <Icon name="material-symbols-light:person" :size="26"></Icon>
