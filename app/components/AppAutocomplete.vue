@@ -7,6 +7,8 @@ const props = defineProps({
   name: { type: String, required: true },
   label: { type: String, default: "" },
   error: { type: String, default: "" },
+  horizontal: { type: Boolean, default: false },
+  showTitle: { type: Boolean, default: false },
   items: {
     type: Array as PropType<readonly Item[]>,
     default: () => [],
@@ -27,8 +29,10 @@ const filteredItems = computed(() => {
   if (hasItemBeenSelected.value) return props.items;
 
   return searchQuery.value
-    ? props.items.filter((item) =>
-        item.value.toLowerCase().includes(searchQuery.value.toLowerCase()),
+    ? props.items.filter(
+        (item) =>
+          item.value.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+          item.title.toLowerCase().includes(searchQuery.value.toLowerCase()),
       )
     : props.items;
 });
@@ -73,7 +77,7 @@ const moveSelection = (direction: number) => {
 };
 
 const selectItem = (item: Item) => {
-  searchQuery.value = item.value;
+  searchQuery.value = props.showTitle ? item.title : item.value;
   isOpen.value = false;
   selectedIndex.value = -1;
   hasItemBeenSelected.value = true;
@@ -107,54 +111,62 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="relative mt-1 mb-5">
-    <label :for="name" class="text-text-0">{{ label }}</label>
+  <div :class="horizontal ? 'flex items-center gap-3' : 'relative mt-1 mb-5'">
+    <label :for="name" class="text-text-0" :class="{ 'shrink-0': horizontal }">
+      {{ label }}
+    </label>
 
-    <Field
-      ref="inputRef"
-      v-model="searchQuery"
-      v-bind="$attrs"
-      class="text-field peer"
-      :name="name"
-      @input="onInput"
-      @keydown="onKeyDown"
-      @focus="isOpen = true"
-    />
-    <Transition name="fade">
-      <ul
-        v-if="isOpen && filteredItems.length"
-        ref="listRef"
-        class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg"
-      >
-        <li
-          v-for="(item, index) in filteredItems"
-          :key="item.value"
-          :class="[
-            'pl-2 flex h-7 items-center cursor-pointer hover:bg-gray-200 rounded-full transition',
-            { 'bg-gray-100': index === selectedIndex },
-          ]"
-          @click="selectItem(item)"
+    <div :class="horizontal ? 'relative flex-1' : 'contents'">
+      <Field
+        ref="inputRef"
+        v-model="searchQuery"
+        v-bind="$attrs"
+        class="text-field peer"
+        :name="name"
+        @input="onInput"
+        @keydown="onKeyDown"
+        @focus="isOpen = true"
+      />
+      <Transition name="fade">
+        <ul
+          v-if="isOpen && filteredItems.length"
+          ref="listRef"
+          class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg"
         >
-          <Icon
-            v-if="item.icon"
-            :name="item.icon.name"
-            class="w-5 h-5 pl-2 mr-4"
-            :style="{ color: item.icon.color }"
-          />
+          <li
+            v-for="(item, index) in filteredItems"
+            :key="item.value"
+            :class="[
+              'pl-2 flex h-7 items-center cursor-pointer hover:bg-gray-200 rounded-full transition',
+              { 'bg-gray-100': index === selectedIndex },
+            ]"
+            @click="selectItem(item)"
+          >
+            <Icon
+              v-if="item.icon"
+              :name="item.icon.name"
+              class="w-5 h-5 pl-2 mr-4"
+              :style="{ color: item.icon.color }"
+            />
 
-          {{ item.title }}
-        </li>
-      </ul>
-    </Transition>
+            {{ item.title }}
+          </li>
+        </ul>
+      </Transition>
 
-    <ErrorText class="absolute"> {{ error }}</ErrorText>
+      <ErrorText class="absolute"> {{ error }}</ErrorText>
 
-    <ClientOnly>
-      <Icon
-        name="material-symbols-light:arrow-drop-down"
-        class="absolute right-2 top-8 text-text-0"
-        size="24"
-      ></Icon>
-    </ClientOnly>
+      <ClientOnly>
+        <Icon
+          name="material-symbols-light:arrow-drop-down"
+          :class="
+            horizontal
+              ? 'absolute right-2 top-1/2 -translate-y-1/2 text-text-0'
+              : 'absolute right-2 top-8 text-text-0'
+          "
+          size="24"
+        ></Icon>
+      </ClientOnly>
+    </div>
   </div>
 </template>
