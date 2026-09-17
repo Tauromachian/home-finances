@@ -16,9 +16,12 @@ export default defineEventHandler(async (event) => {
     .values({ name: body.name })
     .returning({ id: groupsTable.id, name: groupsTable.name });
 
+  // Purely defensive should never happen unless there is a DB error
+  if (!group?.id) throw new Error("Issue inserting group");
+
   await db.insert(usersGroupsTable).values({
     userId: user.id,
-    groupId: group!.id,
+    groupId: group.id,
   });
 
   return { msg: "Success", data: group };
