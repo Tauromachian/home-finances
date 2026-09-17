@@ -131,14 +131,14 @@ onUnmounted(() => {
         <ul
           v-if="isOpen && filteredItems.length"
           ref="listRef"
-          class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg"
+          class="absolute z-10 w-full mt-1 bg-neutral-2 border border-neutral-1 rounded-lg shadow-lg"
         >
           <li
             v-for="(item, index) in filteredItems"
             :key="item.value"
             :class="[
-              'pl-2 flex h-7 items-center cursor-pointer hover:bg-gray-200 rounded-full transition',
-              { 'bg-gray-100': index === selectedIndex },
+              'pl-2 flex h-7 items-center cursor-pointer text-text-1 hover:bg-neutral-1 rounded-full transition',
+              { 'bg-neutral-1': index === selectedIndex },
             ]"
             @click="selectItem(item)"
           >
