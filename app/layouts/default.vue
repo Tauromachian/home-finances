@@ -28,27 +28,29 @@ async function signOut() {
 
 <template>
   <main class="font-sans min-h-screen bg-neutral-0 text-text-0">
-    <header class="flex items-center max-w-6xl mx-4 lg:mx-auto pt-5">
-      <h1 class="font-serif text-4xl font-bold text-text-1">
-        Home
-        <span class="text-accent-0 italic"> Finances </span>
-      </h1>
+    <NavBar />
 
-      <GroupScopeSwitcher class="ml-auto" />
+    <div class="lg:pl-64">
+      <header class="flex items-center max-w-6xl mx-4 lg:mx-8 xl:mx-auto pt-5">
+        <h1 class="font-serif text-4xl font-bold text-text-1 lg:hidden">
+          Home
+          <span class="text-accent-0 italic"> Finances </span>
+        </h1>
 
-      <button
-        ref="avatar-button"
-        class="rounded-full cursor-pointer h-14 w-14 border border-accent-0 flex justify-center items-center ml-3"
-        @click="isUserMenuOpen = true"
-      >
-        <Icon name="material-symbols-light:person" :size="26"></Icon>
-      </button>
-    </header>
+        <GroupScopeSwitcher class="ml-auto" />
 
-    <div class="max-w-6xl mx-4 lg:mx-auto pt-5 pb-64 lg:pb-0">
-      <NavBar class="mb-8"></NavBar>
+        <button
+          ref="avatar-button"
+          class="rounded-full cursor-pointer h-14 w-14 border border-accent-0 flex justify-center items-center ml-3"
+          @click="isUserMenuOpen = true"
+        >
+          <Icon name="material-symbols-light:person" :size="26"></Icon>
+        </button>
+      </header>
 
-      <slot />
+      <div class="max-w-6xl mx-4 lg:mx-8 xl:mx-auto pt-5 pb-64 lg:pb-8">
+        <slot />
+      </div>
     </div>
 
     <AppMenu

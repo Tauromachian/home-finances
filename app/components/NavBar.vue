@@ -57,21 +57,32 @@ async function signOut() {
 
 <template>
   <div>
-    <nav class="bg-neutral-1 rounded-xl p-1 hidden lg:block">
-      <ul class="font-medium text-sm flex justify-evenly gap-5">
-        <li v-for="link in links" :key="link.to" class="w-full text-center">
+    <aside
+      class="hidden lg:flex fixed inset-y-0 left-0 z-40 w-64 flex-col gap-4 bg-neutral-1 p-4"
+    >
+      <NuxtLink
+        to="/"
+        class="px-2 pt-2 font-serif text-2xl font-bold text-text-1"
+      >
+        Home
+        <span class="text-accent-0 italic"> Finances </span>
+      </NuxtLink>
+
+      <ul class="font-medium text-sm flex flex-col gap-1">
+        <li v-for="link in links" :key="link.to">
           <NuxtLink
             :to="link.to"
-            class="block me-2 py-2 px-8 w-full rounded-lg"
+            class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-0 hover:bg-neutral-2"
             active-class="bg-neutral-2 text-text-1"
           >
+            <Icon :name="link.icon" size="20" />
             <span>
               {{ link.name }}
             </span>
           </NuxtLink>
         </li>
       </ul>
-    </nav>
+    </aside>
 
     <div
       class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-neutral-1 rounded-t-2xl p-3"
