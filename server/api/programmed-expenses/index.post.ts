@@ -2,6 +2,7 @@ import { db } from "@@/server/orm";
 
 import { programmedExpensesTable } from "@@/server/db/schema";
 
+import { resolveGroupId } from "@@/server/utils/groupAccess";
 import { validateChargeSchedule } from "@@/server/utils/programmedExpense";
 
 export default defineEventHandler(async (event) => {
@@ -9,6 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const programmedExpense = await readBody(event);
   programmedExpense.userId = user.id;
+  programmedExpense.groupId = await resolveGroupId(user.id, programmedExpense);
 
   const schedule = validateChargeSchedule(programmedExpense);
 

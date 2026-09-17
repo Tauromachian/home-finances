@@ -2,6 +2,7 @@ import { db } from "@@/server/orm";
 
 import { programmedIncomesTable } from "@@/server/db/schema";
 
+import { resolveGroupId } from "@@/server/utils/groupAccess";
 import { validateChargeSchedule } from "@@/server/utils/programmedIncome";
 
 export default defineEventHandler(async (event) => {
@@ -9,6 +10,7 @@ export default defineEventHandler(async (event) => {
 
   const programmedIncome = await readBody(event);
   programmedIncome.userId = user.id;
+  programmedIncome.groupId = await resolveGroupId(user.id, programmedIncome);
 
   const schedule = validateChargeSchedule(programmedIncome);
 

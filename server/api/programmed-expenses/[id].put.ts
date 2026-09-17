@@ -4,14 +4,33 @@ import { db } from "@@/server/orm";
 
 import { programmedExpensesTable } from "@@/server/db/schema";
 
+import {
+  assertRecordAccess,
+  resolveGroupId,
+} from "@@/server/utils/groupAccess";
 import { validateChargeSchedule } from "@@/server/utils/programmedExpense";
 
 export default defineEventHandler(async (event) => {
   const id = Number(event.context.params?.id);
   const user = event.context.user;
 
+  const [existing] = await db
+    .select({
+      userId: programmedExpensesTable.userId,
+      groupId: programmedExpensesTable.groupId,
+    })
+    .from(programmedExpensesTable)
+    .where(eq(programmedExpensesTable.id, id))
+    .limit(1);
+
+  if (!existing) {
+    throw createError({ statusCode: 404, message: "Expense not found" });
+  }
+
+  await assertRecordAccess(user.id, existing);
+
   const programmedExpense = await readBody(event);
-  programmedExpense.userId = user.id;
+  programmedExpense.groupId = await resolveGroupId(user.id, programmedExpense);
 
   const schedule = validateChargeSchedule(programmedExpense);
 
