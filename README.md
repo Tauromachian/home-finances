@@ -4,9 +4,10 @@ A full-stack web application built with **Nuxt 4** for tracking personal and hou
 
 ## Features
 
-- **Dashboard** — net worth snapshot, balance change, income, expenses, and cashflow summary with an Expenses vs Gains column chart.
-- **Expenses** — track recurring and one-off expenses by category and frequency, with a donut chart breakdown.
-- **Income** — log income streams by category and frequency.
+- **Dashboard** — net worth snapshot, balance change, income, expenses, and cashflow summary with an Expenses vs Gains column chart. Follows the selected Personal/Group scope.
+- **Expenses** — track one-off expenses (Manage) and recurring schedules (Frequent), with reports (totals, category breakdown donut, monthly line chart).
+- **Income** — log one-off incomes (Manage) and recurring schedules (Frequent), with reports.
+- **Groups** — share expenses and incomes with a household or team. A scope switcher in the header toggles between Personal and each group; every member has equal manage rights. Members are invited by email on the Groups page.
 - **Investments** — record holdings with current value, category, and description. Portfolio value is computed live and visualised with a donut (allocation) and line (value over time) chart.
 - **Compound interest calculator** — estimate growth of an initial amount plus monthly contributions over time, with total invested and interest earned.
 - **Authentication** — email/password login and signup powered by Supabase, with route protection on the API layer.
@@ -39,17 +40,25 @@ This is a **full-stack application with server-side rendering (SSR) enabled**:
 
 ```
 app/                    # Nuxt 4 frontend (Vue components, pages, composables, types, utils)
-  components/           # AppCard, AppDialog, charts, forms, dashboard, navbar, ...
-  pages/                # index, expenses, income, investments, compound-calculator, login, confirm
+  components/           # AppCard, AppDialog, charts, forms, dashboard, navbar, group pickers, ...
+  pages/                # index, expenses, income, investments, compound-calculator, groups, login, confirm
   layouts/              # default, auth
-  composables/          # useDisplay
-  utils/                # categories, frequencies, compound interest helpers, vee-validate rules
-  types/                # expense, income, investment, compound, item, category
+  composables/          # useExpenses, useIncomes, useGroups (shared Personal/Group scope)
+  services/             # API fetch wrappers (expenses, incomes, programmed*, groups)
+  utils/                # period (dates, ranges, rounding), categories, frequencies, months, rules
+  types/                # expense, income, investment, group, compound, item, category
 server/                 # Nitro server (backend)
   api/
     expenses/           # index.get / index.post / [id].put / [id].delete
+    incomes/            # index.get / index.post / [id].put / [id].delete
+    programmed-expenses/# index.get / index.post / [id].put / [id].delete
+    programmed-incomes/ # index.get / index.post / [id].put / [id].delete
     investments/        # index.get / index.post / [id].put / [id].delete
-  db/schema.ts          # Drizzle schema (users, expenses, investments, income)
+    groups/             # index.get / index.post / [id].get / [id].delete / [id]/members/...
+  db/schema/            # Per-table Drizzle schema (expenses, incomes, programmed-*,
+                        # investments, groups, users-groups, users, frequency)
+  db/schema.ts          # Barrel re-exporting all tables (drizzle-kit entrypoint)
+  utils/groupAccess.ts  # Group membership gates (assertGroupMember, assertRecordAccess, ...)
   middleware/auth.ts    # Protects /api/* with Supabase session
   orm/index.ts          # Drizzle client (pg)
 public/                 # Static assets (screenshots, favicon)
@@ -61,31 +70,60 @@ drizzle.config.ts       # Drizzle Kit configuration
 
 ## Database Schema
 
-Defined in [`server/db/schema.ts`](server/db/schema.ts):
+Defined per table in [`server/db/schema/`](server/db/schema/), re-exported from [`server/db/schema.ts`](server/db/schema.ts) (the drizzle-kit entrypoint):
 
-| Table         | Schema | Purpose                                                              |
-| ------------- | ------ | -------------------------------------------------------------------- |
-| `users`       | `auth` | Extends Supabase's `auth.users` with `full_name` and `phone`         |
-| `expenses`    | public | Expense items (amount, name, category, frequency, description)       |
-| `investments` | public | Holdings (name, category, amount, current_value, description)        |
-| `income`      | public | Income streams (name, amount, frequency, description)                |
+| Table                 | Schema | Purpose                                                              |
+| --------------------- | ------ | -------------------------------------------------------------------- |
+| `users`               | `auth` | Extends Supabase's `auth.users` with `email`, `full_name`, `phone`   |
+| `groups`              | public | Groups (`id`, `name`) for shared finances                            |
+| `users_groups`        | public | Group memberships (`user_id`, `group_id`, unique per pair)           |
+| `expenses`            | public | One-off expenses (amount, name, category, expense_date, description) |
+| `incomes`             | public | One-off incomes (amount, name, income_date, description)             |
+| `programmed_expenses` | public | Recurring expense schedules (frequency, charge_day, charge_month)    |
+| `programmed_incomes`  | public | Recurring income schedules (frequency, charge_day, charge_month)     |
+| `investments`         | public | Holdings (name, category, amount, current_value, description)        |
 
-All data tables reference `auth.users.id` via `user_id`.
+All data tables reference `auth.users.id` via `user_id` (authorship — always forced from the session, never trusted from the client). The expense/income tables (actuals and programmed) additionally carry a nullable `group_id`: `NULL` means a personal record, set means shared with that group. `investments` stays personal-only.
 
 ## API
 
 All `/api/*` routes are protected by `server/middleware/auth.ts`, which throws `401 Unauthorized` when no Supabase session is present. The authenticated user is exposed on `event.context.user` (with `id` mapped from Supabase's `sub` claim).
 
-| Method     | Path                  | Description                  |
-| ---------- | --------------------- | ---------------------------- |
-| `GET`      | `/api/expenses`       | List expenses for the user   |
-| `POST`     | `/api/expenses`       | Create an expense            |
-| `PUT`      | `/api/expenses/:id`   | Update an expense            |
-| `DELETE`   | `/api/expenses/:id`   | Delete an expense            |
+Record routes (`expenses`, `incomes`, `programmed-expenses`, `programmed-incomes`) are group-aware via `server/utils/groupAccess.ts`:
+
+- `GET` returns the user's personal records plus records shared with their groups.
+- `POST`/`PUT` accept an optional `groupId` (omitted = personal); a non-member `groupId` fails with `403`.
+- `PUT`/`DELETE` on a personal record require ownership; on a shared record require group membership (`403` otherwise, `404` when missing).
+
+| Method     | Path                  | Description                                  |
+| ---------- | --------------------- | -------------------------------------------- |
+| `GET`      | `/api/expenses`       | List personal + group-shared expenses        |
+| `POST`     | `/api/expenses`       | Create an expense (optional `groupId`)       |
+| `PUT`      | `/api/expenses/:id`   | Update an expense                            |
+| `DELETE`   | `/api/expenses/:id`   | Delete an expense                            |
+| `GET`      | `/api/incomes`        | List personal + group-shared incomes         |
+| `POST`     | `/api/incomes`        | Create an income (optional `groupId`)        |
+| `PUT`      | `/api/incomes/:id`    | Update an income                             |
+| `DELETE`   | `/api/incomes/:id`    | Delete an income                             |
+| `GET`      | `/api/programmed-expenses`       | List personal + shared programmed expenses |
+| `POST`     | `/api/programmed-expenses`       | Create a programmed expense                |
+| `PUT`      | `/api/programmed-expenses/:id`   | Update a programmed expense                |
+| `DELETE`   | `/api/programmed-expenses/:id`   | Delete a programmed expense                |
+| `GET`      | `/api/programmed-incomes`        | List personal + shared programmed incomes  |
+| `POST`     | `/api/programmed-incomes`        | Create a programmed income                 |
+| `PUT`      | `/api/programmed-incomes/:id`    | Update a programmed income                 |
+| `DELETE`   | `/api/programmed-incomes/:id`    | Delete a programmed income                 |
 | `GET`      | `/api/investments`    | List investments for the user |
 | `POST`     | `/api/investments`    | Create an investment         |
 | `PUT`      | `/api/investments/:id`| Update an investment         |
 | `DELETE`   | `/api/investments/:id`| Delete an investment         |
+| `GET`      | `/api/groups`         | List my groups                               |
+| `POST`     | `/api/groups`         | Create a group (creator auto-joins)          |
+| `GET`      | `/api/groups/:id`     | Get a group (members only)                   |
+| `DELETE`   | `/api/groups/:id`     | Delete a group (blocked while shared records exist) |
+| `GET`      | `/api/groups/:id/members`        | List group members (with emails)  |
+| `POST`     | `/api/groups/:id/members`        | Add a member by email (`404` unknown, `409` duplicate) |
+| `DELETE`   | `/api/groups/:id/members/:userId`| Remove a member                   |
 
 ## Design
 
