@@ -41,6 +41,7 @@ const activeTab = computed<IncomesTab>({
 
 const incomes = ref<Income[]>([]);
 const programmedIncomes = ref<ProgrammedIncome[]>([]);
+const isLoading = ref(false);
 
 const { inScope, activeGroupId } = useGroups();
 
@@ -70,11 +71,15 @@ const { totalIncomes, yearToDateIncomes } = useIncomes(
 );
 
 async function loadIncomes() {
+  isLoading.value = true;
   incomes.value = await fetchIncomes();
+  isLoading.value = false;
 }
 
 async function loadProgrammedIncomes() {
+  isLoading.value = true;
   programmedIncomes.value = await fetchProgrammedIncomes();
+  isLoading.value = false;
 }
 
 const formRef = useTemplateRef("formRef");
@@ -259,13 +264,11 @@ onBeforeMount(() => {
             ></IncomeItem>
           </div>
 
-          <div
-            v-if="!scopedIncomes?.length"
-            class="flex flex-col items-center gap-5 justify-center my-6"
-          >
-            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
+          <AppLoader v-if="isLoading" size="70" class="my-10"></AppLoader>
+
+          <EmptyState v-else-if="!scopedIncomes?.length">
             <p>No incomes! Add one</p>
-          </div>
+          </EmptyState>
         </AppCardBody>
       </AppCard>
     </div>
@@ -287,13 +290,11 @@ onBeforeMount(() => {
             ></IncomeProgrammedItem>
           </div>
 
-          <div
-            v-if="!scopedProgrammedIncomes?.length"
-            class="flex flex-col items-center gap-5 justify-center my-6"
-          >
-            <Icon size="48" name="material-symbols-light:note-outline"></Icon>
+          <AppLoader v-if="isLoading" size="70" class="my-10"></AppLoader>
+
+          <EmptyState v-else-if="!scopedProgrammedIncomes?.length">
             <p>No frequent incomes! Add one</p>
-          </div>
+          </EmptyState>
         </AppCardBody>
       </AppCard>
     </div>
