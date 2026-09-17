@@ -9,8 +9,13 @@ import type { Income } from "~/types/income";
 const expenses = ref<Expense[]>([]);
 const incomes = ref<Income[]>([]);
 
-const { totalExpenses } = useExpenses(expenses);
-const { totalIncomes } = useIncomes(incomes);
+const { inScope, activeGroup } = useGroups();
+
+const scopedExpenses = computed(() => inScope(expenses.value));
+const scopedIncomes = computed(() => inScope(incomes.value));
+
+const { totalExpenses } = useExpenses(scopedExpenses);
+const { totalIncomes } = useIncomes(scopedIncomes);
 
 const cashflow = computed(() =>
   round2(totalIncomes.value - totalExpenses.value),
@@ -36,6 +41,9 @@ onBeforeMount(() => {
 
 <template>
   <div class="flex flex-col gap-3 md:gap-4">
+    <p v-if="activeGroup" class="text-sm text-text-0">
+      Showing {{ activeGroup.name }} finances
+    </p>
     <AppCard color="accent-3" class="text-text-inverse">
       <AppCardBody>
         <p class="text-text-0">Net Worth</p>
@@ -78,8 +86,8 @@ onBeforeMount(() => {
         <p class="text-sm">Expenses vs Gains</p>
         <ClientOnly>
           <DashboardColumnChart
-            :incomes="incomes"
-            :expenses="expenses"
+            :incomes="scopedIncomes"
+            :expenses="scopedExpenses"
           ></DashboardColumnChart>
           <template #fallback>
             <AppLoader size="80" class="my-40"></AppLoader>

@@ -43,6 +43,13 @@ const activeTab = computed<ExpensesTab>({
 const expenses = ref<Expense[]>([]);
 const programmedExpenses = ref<ProgrammedExpense[]>([]);
 
+const { inScope, activeGroupId } = useGroups();
+
+const scopedExpenses = computed(() => inScope(expenses.value));
+const scopedProgrammedExpenses = computed(() =>
+  inScope(programmedExpenses.value),
+);
+
 const reportDefaults = defaultReportRange();
 const reportStart = ref(reportDefaults.start);
 const reportEnd = ref(reportDefaults.end);
@@ -58,7 +65,7 @@ const reportRange = computed(() => {
 });
 
 const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
-  expenses,
+  scopedExpenses,
   new Date(),
   reportRange,
 );
@@ -86,6 +93,7 @@ const EMPTY_EXPENSE: Expense = {
   category: "",
   expenseDate: "",
   description: "",
+  groupId: null,
 };
 
 const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
@@ -96,6 +104,7 @@ const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
   description: "",
   chargeDay: null,
   chargeMonth: null,
+  groupId: null,
 };
 
 const expenseForm = ref<Expense>({ ...EMPTY_EXPENSE });
@@ -157,9 +166,12 @@ async function openForm(mode: FormMode, expense?: Expense | ProgrammedExpense) {
 
   if (mode === "insert") {
     if (formKind.value === "programmed") {
-      programmedExpenseForm.value = { ...EMPTY_PROGRAMMED_EXPENSE };
+      programmedExpenseForm.value = {
+        ...EMPTY_PROGRAMMED_EXPENSE,
+        groupId: activeGroupId.value,
+      };
     } else {
-      expenseForm.value = { ...EMPTY_EXPENSE };
+      expenseForm.value = { ...EMPTY_EXPENSE, groupId: activeGroupId.value };
     }
 
     await nextTick();
@@ -241,7 +253,7 @@ onBeforeMount(() => {
           </BaseButton>
           <div class="flex flex-col gap-3" data-testid="expenses-items">
             <ExpenseItem
-              v-for="expense in expenses"
+              v-for="expense in scopedExpenses"
               :key="expense.id"
               :expense="expense"
               variant="outlined"
@@ -254,7 +266,7 @@ onBeforeMount(() => {
           </div>
 
           <div
-            v-if="!expenses?.length"
+            v-if="!scopedExpenses?.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
@@ -275,7 +287,7 @@ onBeforeMount(() => {
             data-testid="frequent-expenses-items"
           >
             <ExpenseProgrammedItem
-              v-for="expense in programmedExpenses"
+              v-for="expense in scopedProgrammedExpenses"
               :key="expense.id"
               :expense="expense"
               variant="outlined"
@@ -288,7 +300,7 @@ onBeforeMount(() => {
           </div>
 
           <div
-            v-if="!programmedExpenses?.length"
+            v-if="!scopedProgrammedExpenses?.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>

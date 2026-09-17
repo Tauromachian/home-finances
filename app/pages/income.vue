@@ -42,6 +42,13 @@ const activeTab = computed<IncomesTab>({
 const incomes = ref<Income[]>([]);
 const programmedIncomes = ref<ProgrammedIncome[]>([]);
 
+const { inScope, activeGroupId } = useGroups();
+
+const scopedIncomes = computed(() => inScope(incomes.value));
+const scopedProgrammedIncomes = computed(() =>
+  inScope(programmedIncomes.value),
+);
+
 const reportDefaults = defaultReportRange();
 const reportStart = ref(reportDefaults.start);
 const reportEnd = ref(reportDefaults.end);
@@ -57,7 +64,7 @@ const reportRange = computed(() => {
 });
 
 const { totalIncomes, yearToDateIncomes } = useIncomes(
-  incomes,
+  scopedIncomes,
   new Date(),
   reportRange,
 );
@@ -84,6 +91,7 @@ const EMPTY_INCOME: Income = {
   amount: 0,
   incomeDate: "",
   description: "",
+  groupId: null,
 };
 
 const EMPTY_PROGRAMMED_INCOME: ProgrammedIncome = {
@@ -93,6 +101,7 @@ const EMPTY_PROGRAMMED_INCOME: ProgrammedIncome = {
   description: "",
   chargeDay: null,
   chargeMonth: null,
+  groupId: null,
 };
 
 const incomeForm = ref<Income>({ ...EMPTY_INCOME });
@@ -154,9 +163,12 @@ async function openForm(mode: FormMode, income?: Income | ProgrammedIncome) {
 
   if (mode === "insert") {
     if (formKind.value === "programmed") {
-      programmedIncomeForm.value = { ...EMPTY_PROGRAMMED_INCOME };
+      programmedIncomeForm.value = {
+        ...EMPTY_PROGRAMMED_INCOME,
+        groupId: activeGroupId.value,
+      };
     } else {
-      incomeForm.value = { ...EMPTY_INCOME };
+      incomeForm.value = { ...EMPTY_INCOME, groupId: activeGroupId.value };
     }
 
     await nextTick();
@@ -238,7 +250,7 @@ onBeforeMount(() => {
           </BaseButton>
           <div class="flex flex-col gap-3" data-testid="incomes-items">
             <IncomeItem
-              v-for="income in incomes"
+              v-for="income in scopedIncomes"
               :key="income.id"
               :income="income"
               variant="outlined"
@@ -248,7 +260,7 @@ onBeforeMount(() => {
           </div>
 
           <div
-            v-if="!incomes?.length"
+            v-if="!scopedIncomes?.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
@@ -266,7 +278,7 @@ onBeforeMount(() => {
           </BaseButton>
           <div class="flex flex-col gap-3" data-testid="frequent-incomes-items">
             <IncomeProgrammedItem
-              v-for="income in programmedIncomes"
+              v-for="income in scopedProgrammedIncomes"
               :key="income.id"
               :income="income"
               variant="outlined"
@@ -276,7 +288,7 @@ onBeforeMount(() => {
           </div>
 
           <div
-            v-if="!programmedIncomes?.length"
+            v-if="!scopedProgrammedIncomes?.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
