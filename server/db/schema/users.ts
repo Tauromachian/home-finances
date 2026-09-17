@@ -4,6 +4,7 @@ const auth = pgSchema("auth");
 
 export const usersTable = auth.table("users", {
   id: uuid("id").primaryKey(),
+  email: varchar("email", { length: 255 }),
   fullName: text("full_name"),
   phone: varchar("phone", { length: 256 }),
 });
