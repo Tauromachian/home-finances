@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
 
   await db.insert(usersGroupsTable).values({
     userId: user.id,
-    groupId: group.id,
+    groupId: group!.id,
   });
 
   return { msg: "Success", data: group };
