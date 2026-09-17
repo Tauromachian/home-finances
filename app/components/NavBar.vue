@@ -18,6 +18,11 @@ const links = [
     icon: "material-symbols-light:attach-money",
   },
   {
+    name: "Groups",
+    to: "/groups",
+    icon: "material-symbols-light:group",
+  },
+  {
     name: "Investments",
     to: "/investments",
     icon: "material-symbols-light:trending-up",
