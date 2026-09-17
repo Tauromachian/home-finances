@@ -6,6 +6,7 @@ export type Income = {
   amount: number;
   incomeDate: string;
   description: string;
+  groupId: number | null;
 };
 
 export type ProgrammedIncome = {
@@ -16,4 +17,5 @@ export type ProgrammedIncome = {
   description: string;
   chargeDay: number | null;
   chargeMonth: number | null;
+  groupId: number | null;
 };

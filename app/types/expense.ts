@@ -7,6 +7,7 @@ export type Expense = {
   category: string;
   expenseDate: string;
   description: string;
+  groupId: number | null;
 };
 
 export type ProgrammedExpense = {
@@ -18,4 +19,5 @@ export type ProgrammedExpense = {
   description: string;
   chargeDay: number | null;
   chargeMonth: number | null;
+  groupId: number | null;
 };
