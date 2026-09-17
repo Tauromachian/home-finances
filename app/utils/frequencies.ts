@@ -1,10 +1,12 @@
+import { Frequency } from "~/types/frequency";
+
 export const frequencies = [
   {
     title: "Monthly",
-    value: "monthly",
+    value: Frequency.MONTHLY,
   },
   {
     title: "Yearly",
-    value: "yearly",
+    value: Frequency.YEARLY,
   },
 ] as const;
