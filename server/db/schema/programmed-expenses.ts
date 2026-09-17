@@ -9,6 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 
 import { frequencyEnum } from "./frequency";
+import { groupsTable } from "./groups";
 import { usersTable } from "./users";
 
 export const programmedExpensesTable = pgTable(
@@ -18,6 +19,8 @@ export const programmedExpensesTable = pgTable(
     userId: uuid("user_id")
       .notNull()
       .references(() => usersTable.id),
+    // NULL means personal; set means shared with the group.
+    groupId: integer("group_id").references(() => groupsTable.id),
     amount: numeric({ mode: "number" }).notNull(),
     name: varchar({ length: 150 }).notNull(),
     category: varchar({ length: 20 }).notNull(),
