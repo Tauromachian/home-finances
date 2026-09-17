@@ -44,6 +44,14 @@ watch(actualDate, (date) => {
   if (date) dateError.value = "";
 });
 
+// The share picker travels outside vee-validate state, like the date.
+const sharedGroupId = computed({
+  get: () => modelValue.value?.groupId ?? null,
+  set: (value: number | null) => {
+    if (modelValue.value) modelValue.value.groupId = value;
+  },
+});
+
 function onSubmit(values: Expense) {
   if (!actualDate.value) {
     dateError.value = "Date is required";
@@ -51,7 +59,11 @@ function onSubmit(values: Expense) {
   }
 
   dateError.value = "";
-  emit("submit", { ...values, expenseDate: actualDate.value });
+  emit("submit", {
+    ...values,
+    expenseDate: actualDate.value,
+    groupId: sharedGroupId.value,
+  });
 
   formRef.value.resetForm();
 }
@@ -116,6 +128,8 @@ defineExpose({ internalRef: formRef, resetForm });
         label="Category"
         name="category"
       ></AppAutocomplete>
+
+      <GroupSharePicker v-model="sharedGroupId" />
 
       <AppInput
         :model-value="modelValue.description"
