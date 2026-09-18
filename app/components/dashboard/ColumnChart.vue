@@ -44,6 +44,9 @@ const series = computed(() => [
 const options = computed<ApexOptions>(() => ({
   chart: {
     height: 320,
+    toolbar: {
+      show: false,
+    },
   },
   colors: ["#16a34a", "#dc2626"],
   responsive: [
