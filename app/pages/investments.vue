@@ -120,7 +120,6 @@ onBeforeMount(() => loadData());
             <p class="text-5xl font-serif text-accent-4">
               {{ portfolioValue }}
             </p>
-            <p class="opacity-60">{{ investments.length }} investments.value</p>
           </div>
           <div class="ml-auto flex align-middle items-center gap-8">
             <div>
