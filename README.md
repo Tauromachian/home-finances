@@ -5,8 +5,8 @@ A full-stack web application built with **Nuxt 4** for tracking personal and hou
 ## Features
 
 - **Dashboard** — net worth snapshot, balance change, income, expenses, and cashflow summary with an Expenses vs Gains column chart. Follows the selected Personal/Group scope.
-- **Expenses** — track one-off expenses (Manage) and recurring schedules (Frequent), with reports (totals, category breakdown donut, monthly line chart).
-- **Income** — log one-off incomes (Manage) and recurring schedules (Frequent), with reports.
+- **Expenses** — track one-off expenses (Manage) and recurring schedules (Frequent), with reports (totals, category breakdown donut, monthly line chart) and CSV/Excel import-export.
+- **Income** — log one-off incomes (Manage) and recurring schedules (Frequent), with reports and CSV/Excel import-export.
 - **Groups** — share expenses and incomes with a household or team. A scope switcher in the header toggles between Personal and each group; every member has equal manage rights. Members are invited by email on the Groups page.
 - **Investments** — record holdings with current value, category, and description. Portfolio value is computed live and visualised with a donut (allocation) and line (value over time) chart.
 - **Compound interest calculator** — estimate growth of an initial amount plus monthly contributions over time, with total invested and interest earned.
@@ -99,10 +99,12 @@ Record routes (`expenses`, `incomes`, `programmed-expenses`, `programmed-incomes
 | ---------- | --------------------- | -------------------------------------------- |
 | `GET`      | `/api/expenses`       | List personal + group-shared expenses        |
 | `POST`     | `/api/expenses`       | Create an expense (optional `groupId`)       |
+| `POST`     | `/api/expenses/import`| Batch-import expense rows (validated per row; returns `{ inserted, errors }`) |
 | `PUT`      | `/api/expenses/:id`   | Update an expense                            |
 | `DELETE`   | `/api/expenses/:id`   | Delete an expense                            |
 | `GET`      | `/api/incomes`        | List personal + group-shared incomes         |
 | `POST`     | `/api/incomes`        | Create an income (optional `groupId`)        |
+| `POST`     | `/api/incomes/import` | Batch-import income rows (validated per row; returns `{ inserted, errors }`) |
 | `PUT`      | `/api/incomes/:id`    | Update an income                             |
 | `DELETE`   | `/api/incomes/:id`    | Delete an income                             |
 | `GET`      | `/api/programmed-expenses`       | List personal + shared programmed expenses |
