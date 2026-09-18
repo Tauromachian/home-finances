@@ -158,12 +158,9 @@ onUnmounted(() => {
 
       <ClientOnly>
         <Icon
-          name="material-symbols-light:arrow-drop-down"
-          :class="
-            horizontal
-              ? 'absolute right-2 top-1/2 -translate-y-1/2 text-text-0'
-              : 'absolute right-2 top-8 text-text-0'
-          "
+          name="material-symbols-light:arrow-drop-down pointer-events-none"
+          class="absolute right-2 text-text-0"
+          :class="horizontal ? 'top-1/2 -translate-y-1/2 ' : 'top-8 '"
           size="24"
         ></Icon>
       </ClientOnly>
