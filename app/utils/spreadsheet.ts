@@ -169,10 +169,10 @@ function normalizeDate(value: unknown): string | null {
   return null;
 }
 
-export interface NormalizedImport {
+export type NormalizedImport = {
   rows: SheetRow[];
   errors: string[];
-}
+};
 
 // Maps raw rows (headers matched by label or key, case-insensitive) to
 // typed rows, collecting per-row errors. Blank rows are skipped.
