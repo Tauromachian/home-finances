@@ -32,11 +32,6 @@ async function signOut() {
 
     <div class="lg:pl-64">
       <header class="flex items-center max-w-6xl mx-4 lg:mx-8 xl:mx-auto pt-5">
-        <h1 class="font-serif text-4xl font-bold text-text-1 lg:hidden">
-          Home
-          <span class="text-accent-0 italic"> Finances </span>
-        </h1>
-
         <GroupScopeSwitcher />
 
         <button
