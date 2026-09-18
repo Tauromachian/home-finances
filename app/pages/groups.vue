@@ -190,13 +190,15 @@ onBeforeMount(() => {
 
         <p v-else class="text-sm text-text-0 mt-4">No members yet.</p>
 
-        <BaseButton
-          variant="outlined"
-          class="mt-5"
-          @click="isConfirmDeleteOpen = true"
-        >
-          Delete group
-        </BaseButton>
+        <div class="w-full flex">
+          <BaseButton
+            variant="outlined"
+            class="mt-5 ml-auto"
+            @click="isConfirmDeleteOpen = true"
+          >
+            Delete group
+          </BaseButton>
+        </div>
       </AppCardBody>
     </AppCard>
 
