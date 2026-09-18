@@ -52,7 +52,12 @@ const classes = computed<string[]>(() => {
         <input type="checkbox" class="opacity-0" />
       </div>
     </button>
-    <label v-if="label" for="" class="cursor-pointer pl-1" @click="nextStep">
+    <label
+      v-if="label"
+      for=""
+      class="cursor-pointer pl-1 text-text-1"
+      @click="nextStep"
+    >
       {{ label }}
     </label>
   </div>
