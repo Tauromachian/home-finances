@@ -6,13 +6,14 @@ import {
 } from "~/utils/period";
 import { loadIncomes as fetchIncomes } from "~/services/incomes";
 import { loadProgrammedIncomes as fetchProgrammedIncomes } from "~/services/programmedIncomes";
+import { INCOME_COLUMNS } from "~/utils/spreadsheet";
 
 import type { Income, ProgrammedIncome } from "~/types/income";
 import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
 type FormKind = "actual" | "programmed";
-type IncomesTab = "manage" | "frequent" | "reports";
+type IncomesTab = "manage" | "frequent" | "reports" | "import-export";
 
 const route = useRoute();
 const router = useRouter();
@@ -25,7 +26,9 @@ const activeTab = computed<IncomesTab>({
       ? "reports"
       : route.query.tab === "frequent"
         ? "frequent"
-        : "manage",
+        : route.query.tab === "import-export"
+          ? "import-export"
+          : "manage",
   set: (tab: IncomesTab) => {
     const query = { ...route.query };
 
@@ -244,6 +247,12 @@ onBeforeMount(() => {
         >
           Reports
         </BaseButton>
+        <BaseButton
+          :variant="activeTab === 'import-export' ? 'regular' : 'outlined'"
+          @click="activeTab = 'import-export'"
+        >
+          Import / Export
+        </BaseButton>
       </BaseButtonGroup>
     </div>
 
@@ -297,6 +306,17 @@ onBeforeMount(() => {
           </EmptyState>
         </AppCardBody>
       </AppCard>
+    </div>
+
+    <div v-else-if="activeTab === 'import-export'">
+      <ImportExportTab
+        :records="scopedIncomes"
+        :columns="INCOME_COLUMNS"
+        import-url="/api/incomes/import"
+        entity-name="income"
+        date-key="incomeDate"
+        @imported="loadIncomes"
+      />
     </div>
 
     <div v-else class="flex flex-col gap-5">
