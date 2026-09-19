@@ -103,6 +103,19 @@ const options = computed<ApexOptions>(() => ({
   fill: {
     opacity: 1,
   },
+  grid: {
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+    yaxis: {
+      lines: {
+        show: true,
+      },
+    },
+    strokeDashArray: 5,
+  },
 }));
 </script>
 

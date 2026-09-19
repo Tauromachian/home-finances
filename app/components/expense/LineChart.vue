@@ -62,6 +62,19 @@ const options = computed<ApexOptions>(() => {
         formatter: (value: number) => `€${Math.round(value)}`,
       },
     },
+    grid: {
+      xaxis: {
+        lines: {
+          show: false,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      strokeDashArray: 5,
+    },
   };
 });
 </script>

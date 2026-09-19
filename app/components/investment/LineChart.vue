@@ -96,6 +96,19 @@ const options = computed<ApexOptions>(() => {
     xaxis: {
       categories: months,
     },
+    grid: {
+      xaxis: {
+        lines: {
+          show: false,
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      strokeDashArray: 5,
+    },
   };
 });
 </script>
