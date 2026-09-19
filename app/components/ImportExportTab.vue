@@ -4,7 +4,6 @@ import {
   downloadXlsxFile,
   exportFilename,
   normalizeImportRows,
-  parseSpreadsheetFile,
   toCsv,
   type NormalizedImport,
   type SheetColumn,
@@ -27,11 +26,11 @@ const emit = defineEmits<{
 const { activeGroupId, activeGroup } = useGroups();
 const appToaster = inject<Ref>("appToaster");
 
-const fileInputRef = useTemplateRef("fileInputRef");
-
-const fileName = ref("");
+const fileImport = reactive({
+  name: "",
+  raw: [],
+});
 const preview = ref<NormalizedImport | null>(null);
-const isParsing = ref(false);
 const isImporting = ref(false);
 
 const scopeLabel = computed(() => activeGroup.value?.name ?? "Personal");
@@ -76,27 +75,11 @@ async function exportExcel() {
 }
 
 function resetImport() {
-  fileName.value = "";
   preview.value = null;
-  if (fileInputRef.value) fileInputRef.value.value = "";
 }
 
-async function onFileSelected(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file) return;
-
-  fileName.value = file.name;
-  isParsing.value = true;
-
-  try {
-    const raw = await parseSpreadsheetFile(file);
-    preview.value = normalizeImportRows(raw, props.columns);
-  } catch (error) {
-    preview.value = null;
-    showMessage(error instanceof Error ? error.message : "Could not read file");
-  } finally {
-    isParsing.value = false;
-  }
+async function onFileSelected() {
+  preview.value = normalizeImportRows(fileImport.raw, props.columns);
 }
 
 async function confirmImport() {
@@ -135,8 +118,7 @@ async function confirmImport() {
 }
 
 function resetFileOnly() {
-  fileName.value = "";
-  if (fileInputRef.value) fileInputRef.value.value = "";
+  fileImport.name = "";
 }
 
 function previewCell(row: SheetRow, column: SheetColumn): string {
@@ -191,22 +173,15 @@ function previewCell(row: SheetRow, column: SheetColumn): string {
           columns: {{ columns.map((c) => c.label).join(", ") }}.
         </p>
 
-        <div class="flex flex-wrap items-center gap-2 mt-4">
-          <input
-            ref="fileInputRef"
-            type="file"
-            accept=".csv,.xlsx,.xls"
-            class="text-sm text-text-0"
-            @change="onFileSelected"
-          />
-          <BaseButton v-if="preview" variant="outlined" @click="resetImport">
-            Clear
-          </BaseButton>
-        </div>
+        <AppImport
+          v-model="fileImport"
+          class="mt-5"
+          accept=".csv,.xlsx,.xls"
+          @change="onFileSelected"
+          @reset-import="resetImport"
+        ></AppImport>
 
-        <p v-if="isParsing" class="text-sm text-text-0 mt-4">Reading file…</p>
-
-        <div v-if="preview && !isParsing" class="mt-4">
+        <div v-if="preview" class="mt-4">
           <p class="text-sm text-text-1">
             {{ preview.rows.length }} rows ready to import,
             {{ preview.errors.length }} with errors.
