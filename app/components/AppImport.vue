@@ -32,14 +32,6 @@ function showMessage(message: string) {
   appToaster.value.openToast(message);
 }
 
-async function wait(time: number) {
-  return new Promise((success) => {
-    setTimeout(() => {
-      success(true);
-    }, time);
-  });
-}
-
 async function onFileSelected(event: Event) {
   file.value = (event.target as HTMLInputElement).files?.[0];
   if (!file.value) return;
