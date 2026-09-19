@@ -25,7 +25,7 @@ const props = defineProps({
 const classes = computed(() => {
   const calculatedClasses: Record<Variant, string[]> = {
     "": [],
-    text: ["bg-transparent"],
+    text: ["bg-transparent", "flex", "align-center"],
     outlined: ["border", "bg-transparent", "border-neutral-1", "text-text-1"],
     regular: ["text-white", "focus:text-white"],
   };
