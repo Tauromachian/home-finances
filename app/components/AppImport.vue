@@ -26,22 +26,22 @@ const appToaster = inject<Ref>("appToaster");
 const isParsing = ref(false);
 const fileInputRef = useTemplateRef("input-ref");
 const file = ref<File>();
+const isDragEntering = ref(false);
 
 function showMessage(message: string) {
   if (!appToaster?.value) return;
   appToaster.value.openToast(message);
 }
 
-async function onFileSelected(event: Event) {
-  file.value = (event.target as HTMLInputElement).files?.[0];
-  if (!file.value) return;
+async function selectFile(file?: File) {
+  if (!file) return;
 
-  model.value.name = file.value.name;
+  model.value.name = file.name;
 
   isParsing.value = true;
 
   try {
-    model.value.raw = await parseSpreadsheetFile(file.value);
+    model.value.raw = await parseSpreadsheetFile(file);
   } catch (error) {
     showMessage(error instanceof Error ? error.message : "Could not read file");
   } finally {
@@ -49,6 +49,19 @@ async function onFileSelected(event: Event) {
   }
 
   emit("change");
+}
+
+function onFileSelected(event: Event) {
+  file.value = (event.target as HTMLInputElement).files?.[0];
+
+  selectFile(file.value);
+}
+
+function onDrop(event: DragEvent) {
+  file.value = event.dataTransfer.files?.[0];
+
+  selectFile(file.value);
+  isDragEntering.value = false;
 }
 
 function clickOnInputFile() {
@@ -65,9 +78,18 @@ function resetImport() {
 
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-60 border-3 border-accent-0 rounded-lg cursor-pointer p-10"
+    class="flex flex-col relative border-dashed items-center justify-center w-full h-60 border-3 border-accent-0 rounded-lg cursor-pointer p-10"
+    @dragenter.prevent="isDragEntering = true"
     @click="clickOnInputFile"
   >
+    <div
+      class="absolute bg-black opacity-25 inset-0 z-10"
+      :class="{ block: isDragEntering, hidden: !isDragEntering }"
+      @dragover.prevent
+      @dragleave.prevent="isDragEntering = false"
+      @drop.prevent.stop="onDrop"
+    ></div>
+
     <AppCard
       v-if="file"
       class="mx-10 relative rounded"
