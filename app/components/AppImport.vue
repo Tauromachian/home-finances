@@ -65,7 +65,7 @@ function resetImport() {
 
 <template>
   <div
-    class="flex flex-col items-center justify-center w-full h-60 border border-accent-0 rounded-lg cursor-pointer p-10"
+    class="flex flex-col items-center justify-center w-full h-60 border-3 border-accent-0 rounded-lg cursor-pointer p-10"
     @click="clickOnInputFile"
   >
     <AppCard
