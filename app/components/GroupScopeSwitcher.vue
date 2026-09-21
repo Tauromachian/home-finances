@@ -12,13 +12,29 @@ const scopeItems = computed<Item[]>(() => [
 ]);
 
 const displayValue = computed(() => activeGroup.value?.name ?? "Personal");
+watch(displayValue, (value) => {
+  if (!window?.localStorage) return;
 
-function onSelectScope(item: Item) {
+  localStorage.setItem("scope", value);
+});
+
+function selectScope(item: { value: string }) {
+  console.log(item);
   activeGroupId.value = item.value === "" ? null : Number(item.value);
 }
 
 onBeforeMount(() => {
   if (!groups.value.length) loadGroups();
+});
+
+onMounted(() => {
+  if (!window?.localStorage) return;
+
+  const scope = localStorage.getItem("scope");
+
+  if (!scope) return;
+
+  selectScope({ value: scope === "Family" ? "1" : "" });
 });
 </script>
 
@@ -30,6 +46,6 @@ onBeforeMount(() => {
     label="Scope"
     horizontal
     show-title
-    @selected="onSelectScope"
+    @selected="selectScope"
   />
 </template>
