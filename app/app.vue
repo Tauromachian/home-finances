@@ -18,7 +18,7 @@ function getSystemTheme(): "dark" | "light" {
   return isDark ? "dark" : "light";
 }
 
-function changeTheme(theme: "dark" | "light") {
+function setTheme(theme: "dark" | "light") {
   const html = document.querySelector("html");
   html.setAttribute("data-theme", theme);
 
@@ -33,7 +33,7 @@ function applyTheme(enterTheme: ThemeName) {
   if (enterTheme === "system") appliableTheme = getSystemTheme();
   else appliableTheme = enterTheme;
 
-  changeTheme(appliableTheme);
+  setTheme(appliableTheme);
   localStorage.setItem("theme", enterTheme);
 }
 
@@ -56,7 +56,7 @@ onMounted(() => {
     if (enterTheme !== "system") return;
 
     const systemTheme = getSystemTheme();
-    changeTheme(systemTheme);
+    setTheme(systemTheme);
   });
 
   theme.value = enterTheme;
