@@ -40,5 +40,7 @@ export default defineNuxtConfig({
     dbHost: "",
     dbPort: "",
     dbName: "",
+    // Private (server-only): TwelveData API key via NUXT_MARKET_API_KEY.
+    marketApiKey: "",
   },
 });
