@@ -41,9 +41,6 @@ onBeforeMount(() => {
 
 <template>
   <div class="flex flex-col gap-3 md:gap-4">
-    <p v-if="activeGroup" class="text-sm text-text-0">
-      Showing {{ activeGroup.name }} finances
-    </p>
     <AppCard color="accent-3" class="text-text-inverse">
       <AppCardBody>
         <p class="text-text-0">Net Worth</p>
