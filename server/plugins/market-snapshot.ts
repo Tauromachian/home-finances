@@ -1,11 +1,11 @@
 /**
  * Market snapshot upkeep: refresh the tracked list on boot and every
- * 5 minutes so all clients share one warm snapshot (a single upstream
- * batch call per tick, well inside the free tier).
+ * 15 minutes so all clients share one warm snapshot (a single 3-symbol
+ * upstream batch call per tick = 288 credits/day, well inside the free tier).
  */
 
 import {
-  MARKET_REFRESH_MS,
+  MARKET_TRACKED_REFRESH_MS,
   refreshTrackedSymbols,
 } from "../utils/marketSnapshot";
 import { useLogger } from "../utils/logger";
@@ -35,5 +35,5 @@ export default defineNitroPlugin(() => {
         error instanceof Error ? error.message : error,
       );
     });
-  }, MARKET_REFRESH_MS);
+  }, MARKET_TRACKED_REFRESH_MS);
 });
