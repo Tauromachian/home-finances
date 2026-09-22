@@ -54,26 +54,6 @@ const marketPrices = computed<
   return map;
 });
 
-const marketStatusText = computed(() => {
-  switch (market.status.value) {
-    case "live":
-      return market.lastRefresh.value
-        ? `Prices updated ${new Date(market.lastRefresh.value).toLocaleTimeString("en-IE", { hour: "2-digit", minute: "2-digit" })}`
-        : "Live prices";
-    case "loading":
-      return "Loading prices…";
-    case "stale":
-      return "Showing cached prices";
-    case "unconfigured":
-      console.warn("Set NUXT_MARKET_API_KEY to enable live prices");
-      return;
-    case "error":
-      return "Price refresh failed — showing saved values";
-    default:
-      return "";
-  }
-});
-
 const portfolioValue = computed(() => {
   const total = investments.value.reduce(
     (acum: number, nextValue: Investment) => {
@@ -311,16 +291,6 @@ onMounted(async () => {
               <p class="font-bold">{{ formattedResume.investmentReturn }}</p>
             </div>
           </div>
-        </AppCardBody>
-        <AppCardBody class="flex items-center gap-3 pt-0">
-          <BaseButton
-            class="text-text-inverse!"
-            variant="outlined"
-            @click="market.refresh(linkedSymbols)"
-          >
-            Refresh prices
-          </BaseButton>
-          <span class="text-xs opacity-60">{{ marketStatusText }}</span>
         </AppCardBody>
       </AppCard>
 
