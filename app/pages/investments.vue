@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { gainVsCost, resolveCurrentValue } from "~/utils/market";
 import type { Investment } from "~/types/investment";
+import type { Item } from "~/types/item";
 
 type FormMode = "edit" | "insert";
 
@@ -7,12 +9,64 @@ const investments = ref<Investment[]>([]);
 
 const isOpen = ref(false);
 const isConfirmationDialogOpen = ref(false);
+const isLinkDialogOpen = ref(false);
+const linkTarget = ref<Investment | null>(null);
 
 const appToaster = inject<Ref>("appToaster");
 
 let selectedId: number | string = "";
 
 const formMode = ref<FormMode>("insert");
+
+const market = useMarketSnapshot();
+
+const linkedSymbols = computed(() =>
+  investments.value
+    .map((investment) => investment.marketSymbol)
+    .filter((symbol): symbol is string => !!symbol),
+);
+
+/** All downloaded entries as picker options — filtered locally, no network. */
+const marketItems = computed<Item[]>(() =>
+  Object.values(market.snapshot.value)
+    .map((entry) => ({
+      title: entry.name ? `${entry.symbol} — ${entry.name}` : entry.symbol,
+      value: entry.symbol,
+    }))
+    .sort((a, b) => a.value.localeCompare(b.value)),
+);
+
+/** Live prices keyed by symbol for the investment form. */
+const marketPrices = computed<
+  Record<string, { price: number | null; currency: string | null }>
+>(() => {
+  const map: Record<string, { price: number | null; currency: string | null }> =
+    {};
+  for (const entry of Object.values(market.snapshot.value)) {
+    map[entry.symbol] = { price: entry.price, currency: entry.currency };
+  }
+  return map;
+});
+
+const marketStatusText = computed(() => {
+  switch (market.status.value) {
+    case "live":
+      return market.lastRefresh.value
+        ? `Prices updated ${new Date(market.lastRefresh.value).toLocaleTimeString("en-IE", { hour: "2-digit", minute: "2-digit" })}`
+        : "Live prices";
+    case "loading":
+      return "Loading prices…";
+    case "stale":
+      return "Showing cached prices";
+    case "unconfigured":
+      console.warn("Set NUXT_MARKET_API_KEY to enable live prices");
+      return;
+    case "error":
+      return "Price refresh failed — showing saved values";
+    default:
+      return "";
+  }
+});
 
 const portfolioValue = computed(() => {
   const total = investments.value.reduce(
@@ -29,6 +83,72 @@ const portfolioValue = computed(() => {
   }).format(total);
 });
 
+const livePortfolioValue = computed(() => {
+  const total = investments.value.reduce(
+    (acc: number, investment: Investment) => {
+      const entry = investment.marketSymbol
+        ? market.entry(investment.marketSymbol)
+        : null;
+      return acc + (entry?.price ?? Number(investment.currentValue));
+    },
+    0,
+  );
+
+  return new Intl.NumberFormat("en-IE", {
+    style: "currency",
+    currency: "EUR",
+  }).format(total);
+});
+
+function liveInfo(investment: Investment) {
+  const entry = investment.marketSymbol
+    ? market.entry(investment.marketSymbol)
+    : null;
+  const { gain, returnPct } = gainVsCost(
+    entry?.price ?? null,
+    Number(investment.amount),
+  );
+
+  return {
+    price: entry?.price ?? null,
+    currency: entry?.currency ?? null,
+    gain,
+    returnPct,
+    stale:
+      market.status.value === "stale" ||
+      (!!investment.marketSymbol &&
+        market.missing.value.includes(investment.marketSymbol)),
+  };
+}
+
+const liveById = computed(() => {
+  const map = new Map<
+    string,
+    {
+      price: number | null;
+      currency: string | null;
+      gain: number | null;
+      returnPct: number | null;
+      stale: boolean;
+    }
+  >();
+  for (const investment of investments.value) {
+    map.set(String(investment.id), liveInfo(investment));
+  }
+  return map;
+});
+
+function liveFor(investment: Investment) {
+  return (
+    liveById.value.get(String(investment.id)) ?? {
+      price: null,
+      currency: null,
+      gain: null,
+      returnPct: null,
+      stale: false,
+    }
+  );
+}
 const resume = reactive({
   gainLossBalance: 1280,
   investmentReturn: 14,
@@ -53,23 +173,42 @@ function showMessage(message: string) {
 }
 
 async function submitForm(form: Investment) {
+  // Tracked stocks take their current value from the live quote; manual
+  // holdings use the entered value. Abort when neither is available.
+  const currentValue = resolveCurrentValue(
+    form.marketSymbol,
+    form.currentValue,
+    (symbol) => market.entry(symbol)?.price ?? null,
+  );
+
+  if (currentValue === null) {
+    if (appToaster?.value) {
+      appToaster.value.openToast(
+        "Live price unavailable — enter the value manually.",
+      );
+    }
+    return;
+  }
+
+  const payload = { ...form, currentValue };
+
   if (formMode.value === "insert") {
     await fetch("/api/investments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     });
 
     showMessage("New investment added!");
   } else {
-    await fetch("/api/investments", {
+    await fetch(`/api/investments/${selectedId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     });
 
     showMessage("Investment edited");
@@ -97,13 +236,59 @@ async function deleteInvestment() {
   loadData();
 }
 
+function openLinkDialog(investment: Investment) {
+  linkTarget.value = investment;
+  isLinkDialogOpen.value = true;
+}
+
+async function linkStock(item: Item) {
+  if (linkTarget.value?.id === undefined || linkTarget.value?.id === "") return;
+
+  await fetch(`/api/investments/${linkTarget.value.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ...linkTarget.value, marketSymbol: item.value }),
+  });
+
+  isLinkDialogOpen.value = false;
+  linkTarget.value = null;
+
+  await loadData();
+  market.refresh(linkedSymbols.value);
+
+  if (appToaster?.value) appToaster.value.openToast("Stock linked!");
+}
+
+async function unlinkStock(investment: Investment) {
+  await fetch(`/api/investments/${investment.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ ...investment, marketSymbol: null }),
+  });
+
+  await loadData();
+
+  if (appToaster?.value) appToaster.value.openToast("Stock unlinked");
+}
+
 async function loadData() {
   const res = await fetch("/api/investments");
   const data = await res.json();
-  investments.value = data.data;
+  investments.value = (data.data ?? []).map((row: Investment) => ({
+    ...row,
+    marketSymbol: row.marketSymbol ?? null,
+  }));
 }
 
-onBeforeMount(() => loadData());
+onMounted(async () => {
+  await loadData();
+  // One batched petition (linked ∪ suggestion list), then every 5 minutes.
+  market.startAutoRefresh(() => linkedSymbols.value);
+});
 </script>
 
 <template>
@@ -120,6 +305,16 @@ onBeforeMount(() => loadData());
             <p class="text-5xl font-serif text-accent-4">
               {{ portfolioValue }}
             </p>
+            <p
+              v-if="
+                market.status.value === 'live' ||
+                market.status.value === 'stale'
+              "
+              class="text-sm"
+            >
+              <span class="opacity-60">Live: </span>
+              <span class="font-bold">{{ livePortfolioValue }}</span>
+            </p>
           </div>
           <div class="ml-auto flex align-middle items-center gap-8">
             <div>
@@ -131,6 +326,16 @@ onBeforeMount(() => loadData());
               <p class="font-bold">{{ formattedResume.investmentReturn }}</p>
             </div>
           </div>
+        </AppCardBody>
+        <AppCardBody class="flex items-center gap-3 pt-0">
+          <BaseButton
+            class="text-text-inverse!"
+            variant="outlined"
+            @click="market.refresh(linkedSymbols)"
+          >
+            Refresh prices
+          </BaseButton>
+          <span class="text-xs opacity-60">{{ marketStatusText }}</span>
         </AppCardBody>
       </AppCard>
 
@@ -195,13 +400,20 @@ onBeforeMount(() => loadData());
           <p class="text-md font-bold mb-4">Holdings</p>
           <div v-if="investments.length" class="flex flex-col gap-2">
             <InvestmentItem
-              v-for="(investment, index) in investments"
-              :key="`investment-${index}`"
+              v-for="investment in investments"
+              :key="`investment-${investment.id}`"
               :investment
               :category="
                 getCategoryByName(investment.category, assetsCategories)
               "
+              :live-price="liveFor(investment).price"
+              :live-currency="liveFor(investment).currency"
+              :gain="liveFor(investment).gain"
+              :return-pct="liveFor(investment).returnPct"
+              :price-stale="liveFor(investment).stale"
               @click:delete="openDeleteConfirmationDialog(investment.id)"
+              @click:link="openLinkDialog"
+              @click:unlink="unlinkStock"
             ></InvestmentItem>
           </div>
           <EmptyState v-else></EmptyState>
@@ -217,8 +429,30 @@ onBeforeMount(() => loadData());
     <AppDialog v-model="isOpen">
       <InvestmentForm
         :form-mode="formMode"
+        :market-items="marketItems"
+        :market-prices="marketPrices"
         @submit="submitForm"
       ></InvestmentForm>
+    </AppDialog>
+
+    <AppDialog v-model="isLinkDialogOpen">
+      <AppCard>
+        <AppCardBody>
+          <p class="font-serif text-2xl font-bold text-text-1 mb-1">
+            Link stock
+          </p>
+          <p class="text-sm text-text-0 mb-4">
+            Search the downloaded snapshot — no network while typing.
+          </p>
+          <AppAutocomplete
+            :items="marketItems"
+            label="Stock"
+            name="stock"
+            show-title
+            @selected="linkStock"
+          ></AppAutocomplete>
+        </AppCardBody>
+      </AppCard>
     </AppDialog>
   </div>
 </template>

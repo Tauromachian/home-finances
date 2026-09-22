@@ -4,10 +4,20 @@ import { Form } from "vee-validate";
 import { required, positiveNumber } from "@/utils/rules";
 import { assetsCategories } from "@/utils/categories";
 import type { Investment } from "~/types/investment";
+import type { Item } from "@/types/item";
 
 type FormMode = "edit" | "insert";
 
-defineProps<{ formMode: FormMode }>();
+export type MarketPrice = {
+  price: number | null;
+  currency: string | null;
+};
+
+const props = defineProps<{
+  formMode: FormMode;
+  marketItems?: readonly Item[];
+  marketPrices?: Record<string, MarketPrice>;
+}>();
 
 const emit = defineEmits<{ submit: [investment: Investment] }>();
 const formattedCategories = assetsCategories.map((item) => ({
@@ -20,6 +30,30 @@ const formattedCategories = assetsCategories.map((item) => ({
 }));
 
 const formRef = useTemplateRef<typeof Form>("formRef");
+
+function selectedLivePrice(marketSymbol: unknown): MarketPrice | null {
+  if (typeof marketSymbol !== "string") return null;
+
+  const key = marketSymbol.trim().toUpperCase().replace(/\s+/g, "");
+  if (!key) return null;
+
+  const found = props.marketPrices?.[key];
+  return found && found.price !== null ? found : null;
+}
+
+function formatLivePrice(marketSymbol: unknown): string {
+  const live = selectedLivePrice(marketSymbol);
+  if (!live || live.price === null) return "—";
+
+  try {
+    return new Intl.NumberFormat("en-IE", {
+      style: "currency",
+      currency: live.currency ?? "EUR",
+    }).format(live.price);
+  } catch {
+    return `${live.price.toFixed(2)} ${live.currency ?? ""}`.trim();
+  }
+}
 
 function onSubmit(investment: Investment) {
   emit("submit", investment);
@@ -35,7 +69,7 @@ function onSubmit(investment: Investment) {
       </p>
     </AppCardBody>
     <Form
-      v-slot="{ errors }"
+      v-slot="{ errors, values }"
       ref="formRef"
       class="px-7 pb-4"
       @submit="onSubmit"
@@ -61,7 +95,35 @@ function onSubmit(investment: Investment) {
         </template>
       </AppInput>
 
+      <AppAutocomplete
+        :error="errors.categories"
+        :items="formattedCategories"
+        :rules="required"
+        label="Category"
+        name="category"
+      ></AppAutocomplete>
+
+      <AppAutocomplete
+        :error="errors.marketSymbol"
+        :items="marketItems ?? []"
+        label="Track stock (optional)"
+        name="marketSymbol"
+        show-title
+      ></AppAutocomplete>
+
+      <p
+        v-if="selectedLivePrice(values.marketSymbol)"
+        class="text-sm text-text-0 -mt-3 mb-5"
+      >
+        Live price {{ formatLivePrice(values.marketSymbol) }} — used as current
+        value.
+      </p>
+      <p v-else-if="values.marketSymbol" class="text-sm text-text-0 -mt-3 mb-5">
+        Live price unavailable — enter the value manually.
+      </p>
+
       <AppInput
+        v-if="!selectedLivePrice(values.marketSymbol)"
         label="Current Value"
         type="number"
         name="currentValue"
@@ -73,14 +135,6 @@ function onSubmit(investment: Investment) {
           <Icon name="material-symbols-light:euro" class="text-xl"></Icon>
         </template>
       </AppInput>
-
-      <AppAutocomplete
-        :error="errors.categories"
-        :items="formattedCategories"
-        :rules="required"
-        label="Category"
-        name="category"
-      ></AppAutocomplete>
 
       <AppInput
         label="Description (optional)"
