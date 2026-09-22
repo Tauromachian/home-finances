@@ -12,6 +12,7 @@ import type { Item } from "~/types/item";
 type FormMode = "edit" | "insert";
 
 const investments = ref<Investment[]>([]);
+const isLoading = ref(true);
 
 const isOpen = ref(false);
 const isConfirmationDialogOpen = ref(false);
@@ -25,6 +26,14 @@ let selectedId: number | string = "";
 const formMode = ref<FormMode>("insert");
 
 const market = useMarketSnapshot();
+
+/** First paint: loader while investments or the market snapshot load. */
+const isPageLoading = computed(
+  () =>
+    isLoading.value ||
+    market.status.value === "idle" ||
+    market.status.value === "loading",
+);
 
 const linkedSymbols = computed(() =>
   investments.value
@@ -246,7 +255,12 @@ async function unlinkStock(investment: Investment) {
 }
 
 async function loadData() {
-  investments.value = await getInvestments();
+  isLoading.value = true;
+  try {
+    investments.value = await getInvestments();
+  } finally {
+    isLoading.value = false;
+  }
 }
 
 onMounted(async () => {
@@ -300,8 +314,9 @@ onMounted(async () => {
             <p class="text-md font-bold">Allocation</p>
           </AppCardBody>
 
+          <AppLoader v-if="isPageLoading" size="70" class="my-10"></AppLoader>
           <div
-            v-if="!investments.length"
+            v-else-if="!investments.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
@@ -327,8 +342,9 @@ onMounted(async () => {
             <p class="text-md font-bold">Growth Overview</p>
           </AppCardBody>
 
+          <AppLoader v-if="isPageLoading" size="70" class="my-10"></AppLoader>
           <div
-            v-if="!investments.length"
+            v-else-if="!investments.length"
             class="flex flex-col items-center gap-5 justify-center my-6"
           >
             <Icon size="48" name="material-symbols-light:note-outline"></Icon>
@@ -353,7 +369,8 @@ onMounted(async () => {
       <AppCard>
         <AppCardBody>
           <p class="text-md font-bold mb-4">Holdings</p>
-          <div v-if="investments.length" class="flex flex-col gap-2">
+          <AppLoader v-if="isPageLoading" size="70" class="my-10"></AppLoader>
+          <div v-else-if="investments.length" class="flex flex-col gap-2">
             <InvestmentItem
               v-for="investment in investments"
               :key="`investment-${investment.id}`"
