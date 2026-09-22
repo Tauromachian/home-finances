@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import {
+  createInvestment,
+  deleteInvestment as deleteInvestmentRecord,
+  getInvestments,
+  updateInvestment,
+} from "~/services/investments";
 import { gainVsCost, resolveCurrentValue } from "~/utils/market";
 import type { Investment } from "~/types/investment";
 import type { Item } from "~/types/item";
@@ -193,23 +199,11 @@ async function submitForm(form: Investment) {
   const payload = { ...form, currentValue };
 
   if (formMode.value === "insert") {
-    await fetch("/api/investments", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    await createInvestment(payload);
 
     showMessage("New investment added!");
   } else {
-    await fetch(`/api/investments/${selectedId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    await updateInvestment(selectedId, payload);
 
     showMessage("Investment edited");
   }
@@ -231,7 +225,7 @@ function openDeleteConfirmationDialog(id: string | number) {
 }
 
 async function deleteInvestment() {
-  await fetch(`/api/investments/${selectedId}`, { method: "DELETE" });
+  await deleteInvestmentRecord(selectedId);
   isConfirmationDialogOpen.value = false;
   loadData();
 }
@@ -244,12 +238,9 @@ function openLinkDialog(investment: Investment) {
 async function linkStock(item: Item) {
   if (linkTarget.value?.id === undefined || linkTarget.value?.id === "") return;
 
-  await fetch(`/api/investments/${linkTarget.value.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ ...linkTarget.value, marketSymbol: item.value }),
+  await updateInvestment(linkTarget.value.id, {
+    ...linkTarget.value,
+    marketSymbol: item.value,
   });
 
   isLinkDialogOpen.value = false;
@@ -262,12 +253,11 @@ async function linkStock(item: Item) {
 }
 
 async function unlinkStock(investment: Investment) {
-  await fetch(`/api/investments/${investment.id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ ...investment, marketSymbol: null }),
+  if (investment.id === undefined || investment.id === "") return;
+
+  await updateInvestment(investment.id, {
+    ...investment,
+    marketSymbol: null,
   });
 
   await loadData();
@@ -276,12 +266,7 @@ async function unlinkStock(investment: Investment) {
 }
 
 async function loadData() {
-  const res = await fetch("/api/investments");
-  const data = await res.json();
-  investments.value = (data.data ?? []).map((row: Investment) => ({
-    ...row,
-    marketSymbol: row.marketSymbol ?? null,
-  }));
+  investments.value = await getInvestments();
 }
 
 onMounted(async () => {
