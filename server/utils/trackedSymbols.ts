@@ -1,10 +1,12 @@
 /**
  * Suggestion list for stock tracking (symbols only — no names, no prices).
- * Names + prices are downloaded in one batched `/api/market/quotes` petition
- * on page entry and refreshed every 5 minutes.
+ * Served from the backend: the market snapshot store refreshes this list on
+ * boot and every 5 minutes, and clients download names + prices through
+ * `GET /api/market/snapshot`.
  *
- * Qualified form `SYM/EXCH` disambiguates EU listings. The proxy translates
- * `/` to TwelveData's `:` qualifier upstream; the DB stores the `/` form.
+ * Qualified form `SYM/EXCH` disambiguates EU listings. The TwelveData client
+ * translates `/` to TwelveData's `:` qualifier upstream; the DB stores the
+ * `/` form.
  */
 export const TRACKED_SYMBOLS: readonly string[] = [
   // US — large caps & broad ETFs
