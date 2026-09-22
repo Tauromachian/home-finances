@@ -261,13 +261,11 @@ async function loadData() {
   } finally {
     isLoading.value = false;
   }
+
+  market.startAutoRefresh(() => linkedSymbols.value);
 }
 
-onMounted(async () => {
-  await loadData();
-  // One batched petition (linked ∪ suggestion list), then every 5 minutes.
-  market.startAutoRefresh(() => linkedSymbols.value);
-});
+onMounted(() => loadData());
 </script>
 
 <template>
