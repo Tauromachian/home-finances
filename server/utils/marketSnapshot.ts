@@ -3,10 +3,11 @@
  *
  * Holds the downloaded names + prices for the tracked list plus any
  * user-linked symbols clients have asked about. A Nitro plugin refreshes the
- * tracked list on boot and every `MARKET_REFRESH_MS`; the snapshot endpoint
- * serves this state instantly and only hits TwelveData for symbols that are
- * absent (e.g. a freshly linked stock). One upstream batch call serves all
- * users, keeping the free tier (8 req/min) safe.
+ * tracked list on boot and every `MARKET_TRACKED_REFRESH_MS` (15 minutes:
+ * 3 symbols × 96 ticks = 288 credits/day, well inside the free tier);
+ * the snapshot endpoint serves this state instantly and only hits TwelveData
+ * for symbols that are absent (e.g. a freshly linked stock). One upstream
+ * batch call serves all users, keeping the free tier (8 req/min) safe.
  *
  * No database access: linked symbols arrive per request from the client.
  */
@@ -19,8 +20,8 @@ import {
   type MarketQuoteEntry,
 } from "./twelveData";
 
-export const MARKET_REFRESH_MS = 5 * 60 * 1000;
-const STALE_AFTER_MS = 2 * MARKET_REFRESH_MS;
+export const MARKET_TRACKED_REFRESH_MS = 15 * 60 * 1000;
+const STALE_AFTER_MS = 2 * MARKET_TRACKED_REFRESH_MS;
 
 export type MarketSnapshotStatus = "loading" | "live" | "stale" | "error";
 
