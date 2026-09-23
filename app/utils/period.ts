@@ -34,8 +34,8 @@ export function toISODate(year: number, month: number, day: number): string {
  * Last day of the month previous to `now` (September => Aug 31,
  * January => Dec 31 of the previous year).
  */
-export function endOfPreviousMonth(now: Date = new Date()): string {
-  const end = new Date(now.getFullYear(), now.getMonth(), 0);
+export function endOfThisMonth(now: Date = new Date()): string {
+  const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
   return toISODate(end.getFullYear(), end.getMonth() + 1, end.getDate());
 }
 
@@ -47,7 +47,7 @@ export function defaultReportRange(now: Date = new Date()): {
   start: string;
   end: string;
 } {
-  const end = endOfPreviousMonth(now);
+  const end = endOfThisMonth(now);
   const parsed = parseIsoDate(end);
 
   return { start: `${parsed?.year ?? now.getFullYear()}-01-01`, end };

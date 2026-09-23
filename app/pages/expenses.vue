@@ -2,7 +2,7 @@
 import { expensesCategories } from "~/utils/categories";
 import {
   defaultReportRange,
-  endOfPreviousMonth,
+  endOfThisMonth,
   parseIsoDate,
 } from "~/utils/period";
 import { loadExpenses as fetchExpenses } from "~/services/expenses";
@@ -61,7 +61,7 @@ const reportEnd = ref(reportDefaults.end);
 // Clearing a picker leaves that side empty; resolve it back to the
 // default so stats and charts always share the same range.
 const reportRange = computed(() => {
-  const end = reportEnd.value || endOfPreviousMonth();
+  const end = reportEnd.value || endOfThisMonth();
   const endYear = parseIsoDate(end)?.year ?? new Date().getFullYear();
   const start = reportStart.value || `${endYear}-01-01`;
 
