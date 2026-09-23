@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createInvestment,
   deleteInvestment,
-  loadInvestments,
+  getInvestments,
   updateInvestment,
 } from "../../app/services/investments";
 import type { Investment } from "../../app/types/investment";
@@ -30,13 +30,13 @@ beforeEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("loadInvestments", () => {
+describe("getInvestments", () => {
   it("returns rows and defaults marketSymbol to null", async () => {
     stubFetch({
       data: [{ ...INVESTMENT, marketSymbol: undefined }, INVESTMENT],
     });
 
-    const result = await loadInvestments();
+    const result = await getInvestments();
 
     expect(result).toHaveLength(2);
     expect(result[0].marketSymbol).toBeNull();
@@ -46,7 +46,7 @@ describe("loadInvestments", () => {
   it("returns an empty list without data", async () => {
     stubFetch({});
 
-    await expect(loadInvestments()).resolves.toEqual([]);
+    await expect(getInvestments()).resolves.toEqual([]);
   });
 });
 
