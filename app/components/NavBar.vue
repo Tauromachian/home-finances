@@ -22,11 +22,11 @@ const links = [
     to: "/groups",
     icon: "material-symbols-light:group",
   },
-  {
-    name: "Investments",
-    to: "/investments",
-    icon: "material-symbols-light:trending-up",
-  },
+  //  {
+  //    name: "Investments",
+  //    to: "/investments",
+  //    icon: "material-symbols-light:trending-up",
+  //  },
   {
     name: "Compound Calculator",
     to: "/compound-calculator",
