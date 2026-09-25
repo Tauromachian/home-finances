@@ -95,42 +95,41 @@ Record routes (`expenses`, `incomes`, `programmed-expenses`, `programmed-incomes
 - `POST`/`PUT` accept an optional `groupId` (omitted = personal); a non-member `groupId` fails with `403`.
 - `PUT`/`DELETE` on a personal record require ownership; on a shared record require group membership (`403` otherwise, `404` when missing).
 
-| Method     | Path                  | Description                                  |
-| ---------- | --------------------- | -------------------------------------------- |
-| `GET`      | `/api/expenses`       | List personal + group-shared expenses        |
-| `POST`     | `/api/expenses`       | Create an expense (optional `groupId`)       |
-| `POST`     | `/api/expenses/import`| Batch-import expense rows (validated per row; returns `{ inserted, errors }`) |
-| `PUT`      | `/api/expenses/:id`   | Update an expense                            |
-| `DELETE`   | `/api/expenses/:id`   | Delete an expense                            |
-| `GET`      | `/api/incomes`        | List personal + group-shared incomes         |
-| `POST`     | `/api/incomes`        | Create an income (optional `groupId`)        |
-| `POST`     | `/api/incomes/import` | Batch-import income rows (validated per row; returns `{ inserted, errors }`) |
-| `PUT`      | `/api/incomes/:id`    | Update an income                             |
-| `DELETE`   | `/api/incomes/:id`    | Delete an income                             |
-| `GET`      | `/api/programmed-expenses`       | List personal + shared programmed expenses |
-| `POST`     | `/api/programmed-expenses`       | Create a programmed expense                |
-| `PUT`      | `/api/programmed-expenses/:id`   | Update a programmed expense                |
-| `DELETE`   | `/api/programmed-expenses/:id`   | Delete a programmed expense                |
-| `GET`      | `/api/programmed-incomes`        | List personal + shared programmed incomes  |
-| `POST`     | `/api/programmed-incomes`        | Create a programmed income                 |
-| `PUT`      | `/api/programmed-incomes/:id`    | Update a programmed income                 |
-| `DELETE`   | `/api/programmed-incomes/:id`    | Delete a programmed income                 |
-| `GET`      | `/api/investments`    | List investments for the user |
-| `POST`     | `/api/investments`    | Create an investment         |
-| `PUT`      | `/api/investments/:id`| Update an investment         |
-| `DELETE`   | `/api/investments/:id`| Delete an investment         |
-| `GET`      | `/api/groups`         | List my groups                               |
-| `POST`     | `/api/groups`         | Create a group (creator auto-joins)          |
-| `GET`      | `/api/groups/:id`     | Get a group (members only)                   |
-| `DELETE`   | `/api/groups/:id`     | Delete a group (blocked while shared records exist) |
-| `GET`      | `/api/groups/:id/members`        | List group members (with emails)  |
-| `POST`     | `/api/groups/:id/members`        | Add a member by email (`404` unknown, `409` duplicate) |
-| `DELETE`   | `/api/groups/:id/members/:userId`| Remove a member                   |
+| Method   | Path                              | Description                                                                   |
+| -------- | --------------------------------- | ----------------------------------------------------------------------------- |
+| `GET`    | `/api/expenses`                   | List personal + group-shared expenses                                         |
+| `POST`   | `/api/expenses`                   | Create an expense (optional `groupId`)                                        |
+| `POST`   | `/api/expenses/import`            | Batch-import expense rows (validated per row; returns `{ inserted, errors }`) |
+| `PUT`    | `/api/expenses/:id`               | Update an expense                                                             |
+| `DELETE` | `/api/expenses/:id`               | Delete an expense                                                             |
+| `GET`    | `/api/incomes`                    | List personal + group-shared incomes                                          |
+| `POST`   | `/api/incomes`                    | Create an income (optional `groupId`)                                         |
+| `POST`   | `/api/incomes/import`             | Batch-import income rows (validated per row; returns `{ inserted, errors }`)  |
+| `PUT`    | `/api/incomes/:id`                | Update an income                                                              |
+| `DELETE` | `/api/incomes/:id`                | Delete an income                                                              |
+| `GET`    | `/api/programmed-expenses`        | List personal + shared programmed expenses                                    |
+| `POST`   | `/api/programmed-expenses`        | Create a programmed expense                                                   |
+| `PUT`    | `/api/programmed-expenses/:id`    | Update a programmed expense                                                   |
+| `DELETE` | `/api/programmed-expenses/:id`    | Delete a programmed expense                                                   |
+| `GET`    | `/api/programmed-incomes`         | List personal + shared programmed incomes                                     |
+| `POST`   | `/api/programmed-incomes`         | Create a programmed income                                                    |
+| `PUT`    | `/api/programmed-incomes/:id`     | Update a programmed income                                                    |
+| `DELETE` | `/api/programmed-incomes/:id`     | Delete a programmed income                                                    |
+| `GET`    | `/api/investments`                | List investments for the user                                                 |
+| `POST`   | `/api/investments`                | Create an investment                                                          |
+| `PUT`    | `/api/investments/:id`            | Update an investment                                                          |
+| `DELETE` | `/api/investments/:id`            | Delete an investment                                                          |
+| `GET`    | `/api/groups`                     | List my groups                                                                |
+| `POST`   | `/api/groups`                     | Create a group (creator auto-joins)                                           |
+| `GET`    | `/api/groups/:id`                 | Get a group (members only)                                                    |
+| `DELETE` | `/api/groups/:id`                 | Delete a group (blocked while shared records exist)                           |
+| `GET`    | `/api/groups/:id/members`         | List group members (with emails)                                              |
+| `POST`   | `/api/groups/:id/members`         | Add a member by email (`404` unknown, `409` duplicate)                        |
+| `DELETE` | `/api/groups/:id/members/:userId` | Remove a member                                                               |
 
 ## Design
 
-![Add expense form](public/add-expense-form.jpg)
-![Expenses stats](public/expenses-stats.jpg)
+![Expenses stats](public/dashboard.png)
 
 ## Setup
 
@@ -151,17 +150,17 @@ cp .env.example .env
 
 Required variables:
 
-| Variable                    | Description                                              |
-| --------------------------- | -------------------------------------------------------- |
-| `NUXT_DB_HOST`              | PostgreSQL host (e.g. `localhost`)                       |
-| `NUXT_DB_PORT`              | PostgreSQL port (default `5432`)                         |
-| `NUXT_DB_NAME`              | PostgreSQL database name                                 |
-| `NUXT_DB_USER`              | PostgreSQL user                                          |
-| `NUXT_DB_PASSWORD`          | PostgreSQL password                                      |
-| `NUXT_PUBLIC_SUPABASE_URL`  | Your Supabase project URL                                |
-| `NUXT_PUBLIC_SUPABASE_KEY`  | Your Supabase anon key                                   |
-| `APP_COMPOSE_PORT`          | Host port mapped to the container's `3000` (production)  |
-| `NODE_ENV`                  | `development` or `production`                            |
+| Variable                   | Description                                             |
+| -------------------------- | ------------------------------------------------------- |
+| `NUXT_DB_HOST`             | PostgreSQL host (e.g. `localhost`)                      |
+| `NUXT_DB_PORT`             | PostgreSQL port (default `5432`)                        |
+| `NUXT_DB_NAME`             | PostgreSQL database name                                |
+| `NUXT_DB_USER`             | PostgreSQL user                                         |
+| `NUXT_DB_PASSWORD`         | PostgreSQL password                                     |
+| `NUXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL                               |
+| `NUXT_PUBLIC_SUPABASE_KEY` | Your Supabase anon key                                  |
+| `APP_COMPOSE_PORT`         | Host port mapped to the container's `3000` (production) |
+| `NODE_ENV`                 | `development` or `production`                           |
 
 ### Installation
 
