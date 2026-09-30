@@ -68,6 +68,15 @@ export default defineNuxtConfig({
         { name: "twitter:description", content: siteDescription },
         { name: "twitter:image", content: ogImage },
         { name: "twitter:image:alt", content: `${siteName} dashboard preview` },
+        // PWA / mobile
+        { name: "application-name", content: siteName },
+        { name: "apple-mobile-web-app-capable", content: "yes" },
+        {
+          name: "apple-mobile-web-app-status-bar-style",
+          content: "default",
+        },
+        { name: "apple-mobile-web-app-title", content: siteName },
+        { name: "mobile-web-app-capable", content: "yes" },
         // Theme
         {
           name: "theme-color",
@@ -82,6 +91,24 @@ export default defineNuxtConfig({
       ],
       link: [
         { rel: "icon", type: "image/x-icon", href: "/favicon_io/favicon.ico" },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon_io/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon_io/favicon-16x16.png",
+        },
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/favicon_io/apple-touch-icon.png",
+        },
+        { rel: "manifest", href: "/favicon_io/site.webmanifest" },
         { rel: "canonical", href: siteUrl },
       ],
     },
