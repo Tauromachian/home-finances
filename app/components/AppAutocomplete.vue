@@ -44,26 +44,25 @@ const onInput = () => {
 };
 
 const onKeyDown = (event: KeyboardEvent) => {
-  switch (event.key) {
-    case "ArrowUp":
-      event.preventDefault();
-      moveSelection(-1);
-      break;
-    case "ArrowDown":
-      event.preventDefault();
-      moveSelection(1);
-      break;
-    case "Enter":
-      event.preventDefault();
-      if (selectedIndex.value >= 0) {
-        selectItem(filteredItems.value[selectedIndex.value]);
-      }
-      break;
-    case "Escape":
+  const actionByKey = {
+    ArrowUp: () => moveSelection(-1),
+    ArrowDown: () => moveSelection(1),
+    Enter: () => {
+      if (selectedIndex.value < 0) return;
+
+      selectItem(filteredItems.value[selectedIndex.value]);
+    },
+    Escape: () => {
       isOpen.value = false;
       inputRef.value.$el.blur();
-      break;
-  }
+    },
+  };
+
+  const action = actionByKey[event.key];
+  if (!action) return;
+
+  event.preventDefault();
+  action();
 };
 
 const moveSelection = (direction: number) => {
