@@ -18,8 +18,9 @@ const INVESTMENT: Investment = {
   marketSymbol: "AAPL",
 };
 
-function stubFetch(payload: unknown = {}) {
+function stubFetch(payload: unknown = {}, ok = true) {
   const mock = vi.fn().mockResolvedValue({
+    ok,
     json: () => Promise.resolve(payload),
   });
   vi.stubGlobal("fetch", mock);
