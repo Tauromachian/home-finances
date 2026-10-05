@@ -31,7 +31,9 @@ async function signOut() {
     <NavBar />
 
     <div class="lg:pl-64">
-      <header class="flex items-center max-w-6xl mx-4 lg:mx-8 xl:mx-auto pt-5">
+      <header
+        class="flex items-center max-w-6xl mx-auto px-4 lg:px-8 pt-5"
+      >
         <GroupScopeSwitcher />
 
         <button
@@ -43,7 +45,7 @@ async function signOut() {
         </button>
       </header>
 
-      <div class="max-w-6xl mx-4 lg:mx-8 xl:mx-auto pt-5 pb-64 lg:pb-8">
+      <div class="max-w-6xl mx-auto px-4 lg:px-8 pt-5 pb-64 lg:pb-8">
         <slot />
       </div>
     </div>
