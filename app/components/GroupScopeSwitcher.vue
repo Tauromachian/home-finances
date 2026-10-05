@@ -19,7 +19,6 @@ watch(displayValue, (value) => {
 });
 
 function selectScope(item: { value: string }) {
-  console.log(item);
   activeGroupId.value = item.value === "" ? null : Number(item.value);
 }
 
