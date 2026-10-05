@@ -198,7 +198,9 @@ defineExpose({ internalRef: formRef, resetForm });
       ></AppInput>
 
       <div class="flex justify-end pt-2 pb-2">
-        <BaseButton> Add Expense </BaseButton>
+        <BaseButton>
+          {{ formMode === "insert" ? "Add" : "Edit" }} Expense
+        </BaseButton>
       </div>
     </Form>
   </AppCard>
