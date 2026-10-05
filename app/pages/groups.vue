@@ -33,11 +33,7 @@ function showMessage(message: string) {
 async function loadGroups() {
   groups.value = await apiLoadGroups();
 
-  if (
-    selectedGroupId.value !== null &&
-    !groups.value.some((group) => group.id === selectedGroupId.value)
-  ) {
-    selectedGroupId.value = null;
+  if (!groups.value.some((group) => group.id === selectedGroupId.value)) {
     members.value = [];
   }
 }
@@ -105,8 +101,10 @@ async function deleteGroup() {
   showMessage("Group deleted");
 }
 
-onBeforeMount(() => {
-  loadGroups();
+onBeforeMount(async () => {
+  await loadGroups();
+
+  if (!selectedGroupId.value) selectedGroupId.value = groups.value[0].id;
 });
 </script>
 
