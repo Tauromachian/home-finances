@@ -32,10 +32,6 @@ function showMessage(message: string) {
 
 async function loadGroups() {
   groups.value = await apiLoadGroups();
-
-  if (!groups.value.some((group) => group.id === selectedGroupId.value)) {
-    members.value = [];
-  }
 }
 
 async function selectGroup(id: number) {
@@ -105,6 +101,8 @@ onBeforeMount(async () => {
   await loadGroups();
 
   if (!selectedGroupId.value) selectedGroupId.value = groups.value[0].id;
+
+  selectGroup(selectedGroupId.value);
 });
 </script>
 
