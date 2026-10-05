@@ -7,7 +7,7 @@ import {
   round2,
 } from "../utils/period";
 
-export async function loadExpenses(): Promise<Expense[]> {
+export async function getExpenses(): Promise<Expense[]> {
   const res = await fetch("/api/expenses");
   const data = await res.json();
   return data.data as Expense[];

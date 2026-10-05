@@ -1,4 +1,4 @@
-import { loadGroups as fetchGroups } from "../services/groups";
+import { getGroups as fetchGroups } from "../services/groups";
 
 import type { Group } from "../types/group";
 

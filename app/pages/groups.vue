@@ -3,8 +3,8 @@ import {
   addGroupMember as apiAddMember,
   createGroup as apiCreateGroup,
   deleteGroup as apiDeleteGroup,
-  loadGroupMembers as apiLoadMembers,
-  loadGroups as apiLoadGroups,
+  getGroupMembers as apiLoadMembers,
+  getGroups as apiLoadGroups,
   removeGroupMember as apiRemoveMember,
 } from "~/services/groups";
 

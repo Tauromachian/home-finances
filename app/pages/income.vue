@@ -4,8 +4,8 @@ import {
   endOfThisMonth,
   parseIsoDate,
 } from "~/utils/period";
-import { loadIncomes as fetchIncomes } from "~/services/incomes";
-import { loadProgrammedIncomes as fetchProgrammedIncomes } from "~/services/programmedIncomes";
+import { getIncomes as fetchIncomes } from "~/services/incomes";
+import { getProgrammedIncomes as fetchProgrammedIncomes } from "~/services/programmedIncomes";
 import { INCOME_COLUMNS } from "~/utils/spreadsheet";
 
 import type { Income, ProgrammedIncome } from "~/types/income";
