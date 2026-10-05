@@ -12,14 +12,13 @@ const scopeItems = computed<Item[]>(() => [
 ]);
 
 const displayValue = computed(() => activeGroup.value?.name ?? "Personal");
-watch(displayValue, (value) => {
-  if (!window?.localStorage) return;
-
-  localStorage.setItem("scope", value);
-});
 
 function selectScope(item: { value: string }) {
   activeGroupId.value = item.value === "" ? null : Number(item.value);
+
+  if (!window?.localStorage) return;
+
+  localStorage.setItem("scope", item.value);
 }
 
 onBeforeMount(() => {
@@ -33,7 +32,7 @@ onMounted(() => {
 
   if (!scope) return;
 
-  selectScope({ value: scope === "Family" ? "1" : "" });
+  selectScope({ value: scope });
 });
 </script>
 
