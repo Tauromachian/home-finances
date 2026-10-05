@@ -326,9 +326,11 @@ onMounted(() => loadData());
 
 <template>
   <div>
-    <BaseButton class="mb-5" @click="openForm('insert')">
-      <span class="text-xl">+</span> Add Investment
-    </BaseButton>
+    <div class="flex">
+      <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
+        <span class="text-xl">+</span> Add Investment
+      </BaseButton>
+    </div>
 
     <div class="flex flex-col gap-5">
       <AppCard color="accent-3" class="text-text-inverse">

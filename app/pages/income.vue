@@ -259,9 +259,11 @@ onBeforeMount(() => {
     <div v-if="activeTab === 'manage'" class="flex flex-col gap-5">
       <AppCard>
         <AppCardBody>
-          <BaseButton class="mb-5" @click="openForm('insert')">
-            <span class="text-xl">+</span> Add Income
-          </BaseButton>
+          <div class="flex">
+            <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
+              <span class="text-xl">+</span> Add Income
+            </BaseButton>
+          </div>
           <div class="flex flex-col gap-3" data-testid="incomes-items">
             <IncomeItem
               v-for="income in scopedIncomes"
@@ -285,9 +287,11 @@ onBeforeMount(() => {
     <div v-else-if="activeTab === 'frequent'" class="flex flex-col gap-5">
       <AppCard>
         <AppCardBody>
-          <BaseButton class="mb-5" @click="openForm('insert')">
-            <span class="text-xl">+</span> Program Income
-          </BaseButton>
+          <div class="flex">
+            <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
+              <span class="text-xl">+</span> Program Income
+            </BaseButton>
+          </div>
           <div class="flex flex-col gap-3" data-testid="frequent-incomes-items">
             <IncomeProgrammedItem
               v-for="income in scopedProgrammedIncomes"
