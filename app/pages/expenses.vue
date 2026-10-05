@@ -5,8 +5,8 @@ import {
   endOfThisMonth,
   parseIsoDate,
 } from "~/utils/period";
-import { loadExpenses as fetchExpenses } from "~/services/expenses";
-import { loadProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
+import { getExpenses as fetchExpenses } from "~/services/expenses";
+import { getProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
 import { EXPENSE_COLUMNS } from "~/utils/spreadsheet";
 
 import type { Expense, ProgrammedExpense } from "~/types/expense";

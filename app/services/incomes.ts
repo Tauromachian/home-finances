@@ -7,7 +7,7 @@ import {
   round2,
 } from "../utils/period";
 
-export async function loadIncomes(): Promise<Income[]> {
+export async function getIncomes(): Promise<Income[]> {
   const res = await fetch("/api/incomes");
   const data = await res.json();
   return data.data as Income[];
