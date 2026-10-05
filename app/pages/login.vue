@@ -34,7 +34,7 @@ const signInWithOtp = async () => {
         <AppInput v-model="form.email" type="email" label="Email" />
         <AppInput
           v-model="form.password"
-          :type="isPasswordVisible ? 'test' : 'password'"
+          :type="isPasswordVisible ? 'text' : 'password'"
           label="Password"
           @click:append="isPasswordVisible = !isPasswordVisible"
         >
