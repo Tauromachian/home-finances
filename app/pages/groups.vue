@@ -15,7 +15,7 @@ const appToaster = inject<Ref>("appToaster");
 
 const groups = ref<Group[]>([]);
 const newGroupName = ref("");
-const selectedGroupId = ref<number | null>(null);
+const selectedGroupId = ref<number>();
 const members = ref<GroupMember[]>([]);
 const newMemberEmail = ref("");
 const isConfirmDeleteOpen = ref(false);
