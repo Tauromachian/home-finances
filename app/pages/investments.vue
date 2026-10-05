@@ -6,10 +6,16 @@ import {
   updateInvestment,
 } from "~/services/investments";
 import { gainVsCost, resolveCurrentValue } from "~/utils/market";
+import { assetsCategories, getCategoryByName } from "~/utils/categories";
 import type { Investment } from "~/types/investment";
 import type { Item } from "~/types/item";
 
 type FormMode = "edit" | "insert";
+
+const eurFormatter = new Intl.NumberFormat("en-IE", {
+  style: "currency",
+  currency: "EUR",
+});
 
 const investments = ref<Investment[]>([]);
 const isLoading = ref(true);
@@ -65,35 +71,36 @@ const marketPrices = computed<
 
 const portfolioValue = computed(() => {
   const total = investments.value.reduce(
-    (acum: number, nextValue: Investment) => {
-      acum += nextValue.currentValue;
-      return acum;
-    },
+    (acc: number, investment: Investment) =>
+      acc + (Number(investment.currentValue) || 0),
     0,
   );
 
-  return new Intl.NumberFormat("en-IE", {
-    style: "currency",
-    currency: "EUR",
-  }).format(total);
+  return eurFormatter.format(total);
 });
 
-const livePortfolioValue = computed(() => {
-  const total = investments.value.reduce(
-    (acc: number, investment: Investment) => {
-      const entry = investment.marketSymbol
-        ? market.entry(investment.marketSymbol)
-        : null;
-      return acc + (entry?.price ?? Number(investment.currentValue));
-    },
+const totalCost = computed(() =>
+  investments.value.reduce(
+    (acc: number, investment: Investment) =>
+      acc + (Number(investment.amount) || 0),
     0,
-  );
+  ),
+);
 
-  return new Intl.NumberFormat("en-IE", {
-    style: "currency",
-    currency: "EUR",
-  }).format(total);
-});
+const liveTotal = computed(() =>
+  investments.value.reduce((acc: number, investment: Investment) => {
+    const entry = investment.marketSymbol
+      ? market.entry(investment.marketSymbol)
+      : null;
+    const fallback = Number(investment.currentValue);
+    const value = entry?.price ?? fallback;
+    return acc + (Number.isFinite(value) ? value : 0);
+  }, 0),
+);
+
+const livePortfolioValue = computed(() => eurFormatter.format(liveTotal.value));
+
+const missingSet = computed(() => new Set(market.missing.value));
 
 function liveInfo(investment: Investment) {
   const entry = investment.marketSymbol
@@ -112,7 +119,7 @@ function liveInfo(investment: Investment) {
     stale:
       market.status.value === "stale" ||
       (!!investment.marketSymbol &&
-        market.missing.value.includes(investment.marketSymbol)),
+        missingSet.value.has(investment.marketSymbol)),
   };
 }
 
@@ -144,24 +151,51 @@ function liveFor(investment: Investment) {
     }
   );
 }
-const resume = reactive({
-  gainLossBalance: 1280,
-  investmentReturn: 14,
+
+/** One lookup per row for the template (avoids 5x liveFor() per item). */
+const displayInvestments = computed(() =>
+  investments.value.map((investment) => {
+    const live = liveFor(investment);
+    return {
+      key: `investment-${investment.id}`,
+      investment,
+      category: getCategoryByName(investment.category, assetsCategories),
+      price: live.price,
+      currency: live.currency,
+      gain: live.gain,
+      returnPct: live.returnPct,
+      stale: live.stale,
+    };
+  }),
+);
+
+const resume = computed(() => {
+  const gainLossBalance = liveTotal.value - totalCost.value;
+  const investmentReturn =
+    totalCost.value > 0 ? (gainLossBalance / totalCost.value) * 100 : null;
+
+  return { gainLossBalance, investmentReturn };
 });
 
 const formattedResume = computed(() => {
   return {
-    gainLossBalance: new Intl.NumberFormat("en-IE", {
-      style: "currency",
-      currency: "EUR",
-    }).format(resume.gainLossBalance),
-    investmentReturn: `${resume.investmentReturn.toFixed(2)}%`,
+    gainLossBalance: eurFormatter.format(resume.value.gainLossBalance),
+    investmentReturn:
+      resume.value.investmentReturn === null
+        ? "—"
+        : `${resume.value.investmentReturn.toFixed(2)}%`,
   };
 });
 
 function showMessage(message: string) {
   isOpen.value = false;
 
+  if (!appToaster?.value) return;
+
+  appToaster.value.openToast(message);
+}
+
+function showError(message: string) {
   if (!appToaster?.value) return;
 
   appToaster.value.openToast(message);
@@ -187,14 +221,19 @@ async function submitForm(form: Investment) {
 
   const payload = { ...form, currentValue };
 
-  if (formMode.value === "insert") {
-    await createInvestment(payload);
+  try {
+    if (formMode.value === "insert") {
+      await createInvestment(payload);
 
-    showMessage("New investment added!");
-  } else {
-    await updateInvestment(selectedId, payload);
+      showMessage("New investment added!");
+    } else {
+      await updateInvestment(selectedId, payload);
 
-    showMessage("Investment edited");
+      showMessage("Investment edited");
+    }
+  } catch {
+    showError("Could not save investment");
+    return;
   }
 
   loadData();
@@ -214,7 +253,12 @@ function openDeleteConfirmationDialog(id: string | number) {
 }
 
 async function deleteInvestment() {
-  await deleteInvestmentRecord(selectedId);
+  try {
+    await deleteInvestmentRecord(selectedId);
+  } catch {
+    showError("Could not delete investment");
+    return;
+  }
   isConfirmationDialogOpen.value = false;
   loadData();
 }
@@ -227,10 +271,15 @@ function openLinkDialog(investment: Investment) {
 async function linkStock(item: Item) {
   if (linkTarget.value?.id === undefined || linkTarget.value?.id === "") return;
 
-  await updateInvestment(linkTarget.value.id, {
-    ...linkTarget.value,
-    marketSymbol: item.value,
-  });
+  try {
+    await updateInvestment(linkTarget.value.id, {
+      ...linkTarget.value,
+      marketSymbol: item.value,
+    });
+  } catch {
+    showError("Could not link stock");
+    return;
+  }
 
   isLinkDialogOpen.value = false;
   linkTarget.value = null;
@@ -244,10 +293,15 @@ async function linkStock(item: Item) {
 async function unlinkStock(investment: Investment) {
   if (investment.id === undefined || investment.id === "") return;
 
-  await updateInvestment(investment.id, {
-    ...investment,
-    marketSymbol: null,
-  });
+  try {
+    await updateInvestment(investment.id, {
+      ...investment,
+      marketSymbol: null,
+    });
+  } catch {
+    showError("Could not unlink stock");
+    return;
+  }
 
   await loadData();
 
@@ -258,6 +312,8 @@ async function loadData() {
   isLoading.value = true;
   try {
     investments.value = await getInvestments();
+  } catch {
+    showError("Could not load investments");
   } finally {
     isLoading.value = false;
   }
@@ -370,18 +426,16 @@ onMounted(() => loadData());
           <AppLoader v-if="isPageLoading" size="70" class="my-10"></AppLoader>
           <div v-else-if="investments.length" class="flex flex-col gap-2">
             <InvestmentItem
-              v-for="investment in investments"
-              :key="`investment-${investment.id}`"
-              :investment
-              :category="
-                getCategoryByName(investment.category, assetsCategories)
-              "
-              :live-price="liveFor(investment).price"
-              :live-currency="liveFor(investment).currency"
-              :gain="liveFor(investment).gain"
-              :return-pct="liveFor(investment).returnPct"
-              :price-stale="liveFor(investment).stale"
-              @click:delete="openDeleteConfirmationDialog(investment.id)"
+              v-for="row in displayInvestments"
+              :key="row.key"
+              :investment="row.investment"
+              :category="row.category"
+              :live-price="row.price"
+              :live-currency="row.currency"
+              :gain="row.gain"
+              :return-pct="row.returnPct"
+              :price-stale="row.stale"
+              @click:delete="openDeleteConfirmationDialog(row.investment.id)"
               @click:link="openLinkDialog"
               @click:unlink="unlinkStock"
             ></InvestmentItem>
