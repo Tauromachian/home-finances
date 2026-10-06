@@ -100,16 +100,14 @@ async function signOut() {
         :aria-expanded="!isCollapsed"
         :title="isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
         class="absolute top-8 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-neutral-2 bg-neutral-1 text-text-1 shadow-md transition-all duration-300 hover:bg-neutral-2"
-        :class="isCollapsed ? 'left-2' : '-right-5'"
+        :class="isCollapsed ? 'left-2' : 'left-59'"
         @click="toggleSidebar"
       >
         <Icon
-          :name="
-            isCollapsed
-              ? 'material-symbols-light:chevron-right'
-              : 'material-symbols-light:chevron-left'
-          "
+          name="material-symbols-light:chevron-left"
           size="24"
+          class="transition-transform duration-300"
+          :class="isCollapsed ? 'rotate-180' : ''"
         />
       </button>
     </aside>
