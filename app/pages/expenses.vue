@@ -8,6 +8,7 @@ import {
 import { getExpenses as fetchExpenses } from "~/services/expenses";
 import { getProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
 import { EXPENSE_COLUMNS } from "~/utils/spreadsheet";
+import { makeDebounce } from "~/utils/debounce";
 
 import type { Expense, ProgrammedExpense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
@@ -18,6 +19,8 @@ type ExpensesTab = "manage" | "frequent" | "reports" | "import-export";
 
 const route = useRoute();
 const router = useRouter();
+
+const debounce = makeDebounce();
 
 // Sub-view is persisted in the query string (?tab=reports), so it
 // survives reloads and can be shared. Defaults to "manage".
@@ -46,6 +49,7 @@ const activeTab = computed<ExpensesTab>({
 const expenses = ref<Expense[]>([]);
 const programmedExpenses = ref<ProgrammedExpense[]>([]);
 const isLoading = ref(false);
+const search = ref("");
 
 const { inScope, activeGroupId } = useGroups();
 
@@ -74,9 +78,9 @@ const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
   reportRange,
 );
 
-async function loadExpenses() {
+async function loadExpenses(search?: string) {
   isLoading.value = true;
-  expenses.value = await fetchExpenses();
+  expenses.value = await fetchExpenses(search);
   isLoading.value = false;
 }
 
@@ -92,6 +96,10 @@ const programmedFormRef = useTemplateRef("programmedFormRef");
 const activeFormRef = computed(() =>
   formKind.value === "programmed" ? programmedFormRef.value : formRef.value,
 );
+
+watch(search, (value) => {
+  debounce(() => loadExpenses(value));
+});
 
 const appToaster = inject<Ref>("appToaster");
 
@@ -262,8 +270,18 @@ onBeforeMount(() => {
     <div v-if="activeTab === 'manage'" class="flex flex-col gap-5">
       <AppCard>
         <AppCardBody>
-          <div class="flex">
-            <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
+          <div class="flex justify-between">
+            <AppInput
+              v-model="search"
+              class="min-w-100"
+              placeholder="Search expenses"
+            >
+              <template #append>
+                <Icon size="24" name="material-symbols-light:search"></Icon>
+              </template>
+            </AppInput>
+
+            <BaseButton class="mb-5" @click="openForm('insert')">
               <span class="text-xl">+</span> Add Expense
             </BaseButton>
           </div>
