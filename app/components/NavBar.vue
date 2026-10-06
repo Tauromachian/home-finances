@@ -67,7 +67,7 @@ async function signOut() {
       :class="isCollapsed ? 'w-0 p-0 border-0' : 'w-64 p-4 gap-4'"
     >
       <div
-        class="flex flex-col gap-4 overflow-hidden whitespace-nowrap transition-opacity duration-200"
+        class="flex h-full flex-col gap-4 overflow-hidden whitespace-nowrap transition-opacity duration-200"
         :class="isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'"
       >
         <NuxtLink
@@ -92,6 +92,16 @@ async function signOut() {
             </NuxtLink>
           </li>
         </ul>
+
+        <a
+          href="https://github.com/Tauromachian/home-finances"
+          target="_blank"
+          rel="noopener"
+          class="mt-auto flex items-center gap-3 px-4 py-2 rounded-lg text-sm font-medium text-text-0 hover:bg-neutral-2"
+        >
+          <Icon name="mdi:github" size="20" />
+          <span> Fork me on GitHub </span>
+        </a>
       </div>
 
       <BaseButton
