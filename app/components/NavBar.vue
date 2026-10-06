@@ -94,12 +94,14 @@ async function signOut() {
         </ul>
       </div>
 
-      <button
+      <BaseButton
+        icon
+        variant="tonal"
         type="button"
         :aria-label="isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
         :aria-expanded="!isCollapsed"
         :title="isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-        class="absolute top-8 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-neutral-2 bg-neutral-1 text-text-1 shadow-md transition-all duration-300 hover:bg-neutral-2"
+        class="absolute top-8 z-50 flex h-10 w-10 items-center justify-center border border-neutral-2 shadow-md transition-all duration-300"
         :class="isCollapsed ? 'left-2' : 'left-59'"
         @click="toggleSidebar"
       >
@@ -109,7 +111,7 @@ async function signOut() {
           class="transition-transform duration-300"
           :class="isCollapsed ? 'rotate-180' : ''"
         />
-      </button>
+      </BaseButton>
     </aside>
 
     <div
