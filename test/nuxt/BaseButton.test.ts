@@ -37,17 +37,25 @@ describe("BaseButton.vue", () => {
     expect(wrapper.classes()).toContain("text-text-1");
   });
 
-  it("Renders outlined variant correctly", () => {
-    const wrapper = mount(BaseButton, { props: { variant: "outlined" } });
+  it("Renders tonal variant correctly", () => {
+    const wrapper = mount(BaseButton, { props: { variant: "tonal" } });
 
-    expect(wrapper.classes()).toContain("border");
-    expect(wrapper.classes()).toContain("bg-transparent");
-    expect(wrapper.classes()).toContain("border-neutral-1");
+    expect(wrapper.classes()).toContain("bg-neutral-1");
     expect(wrapper.classes()).toContain("text-text-1");
+    expect(wrapper.classes()).toContain("hover:bg-neutral-2");
+  });
+
+  it("Renders tonal icon variant as a circle", () => {
+    const wrapper = mount(BaseButton, {
+      props: { variant: "tonal", icon: true },
+    });
+
+    expect(wrapper.classes()).toContain("bg-neutral-1");
+    expect(wrapper.classes()).toContain("rounded-full");
   });
 
   it("Renders text variant correctly", () => {
-    const wrapper = mount(BaseButton, { props: { variant: "outlined" } });
+    const wrapper = mount(BaseButton, { props: { variant: "text" } });
 
     expect(wrapper.classes()).toContain("bg-transparent");
   });
