@@ -37,7 +37,7 @@ const links = [
 const theme = inject<Ref<ThemeName>>("theme", ref("system"));
 const supabase = useSupabaseClient();
 
-const isCollapsed = ref(false);
+const isCollapsed = useState("sidebar-collapsed", () => false);
 
 const isMenuOpen = ref(false);
 function toggleSidebar() {
