@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const _variants = ["", "regular", "text", "outlined"] as const;
+const _variants = ["", "regular", "text", "outlined", "tonal"] as const;
 
 type Variant = (typeof _variants)[number];
 
@@ -8,7 +8,7 @@ const props = defineProps({
     type: String as PropType<Variant>,
     default: "regular",
     validator(value: string | undefined) {
-      return ["", "regular", "text", "outlined"].includes(value);
+      return ["", "regular", "text", "outlined", "tonal"].includes(value);
     },
   },
   value: {
@@ -16,6 +16,9 @@ const props = defineProps({
     default: "",
   },
   icon: { type: Boolean, default: false },
+  // Applies to the "regular" variant only; other variants use fixed tones.
+  // Note: keep variant classes as static literals — the Tailwind safelist
+  // (@source inline in main.css) only covers dynamic bg-accent-*/bg-danger-*.
   colors: {
     type: Object as PropType<{ color: string; hover: string }>,
     default: () => ({ color: "accent-0", hover: "accent-1" }),
@@ -27,6 +30,7 @@ const classes = computed(() => {
     "": [],
     text: ["bg-transparent", "flex", "align-center"],
     outlined: ["border", "bg-transparent", "border-neutral-1", "text-text-1"],
+    tonal: ["bg-neutral-1", "text-text-1", "hover:bg-neutral-2"],
     regular: ["text-white", "focus:text-white"],
   };
 
