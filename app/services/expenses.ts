@@ -7,12 +7,6 @@ import {
   round2,
 } from "../utils/period";
 
-export async function getExpenses(): Promise<Expense[]> {
-  const res = await fetch("/api/expenses");
-  const data = await res.json();
-  return data.data as Expense[];
-}
-
 export const MONTH_LABELS = [
   "Jan",
   "Feb",
@@ -27,6 +21,16 @@ export const MONTH_LABELS = [
   "Nov",
   "Dec",
 ];
+
+export async function getExpenses(search?: string): Promise<Expense[]> {
+  let URL = "/api/expenses";
+
+  if (search) URL += `?search=${search}`;
+
+  const res = await fetch(URL);
+  const data = await res.json();
+  return data.data as Expense[];
+}
 
 /**
  * Buckets actual expenses into one total per month, from January up to
