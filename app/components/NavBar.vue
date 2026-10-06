@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ThemeName } from "~/types/theme";
 
+const isCollapsed = defineModel<boolean>("collapsed");
+
 const links = [
   {
     name: "Dashboard",
@@ -36,8 +38,6 @@ const links = [
 
 const theme = inject<Ref<ThemeName>>("theme", ref("system"));
 const supabase = useSupabaseClient();
-
-const isCollapsed = useState("sidebar-collapsed", () => false);
 
 const isMenuOpen = ref(false);
 function toggleSidebar() {

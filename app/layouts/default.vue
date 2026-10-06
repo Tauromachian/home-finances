@@ -9,7 +9,7 @@ const user = useSupabaseUser();
 const avatarButtonRef = useTemplateRef("avatar-button");
 
 const isUserMenuOpen = ref(false);
-const isSidebarCollapsed = useState("sidebar-collapsed", () => false);
+const isSidebarCollapsed = ref(false);
 
 const themeName = computed(() => {
   return theme.value[0].toUpperCase() + theme.value.slice(1);
@@ -29,7 +29,7 @@ async function signOut() {
 
 <template>
   <main class="font-sans min-h-screen bg-neutral-0 text-text-0">
-    <NavBar />
+    <NavBar v-model:collapsed="isSidebarCollapsed" />
 
     <div
       class="transition-all duration-300"
