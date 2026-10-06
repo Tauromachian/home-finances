@@ -37,7 +37,12 @@ const links = [
 const theme = inject<Ref<ThemeName>>("theme", ref("system"));
 const supabase = useSupabaseClient();
 
+const isCollapsed = ref(false);
+
 const isMenuOpen = ref(false);
+function toggleSidebar() {
+  isCollapsed.value = !isCollapsed.value;
+}
 
 const themeName = computed(() => {
   return theme.value[0].toUpperCase() + theme.value.slice(1);
@@ -58,30 +63,55 @@ async function signOut() {
 <template>
   <div>
     <aside
-      class="hidden lg:flex fixed inset-y-0 left-0 z-40 w-64 flex-col gap-4 bg-neutral-1 p-4"
+      class="hidden lg:flex fixed inset-y-0 left-0 z-40 flex-col bg-neutral-1 transition-all duration-300 overflow-visible"
+      :class="isCollapsed ? 'w-0 p-0 border-0' : 'w-64 p-4 gap-4'"
     >
-      <NuxtLink
-        to="/"
-        class="px-2 pt-2 font-serif text-2xl font-bold text-text-1"
+      <div
+        class="flex flex-col gap-4 overflow-hidden whitespace-nowrap transition-opacity duration-200"
+        :class="isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100'"
       >
-        Home
-        <span class="text-accent-0 italic"> Finances </span>
-      </NuxtLink>
+        <NuxtLink
+          to="/"
+          class="px-2 pt-2 font-serif text-2xl font-bold text-text-1"
+        >
+          Home
+          <span class="text-accent-0 italic"> Finances </span>
+        </NuxtLink>
 
-      <ul class="font-medium text-sm flex flex-col gap-1">
-        <li v-for="link in links" :key="link.to">
-          <NuxtLink
-            :to="link.to"
-            class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-0 hover:bg-neutral-2"
-            active-class="bg-neutral-2 text-text-1"
-          >
-            <Icon :name="link.icon" size="20" />
-            <span>
-              {{ link.name }}
-            </span>
-          </NuxtLink>
-        </li>
-      </ul>
+        <ul class="font-medium text-sm flex flex-col gap-1">
+          <li v-for="link in links" :key="link.to">
+            <NuxtLink
+              :to="link.to"
+              class="flex items-center gap-3 px-4 py-2 rounded-lg text-text-0 hover:bg-neutral-2"
+              active-class="bg-neutral-2 text-text-1"
+            >
+              <Icon :name="link.icon" size="20" />
+              <span>
+                {{ link.name }}
+              </span>
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+
+      <button
+        type="button"
+        :aria-label="isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+        :aria-expanded="!isCollapsed"
+        :title="isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+        class="absolute top-8 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-neutral-2 bg-neutral-1 text-text-1 shadow-md transition-all duration-300 hover:bg-neutral-2"
+        :class="isCollapsed ? 'left-2' : '-right-5'"
+        @click="toggleSidebar"
+      >
+        <Icon
+          :name="
+            isCollapsed
+              ? 'material-symbols-light:chevron-right'
+              : 'material-symbols-light:chevron-left'
+          "
+          size="24"
+        />
+      </button>
     </aside>
 
     <div

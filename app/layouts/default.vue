@@ -9,6 +9,7 @@ const user = useSupabaseUser();
 const avatarButtonRef = useTemplateRef("avatar-button");
 
 const isUserMenuOpen = ref(false);
+const isSidebarCollapsed = useState("sidebar-collapsed", () => false);
 
 const themeName = computed(() => {
   return theme.value[0].toUpperCase() + theme.value.slice(1);
@@ -30,10 +31,11 @@ async function signOut() {
   <main class="font-sans min-h-screen bg-neutral-0 text-text-0">
     <NavBar />
 
-    <div class="lg:pl-64">
-      <header
-        class="flex items-center max-w-6xl mx-auto px-4 lg:px-8 pt-5"
-      >
+    <div
+      class="transition-all duration-300"
+      :class="isSidebarCollapsed ? 'lg:pl-0' : 'lg:pl-64'"
+    >
+      <header class="flex items-center max-w-6xl mx-auto px-4 lg:px-8 pt-5">
         <GroupScopeSwitcher />
 
         <button
