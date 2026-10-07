@@ -35,8 +35,8 @@ const name = computed<string>(() => {
     <label v-if="label" :for="name" class="text-text-0">{{ label }}</label>
     <div
       data-testid="input-wrapper-el"
-      class="mt-1 relative"
-      :class="{ 'mb-5': !noError, 'mb-1': noError }"
+      class="relative"
+      :class="{ 'mb-5': !noError, 'mb-0': noError, 'mt-1': !!label }"
     >
       <div
         v-if="$slots.prepend"
