@@ -54,7 +54,7 @@ export default defineComponent({
         <div
           id={popoverId}
           ref="popover"
-          class="rounded-2xl shadow-lg bg-neutral-2"
+          class="rounded-2xl shadow-lg bg-neutral-2 overflow-visible"
           popover=""
           style={{
             positionArea: props.position,
