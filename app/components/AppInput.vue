@@ -36,7 +36,7 @@ const name = computed<string>(() => {
     <div
       data-testid="input-wrapper-el"
       class="relative"
-      :class="{ 'mb-5': !noError, 'mb-0': noError, 'mt-1': !!label }"
+      :class="{ 'mb-5': !noError, 'mt-1': !!label }"
     >
       <div
         v-if="$slots.prepend"
