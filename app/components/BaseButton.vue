@@ -38,7 +38,7 @@ const classes = computed(() => {
   calculatedClasses.regular.push(...[`bg-${color}`, `hover:bg-${hover}`]);
 
   if (props.icon) {
-    calculatedClasses[props.variant].push("px-2", "py-2", "rounded-full");
+    calculatedClasses[props.variant].push("p-2", "rounded-full");
   } else {
     calculatedClasses[props.variant].push("px-3", "py-2", "rounded-xl");
   }
