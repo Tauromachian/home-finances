@@ -273,6 +273,7 @@ onBeforeMount(() => {
           <div class="flex justify-between">
             <AppInput
               v-model="search"
+              no-error
               class="min-w-100"
               placeholder="Search expenses"
             >
