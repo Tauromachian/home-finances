@@ -270,7 +270,7 @@ onBeforeMount(() => {
     <div v-if="activeTab === 'manage'" class="flex flex-col gap-5">
       <AppCard>
         <AppCardBody>
-          <div class="flex justify-between">
+          <div class="flex">
             <AppInput
               v-model="search"
               no-error
