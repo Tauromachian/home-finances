@@ -38,7 +38,7 @@ function executeAction(action: "delete" | "edit") {
 
         <AppMenu>
           <template #activator>
-            <BaseButton variant="outlined" class="flex items-center" icon>
+            <BaseButton variant="outlined" icon>
               <Icon
                 name="material-symbols-light:more-vert"
                 size="20"
