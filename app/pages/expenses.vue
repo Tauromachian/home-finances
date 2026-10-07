@@ -282,7 +282,27 @@ onBeforeMount(() => {
               </template>
             </AppInput>
 
-            <BaseButton class="mb-5" @click="openForm('insert')">
+            <AppMenu min-width="300px">
+              <template #activator>
+                <BaseButton icon class="ml-5 h-fit">
+                  <Icon
+                    size="24"
+                    name="material-symbols-light:filter-list"
+                  ></Icon>
+                </BaseButton>
+              </template>
+
+              <AppCardBody>
+                <AppCard>
+                  <AppDatePicker label="Start Date"></AppDatePicker>
+                  <AppDatePicker label="End Date"></AppDatePicker>
+
+                  <BaseButton>Apply</BaseButton>
+                </AppCard>
+              </AppCardBody>
+            </AppMenu>
+
+            <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
               <span class="text-xl">+</span> Add Expense
             </BaseButton>
           </div>
