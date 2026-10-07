@@ -1,17 +1,17 @@
 import { cloneVNode, type Slot } from "vue";
 
-const positions = [
-  "top left",
-  "top",
-  "top right",
-  "bottom left",
-  "bottom",
-  "bottom right",
+const _physicalValues = [
   "left",
+  "center",
   "right",
+  "top",
+  "center",
+  "bottom",
 ] as const;
 
-type MenuPosition = (typeof positions)[number];
+type PhysicalValue = (typeof _physicalValues)[number];
+
+type Position = PhysicalValue | `${PhysicalValue} ${PhysicalValue}`;
 
 function makeActivator(slot: Slot | undefined, id: string): VNode | undefined {
   if (!slot && import.meta.dev) {
@@ -39,13 +39,7 @@ function makeActivator(slot: Slot | undefined, id: string): VNode | undefined {
 
 export default defineComponent({
   props: {
-    position: {
-      type: String as PropType<MenuPosition>,
-      default: "bottom left",
-      validator(value: string | undefined) {
-        return positions.includes(value as MenuPosition);
-      },
-    },
+    position: { type: Object as PropType<Position>, default: "bottom left" },
   },
   setup(props, { slots }) {
     const popoverId = useId();
