@@ -40,6 +40,7 @@ function makeActivator(slot: Slot | undefined, id: string): VNode | undefined {
 export default defineComponent({
   props: {
     position: { type: Object as PropType<Position>, default: "bottom left" },
+    minWidth: { type: [Number, String], default: undefined },
   },
   setup(props, { slots }) {
     const popoverId = useId();
@@ -55,7 +56,10 @@ export default defineComponent({
           ref="popover"
           class="rounded-2xl shadow-lg bg-neutral-2"
           popover=""
-          style={{ positionArea: props.position }}
+          style={{
+            positionArea: props.position,
+            "min-width": props.minWidth ?? "unset",
+          }}
         >
           {slots.default()}
         </div>
