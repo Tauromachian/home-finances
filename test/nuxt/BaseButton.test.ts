@@ -54,6 +54,14 @@ describe("BaseButton.vue", () => {
     expect(wrapper.classes()).toContain("rounded-full");
   });
 
+  it("Centers icon content with flex to keep the button square", () => {
+    const wrapper = mount(BaseButton, { props: { icon: true } });
+
+    expect(wrapper.classes()).toContain("flex");
+    expect(wrapper.classes()).toContain("items-center");
+    expect(wrapper.classes()).toContain("justify-center");
+  });
+
   it("Renders text variant correctly", () => {
     const wrapper = mount(BaseButton, { props: { variant: "text" } });
 
