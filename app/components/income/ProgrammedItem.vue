@@ -11,10 +11,6 @@ const emit = defineEmits<{
   edit: [id: number | string];
 }>();
 
-const buttonRef = useTemplateRef("buttonRef");
-
-const isActionsMenuOpen = ref(false);
-
 const chargeSchedule = computed(() => {
   if (income.chargeDay == null) return "";
 
@@ -67,34 +63,26 @@ function executeAction(action: "delete" | "edit") {
 
         <p class="font-serif text-text-1 mr-4 text-lg">€{{ income.amount }}</p>
 
-        <BaseButton
-          ref="buttonRef"
-          variant="outlined"
-          class="flex items-center"
-          icon
-          @click="isActionsMenuOpen = true"
-        >
-          <Icon
-            name="material-symbols-light:more-vert"
-            size="20"
-            class="w-10 h-10 text-accent-0 hover:text-accent-1 transition-all duration-100 ease-in-out"
-          />
-        </BaseButton>
+        <AppMenu>
+          <template #activator>
+            <BaseButton variant="outlined" class="flex items-center" icon>
+              <Icon
+                name="material-symbols-light:more-vert"
+                size="20"
+                class="w-10 h-10 text-accent-0 hover:text-accent-1 transition-all duration-100 ease-in-out"
+              />
+            </BaseButton>
+          </template>
+
+          <BaseList
+            :items="[
+              { name: 'Edit', id: 'edit' },
+              { name: 'Delete', id: 'delete' },
+            ]"
+            @click="executeAction"
+          ></BaseList>
+        </AppMenu>
       </div>
     </AppCardBody>
-
-    <AppMenu
-      v-model="isActionsMenuOpen"
-      location="bottom right"
-      :target="buttonRef"
-    >
-      <BaseList
-        :items="[
-          { name: 'Edit', id: 'edit' },
-          { name: 'Delete', id: 'delete' },
-        ]"
-        @click="executeAction"
-      ></BaseList>
-    </AppMenu>
   </AppCard>
 </template>
