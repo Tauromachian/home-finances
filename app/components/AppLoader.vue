@@ -6,10 +6,12 @@ const { size = "18" } = defineProps<{
 
 <template>
   <div class="flex items-center justify-center">
-    <Icon
-      name="material-symbols-light:progress-activity"
-      class="animate-spin size-24"
-      :size
-    />
+    <ClientOnly>
+      <Icon
+        name="material-symbols-light:progress-activity"
+        class="animate-spin size-24"
+        :size
+      />
+    </ClientOnly>
   </div>
 </template>
