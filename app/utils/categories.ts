@@ -22,7 +22,7 @@ export const expensesCategories: Category[] = [
     name: "Travel",
   },
   {
-    icon: "mdi:heart-plus",
+    icon: "material-symbols-light:heart-plus",
     color: "#8b5cf6",
     name: "Health",
   },
