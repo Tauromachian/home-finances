@@ -51,6 +51,9 @@ const programmedExpenses = ref<ProgrammedExpense[]>([]);
 const isLoading = ref(false);
 const search = ref("");
 
+const filterStartDate = ref("");
+const filterEndDate = ref("");
+
 const { inScope, activeGroupId } = useGroups();
 
 const scopedExpenses = computed(() => inScope(expenses.value));
@@ -78,9 +81,13 @@ const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
   reportRange,
 );
 
-async function loadExpenses(search?: string) {
+async function loadExpenses(filters?: {
+  search?: string;
+  startDate?: string;
+  endDate?: string;
+}) {
   isLoading.value = true;
-  expenses.value = await fetchExpenses(search);
+  expenses.value = await fetchExpenses({ ...filters });
   isLoading.value = false;
 }
 
@@ -98,7 +105,7 @@ const activeFormRef = computed(() =>
 );
 
 watch(search, (value) => {
-  debounce(() => loadExpenses(value));
+  debounce(() => loadExpenses({ search: value }));
 });
 
 const appToaster = inject<Ref>("appToaster");
@@ -134,6 +141,13 @@ const isConfirmationDialogOpen = ref(false);
 
 let selectedId: number | string = "";
 const formMode = ref<FormMode>("insert");
+
+function applyFilters() {
+  loadExpenses({
+    startDate: filterStartDate.value,
+    endDate: filterEndDate.value,
+  });
+}
 
 function showMessage(message: string) {
   isOpen.value = false;
@@ -292,14 +306,24 @@ onBeforeMount(() => {
                 </BaseButton>
               </template>
 
-              <AppCardBody>
-                <AppCard>
-                  <AppDatePicker label="Start Date"></AppDatePicker>
-                  <AppDatePicker label="End Date"></AppDatePicker>
+              <AppCard>
+                <AppCardBody>
+                  <AppDatePicker
+                    v-model="filterStartDate"
+                    label="Start Date"
+                  ></AppDatePicker>
+                  <AppDatePicker
+                    v-model="filterEndDate"
+                    label="End Date"
+                  ></AppDatePicker>
 
-                  <BaseButton>Apply</BaseButton>
-                </AppCard>
-              </AppCardBody>
+                  <div class="flex">
+                    <BaseButton class="ml-auto" @click="applyFilters">
+                      Apply
+                    </BaseButton>
+                  </div>
+                </AppCardBody>
+              </AppCard>
             </AppMenu>
 
             <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
