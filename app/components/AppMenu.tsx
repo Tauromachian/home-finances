@@ -1,3 +1,4 @@
+import { removeListener } from "node:cluster";
 import { cloneVNode, type Slot } from "vue";
 
 const _physicalValues = [
@@ -39,13 +40,47 @@ function makeActivator(slot: Slot | undefined, id: string): VNode | undefined {
 
 export default defineComponent({
   props: {
+    modelValue: { type: Boolean, default: false },
     position: { type: Object as PropType<Position>, default: "bottom left" },
     minWidth: { type: [Number, String], default: undefined },
   },
-  setup(props, { slots }) {
+  emits: ["update:modelValue"],
+  setup(props, { emit, slots }) {
     const popoverId = useId();
 
+    const popoverRef = useTemplateRef<HTMLElement>("popover");
+
     const activator = makeActivator(slots.activator, popoverId);
+
+    const isOpen = computed({
+      get() {
+        return props.modelValue;
+      },
+      set(val) {
+        emit("update:modelValue", val);
+      },
+    });
+
+    watch(isOpen, (val) => {
+      if (val) {
+        popoverRef.value.showPopover();
+      } else {
+        popoverRef.value.hidePopover();
+      }
+    });
+
+    function togglePopover(event: ToggleEvent) {
+      if (event.newState === "open") {
+        isOpen.value = true;
+      } else {
+        isOpen.value = false;
+      }
+    }
+
+    onMounted(() => popoverRef.value.addEventListener("toggle", togglePopover));
+    onBeforeUnmount(() => {
+      popoverRef.value.removeEventListener("toggle", togglePopover);
+    });
 
     return () => (
       <>
