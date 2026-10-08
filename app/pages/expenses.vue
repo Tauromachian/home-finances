@@ -42,7 +42,7 @@ const { inScope, activeGroupId } = useGroups();
 
 const expenses = ref<Expense[]>([]);
 const programmedExpenses = ref<ProgrammedExpense[]>([]);
-const isLoading = ref(false);
+const isLoading = ref(true);
 
 const scopedExpenses = computed(() => inScope(expenses.value));
 const scopedProgrammedExpenses = computed(() =>

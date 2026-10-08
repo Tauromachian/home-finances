@@ -39,7 +39,7 @@ const activeTab = computed<IncomesTab>({
 
 const incomes = ref<Income[]>([]);
 const programmedIncomes = ref<ProgrammedIncome[]>([]);
-const isLoading = ref(false);
+const isLoading = ref(true);
 
 const { inScope, activeGroupId } = useGroups();
 
