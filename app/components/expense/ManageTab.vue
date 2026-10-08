@@ -18,6 +18,9 @@ const emit = defineEmits<{
 }>();
 
 const filters = reactive<Filter>({});
+
+const isMenuOpen = ref(false);
+
 const debounce = makeDebounce();
 
 watch(
@@ -29,6 +32,7 @@ watch(
 
 function applyFilters() {
   emit("filter-change", { ...filters });
+  isMenuOpen.value = false;
 }
 </script>
 
@@ -48,7 +52,7 @@ function applyFilters() {
             </template>
           </AppInput>
 
-          <AppMenu min-width="300px">
+          <AppMenu v-model="isMenuOpen" min-width="300px">
             <template #activator>
               <BaseButton icon class="ml-5 h-fit">
                 <Icon
