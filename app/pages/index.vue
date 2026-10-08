@@ -26,7 +26,7 @@ const cashflowColor = computed(() =>
 );
 
 async function loadExpenses() {
-  expenses.value = await fetchExpenses();
+  expenses.value = await fetchExpenses({});
 }
 
 async function loadIncomes() {
