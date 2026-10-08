@@ -1,3 +1,4 @@
+import type { Filter } from "~/types/filter";
 import type { Expense } from "../types/expense";
 import {
   elapsedMonths,
@@ -22,10 +23,13 @@ export const MONTH_LABELS = [
   "Dec",
 ];
 
-export async function getExpenses(search?: string): Promise<Expense[]> {
+export async function getExpenses(filters?: Filter): Promise<Expense[]> {
   let URL = "/api/expenses";
 
-  if (search) URL += `?search=${search}`;
+  if (filters) {
+    const queryString = new URLSearchParams(filters);
+    URL += `?${queryString.toString()}`;
+  }
 
   const res = await fetch(URL);
   const data = await res.json();
