@@ -1,4 +1,3 @@
-import { removeListener } from "node:cluster";
 import { cloneVNode, type Slot } from "vue";
 
 const _physicalValues = [
@@ -41,7 +40,7 @@ function makeActivator(slot: Slot | undefined, id: string): VNode | undefined {
 export default defineComponent({
   props: {
     modelValue: { type: Boolean, default: false },
-    position: { type: Object as PropType<Position>, default: "bottom left" },
+    position: { type: String as PropType<Position>, default: "bottom left" },
     minWidth: { type: [Number, String], default: undefined },
   },
   emits: ["update:modelValue"],
