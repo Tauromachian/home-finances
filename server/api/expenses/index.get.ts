@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull, like, or } from "drizzle-orm";
+import { and, eq, inArray, isNull, like, or, gte, lte } from "drizzle-orm";
 
 import { db } from "../../orm";
 
@@ -11,20 +11,20 @@ export default defineEventHandler(async (event) => {
 
   const query = getQuery(event);
 
-  let andBuilder;
+  const isUserIdEqual = eq(expensesTable.userId, user.id);
+  const isGroupIdNull = isNull(expensesTable.groupId);
 
-  if (query.search) {
-    andBuilder = and(
-      eq(expensesTable.userId, user.id),
-      isNull(expensesTable.groupId),
-      like(expensesTable.name, `%${query.search}%`),
-    );
-  } else {
-    andBuilder = and(
-      eq(expensesTable.userId, user.id),
-      isNull(expensesTable.groupId),
-    );
-  }
+  const andBuilder = and(
+    isUserIdEqual,
+    isGroupIdNull,
+    query.search ? like(expensesTable.name, `%${query.search}%`) : undefined,
+    query.startDate
+      ? gte(expensesTable.expenseDate, query.startDate as string)
+      : undefined,
+    query.endDate
+      ? lte(expensesTable.expenseDate, query.endDate as string)
+      : undefined,
+  );
 
   const expenses = await db
     .select()
