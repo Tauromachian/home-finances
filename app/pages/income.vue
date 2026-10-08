@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import {
-  defaultReportRange,
-  endOfThisMonth,
-  parseIsoDate,
-} from "~/utils/period";
 import { getIncomes as fetchIncomes } from "~/services/incomes";
 import { getProgrammedIncomes as fetchProgrammedIncomes } from "~/services/programmedIncomes";
 import { INCOME_COLUMNS } from "~/utils/spreadsheet";
@@ -51,26 +46,6 @@ const { inScope, activeGroupId } = useGroups();
 const scopedIncomes = computed(() => inScope(incomes.value));
 const scopedProgrammedIncomes = computed(() =>
   inScope(programmedIncomes.value),
-);
-
-const reportDefaults = defaultReportRange();
-const reportStart = ref(reportDefaults.start);
-const reportEnd = ref(reportDefaults.end);
-
-// Clearing a picker leaves that side empty; resolve it back to the
-// default so stats and charts always share the same range.
-const reportRange = computed(() => {
-  const end = reportEnd.value || endOfThisMonth();
-  const endYear = parseIsoDate(end)?.year ?? new Date().getFullYear();
-  const start = reportStart.value || `${endYear}-01-01`;
-
-  return { start, end };
-});
-
-const { totalIncomes, yearToDateIncomes } = useIncomes(
-  scopedIncomes,
-  new Date(),
-  reportRange,
 );
 
 async function loadIncomes() {
@@ -256,61 +231,23 @@ onBeforeMount(() => {
       </BaseButtonGroup>
     </div>
 
-    <div v-if="activeTab === 'manage'" class="flex flex-col gap-5">
-      <AppCard>
-        <AppCardBody>
-          <div class="flex">
-            <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
-              <span class="text-xl">+</span> Add Income
-            </BaseButton>
-          </div>
-          <div class="flex flex-col gap-3" data-testid="incomes-items">
-            <IncomeItem
-              v-for="income in scopedIncomes"
-              :key="income.id"
-              :income="income"
-              variant="outlined"
-              @delete="(id) => openDeleteConfirmationDialog(id, 'actual')"
-              @edit="openForm('edit', income)"
-            ></IncomeItem>
-          </div>
+    <IncomeManageTab
+      v-if="activeTab === 'manage'"
+      :incomes="scopedIncomes"
+      :is-loading="isLoading"
+      @add="openForm('insert')"
+      @edit="(income) => openForm('edit', income)"
+      @delete="(id) => openDeleteConfirmationDialog(id, 'actual')"
+    />
 
-          <AppLoader v-if="isLoading" size="70" class="my-10"></AppLoader>
-
-          <EmptyState v-else-if="!scopedIncomes?.length">
-            <p>No incomes! Add one</p>
-          </EmptyState>
-        </AppCardBody>
-      </AppCard>
-    </div>
-
-    <div v-else-if="activeTab === 'frequent'" class="flex flex-col gap-5">
-      <AppCard>
-        <AppCardBody>
-          <div class="flex">
-            <BaseButton class="mb-5 ml-auto" @click="openForm('insert')">
-              <span class="text-xl">+</span> Program Income
-            </BaseButton>
-          </div>
-          <div class="flex flex-col gap-3" data-testid="frequent-incomes-items">
-            <IncomeProgrammedItem
-              v-for="income in scopedProgrammedIncomes"
-              :key="income.id"
-              :income="income"
-              variant="outlined"
-              @delete="(id) => openDeleteConfirmationDialog(id, 'programmed')"
-              @edit="openForm('edit', income)"
-            ></IncomeProgrammedItem>
-          </div>
-
-          <AppLoader v-if="isLoading" size="70" class="my-10"></AppLoader>
-
-          <EmptyState v-else-if="!scopedProgrammedIncomes?.length">
-            <p>No frequent incomes! Add one</p>
-          </EmptyState>
-        </AppCardBody>
-      </AppCard>
-    </div>
+    <IncomeFrequentTab
+      v-else-if="activeTab === 'frequent'"
+      :incomes="scopedProgrammedIncomes"
+      :is-loading="isLoading"
+      @add="openForm('insert')"
+      @edit="(income) => openForm('edit', income)"
+      @delete="(id) => openDeleteConfirmationDialog(id, 'programmed')"
+    />
 
     <div v-else-if="activeTab === 'import-export'">
       <ImportExportTab
@@ -323,64 +260,7 @@ onBeforeMount(() => {
       />
     </div>
 
-    <div v-else class="flex flex-col gap-5">
-      <AppCard>
-        <AppCardBody>
-          <div
-            class="grid sm:grid-cols-2 gap-x-5"
-            data-testid="reports-time-filter"
-          >
-            <div data-testid="reports-start-date">
-              <AppDatePicker
-                v-model="reportStart"
-                label="Start date"
-                placeholder="Select start date"
-                :max="reportRange.end"
-              />
-            </div>
-            <div data-testid="reports-end-date">
-              <AppDatePicker
-                v-model="reportEnd"
-                label="End date"
-                placeholder="Select end date"
-                :min="reportRange.start"
-              />
-            </div>
-          </div>
-        </AppCardBody>
-      </AppCard>
-
-      <div class="grid md:grid-cols-2 gap-5">
-        <AppCard>
-          <AppCardBody>
-            <p class="text-sm">Total Incomes</p>
-            <p
-              class="text-3xl font-serif text-accent-0 mt-2"
-              data-testid="reports-total"
-            >
-              €{{ totalIncomes.toFixed(2) }}
-            </p>
-          </AppCardBody>
-        </AppCard>
-        <AppCard>
-          <AppCardBody>
-            <p class="text-sm">Entries</p>
-            <p class="text-3xl font-serif mt-2 text-text-1">
-              {{ yearToDateIncomes.length }}
-            </p>
-          </AppCardBody>
-        </AppCard>
-      </div>
-
-      <div
-        v-if="!yearToDateIncomes?.length"
-        class="flex flex-col items-center gap-5 justify-center my-6"
-      >
-        <Icon size="48" name="material-symbols-light:note-outline"></Icon>
-
-        <p>No incomes in this period! Add one</p>
-      </div>
-    </div>
+    <IncomeReportsTab v-else :incomes="scopedIncomes" />
 
     <DialogConfirmDelete
       v-model="isConfirmationDialogOpen"
