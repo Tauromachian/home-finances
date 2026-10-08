@@ -9,7 +9,7 @@ import type { Income } from "~/types/income";
 const expenses = ref<Expense[]>([]);
 const incomes = ref<Income[]>([]);
 
-const { inScope, activeGroup } = useGroups();
+const { inScope } = useGroups();
 
 const scopedExpenses = computed(() => inScope(expenses.value));
 const scopedIncomes = computed(() => inScope(incomes.value));
