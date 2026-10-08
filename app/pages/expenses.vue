@@ -12,6 +12,7 @@ import { makeDebounce } from "~/utils/debounce";
 
 import type { Expense, ProgrammedExpense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
+import type { Filter } from "~/types/filter";
 
 type FormMode = "edit" | "insert";
 type FormKind = "actual" | "programmed";
@@ -46,15 +47,13 @@ const activeTab = computed<ExpensesTab>({
   },
 });
 
+const { inScope, activeGroupId } = useGroups();
+
+const filters = reactive<Filter>({});
+
 const expenses = ref<Expense[]>([]);
 const programmedExpenses = ref<ProgrammedExpense[]>([]);
 const isLoading = ref(false);
-const search = ref("");
-
-const filterStartDate = ref("");
-const filterEndDate = ref("");
-
-const { inScope, activeGroupId } = useGroups();
 
 const scopedExpenses = computed(() => inScope(expenses.value));
 const scopedProgrammedExpenses = computed(() =>
@@ -81,13 +80,9 @@ const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
   reportRange,
 );
 
-async function loadExpenses(filters?: {
-  search?: string;
-  startDate?: string;
-  endDate?: string;
-}) {
+async function loadExpenses(filter?: Filter) {
   isLoading.value = true;
-  expenses.value = await fetchExpenses({ ...filters });
+  expenses.value = await fetchExpenses({ ...filter });
   isLoading.value = false;
 }
 
@@ -104,9 +99,12 @@ const activeFormRef = computed(() =>
   formKind.value === "programmed" ? programmedFormRef.value : formRef.value,
 );
 
-watch(search, (value) => {
-  debounce(() => loadExpenses({ search: value }));
-});
+watch(
+  () => filters.search,
+  () => {
+    debounce(() => loadExpenses(filters));
+  },
+);
 
 const appToaster = inject<Ref>("appToaster");
 
@@ -143,10 +141,7 @@ let selectedId: number | string = "";
 const formMode = ref<FormMode>("insert");
 
 function applyFilters() {
-  loadExpenses({
-    startDate: filterStartDate.value,
-    endDate: filterEndDate.value,
-  });
+  loadExpenses(filters);
 }
 
 function showMessage(message: string) {
@@ -286,7 +281,7 @@ onBeforeMount(() => {
         <AppCardBody>
           <div class="flex">
             <AppInput
-              v-model="search"
+              v-model="filters.search"
               no-error
               class="min-w-100"
               placeholder="Search expenses"
@@ -309,11 +304,11 @@ onBeforeMount(() => {
               <AppCard>
                 <AppCardBody>
                   <AppDatePicker
-                    v-model="filterStartDate"
+                    v-model="filters.startDate"
                     label="Start Date"
                   ></AppDatePicker>
                   <AppDatePicker
-                    v-model="filterEndDate"
+                    v-model="filters.endDate"
                     label="End Date"
                   ></AppDatePicker>
 
