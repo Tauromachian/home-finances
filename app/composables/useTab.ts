@@ -1,8 +1,8 @@
-export function useTab(defaultTab: string, tabs: readonly string[]) {
+export function useTab<T extends string>(defaultTab: T, tabs: readonly T[]) {
   const route = useRoute();
   const router = useRouter();
 
-  const activeTab = computed({
+  const activeTab = computed<T>({
     get: () => {
       const found = tabs.find((tab: string) => tab === route.query.tab);
 
@@ -10,7 +10,7 @@ export function useTab(defaultTab: string, tabs: readonly string[]) {
 
       return defaultTab;
     },
-    set: (tab: string) => {
+    set: (tab: T) => {
       const query = { ...route.query };
 
       if (tab === defaultTab) {
