@@ -8,34 +8,12 @@ import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
 type FormKind = "actual" | "programmed";
-type IncomesTab = "manage" | "frequent" | "reports" | "import-export";
 
-const route = useRoute();
-const router = useRouter();
+const INCOME_TABS = ["manage", "frequent", "reports", "import-export"] as const;
 
 // Sub-view is persisted in the query string (?tab=reports), so it
 // survives reloads and can be shared. Defaults to "manage".
-const activeTab = computed<IncomesTab>({
-  get: () =>
-    route.query.tab === "reports"
-      ? "reports"
-      : route.query.tab === "frequent"
-        ? "frequent"
-        : route.query.tab === "import-export"
-          ? "import-export"
-          : "manage",
-  set: (tab: IncomesTab) => {
-    const query = { ...route.query };
-
-    if (tab === "manage") {
-      delete query.tab;
-    } else {
-      query.tab = tab;
-    }
-
-    router.replace({ query });
-  },
-});
+const { activeTab } = useTab("manage", INCOME_TABS);
 
 const incomes = ref<Income[]>([]);
 const programmedIncomes = ref<ProgrammedIncome[]>([]);

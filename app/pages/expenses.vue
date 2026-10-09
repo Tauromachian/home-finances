@@ -9,34 +9,10 @@ import type { Filter } from "~/types/filter";
 
 type FormMode = "edit" | "insert";
 type FormKind = "actual" | "programmed";
-type ExpensesTab = "manage" | "frequent" | "reports" | "import-export";
 
-const route = useRoute();
-const router = useRouter();
+const tabs = ["manage", "frequent", "reports", "import-export"] as const;
 
-// Sub-view is persisted in the query string (?tab=reports), so it
-// survives reloads and can be shared. Defaults to "manage".
-const activeTab = computed<ExpensesTab>({
-  get: () =>
-    route.query.tab === "reports"
-      ? "reports"
-      : route.query.tab === "frequent"
-        ? "frequent"
-        : route.query.tab === "import-export"
-          ? "import-export"
-          : "manage",
-  set: (tab: ExpensesTab) => {
-    const query = { ...route.query };
-
-    if (tab === "manage") {
-      delete query.tab;
-    } else {
-      query.tab = tab;
-    }
-
-    router.replace({ query });
-  },
-});
+const { activeTab } = useTab("manage", tabs);
 
 const { inScope, activeGroupId } = useGroups();
 
