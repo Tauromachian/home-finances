@@ -201,30 +201,31 @@ onBeforeMount(() => {
   <div>
     <div class="flex items-center mb-5">
       <BaseButtonGroup
+        v-model="activeTab"
         aria-label="Incomes view"
         data-testid="incomes-view-toggle"
       >
         <BaseButton
           :variant="activeTab === 'manage' ? 'regular' : 'outlined'"
-          @click="activeTab = 'manage'"
+          value="manage"
         >
           Manage
         </BaseButton>
         <BaseButton
           :variant="activeTab === 'frequent' ? 'regular' : 'outlined'"
-          @click="activeTab = 'frequent'"
+          value="frequent"
         >
           Frequent
         </BaseButton>
         <BaseButton
           :variant="activeTab === 'reports' ? 'regular' : 'outlined'"
-          @click="activeTab = 'reports'"
+          value="reports"
         >
           Reports
         </BaseButton>
         <BaseButton
           :variant="activeTab === 'import-export' ? 'regular' : 'outlined'"
-          @click="activeTab = 'import-export'"
+          value="import-export"
         >
           Import / Export
         </BaseButton>
