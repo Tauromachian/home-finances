@@ -10,6 +10,8 @@ export type Income = {
   groupId?: number;
 };
 
+export type FormIncome = Omit<Income, "id" | "userId">;
+
 export type ProgrammedIncome = {
   id?: string | number;
   name: string;
