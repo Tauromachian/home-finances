@@ -1,13 +1,15 @@
 import { db } from "@@/server/orm";
 
 import { groupsTable, usersGroupsTable } from "@@/server/db/schema";
+import { Group } from "@@/server/dtos/group";
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user;
 
   const body = await readBody(event);
 
-  if (!body?.name || typeof body.name !== "string") {
+  const res = Group.omit({ id: true }).safeParse(body);
+  if (!res.success) {
     throw createError({ statusCode: 400, message: "name is required" });
   }
 
