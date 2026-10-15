@@ -1,12 +1,13 @@
 import type { Frequency } from "./frequency";
 
 export type Income = {
-  id?: string | number;
+  id: string | number;
+  userId: string;
   name: string;
   amount: number;
   incomeDate: string;
   description: string;
-  groupId: number | null;
+  groupId?: number;
 };
 
 export type ProgrammedIncome = {
