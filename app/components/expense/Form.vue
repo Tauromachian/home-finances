@@ -4,16 +4,16 @@ import { Form } from "vee-validate";
 import { required, positiveNumber } from "@/utils/rules";
 import { expensesCategories } from "@/utils/categories";
 
-import type { Expense } from "~/types/expense";
+import type { FormExpense } from "~/types/expense";
 
 type FormMode = "edit" | "insert";
 
 defineProps<{ formMode: FormMode }>();
 
-const modelValue = defineModel<Expense>();
+const modelValue = defineModel<FormExpense>();
 
 const emit = defineEmits<{
-  submit: [expense: Expense];
+  submit: [expense: FormExpense];
 }>();
 
 const formRef = useTemplateRef<typeof Form>("formRef");
@@ -52,7 +52,7 @@ const sharedGroupId = computed({
   },
 });
 
-function onSubmit(values: Expense) {
+function onSubmit(values: FormExpense) {
   if (!actualDate.value) {
     dateError.value = "Date is required";
     return;

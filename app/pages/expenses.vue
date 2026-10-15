@@ -3,7 +3,7 @@ import { getExpenses as fetchExpenses } from "~/services/expenses";
 import { getProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
 import { EXPENSE_COLUMNS } from "~/utils/spreadsheet";
 
-import type { Expense, ProgrammedExpense } from "~/types/expense";
+import type { Expense, FormExpense, ProgrammedExpense } from "~/types/expense";
 import { Frequency } from "~/types/frequency";
 import type { Filter } from "~/types/filter";
 
@@ -46,7 +46,7 @@ const activeFormRef = computed(() =>
 
 const appToaster = inject<Ref>("appToaster");
 
-const EMPTY_EXPENSE: Expense = {
+const EMPTY_EXPENSE: FormExpense = {
   name: "",
   amount: 0,
   category: "",
@@ -65,7 +65,7 @@ const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
   groupId: null,
 };
 
-const expenseForm = ref<Expense>({ ...EMPTY_EXPENSE });
+const expenseForm = ref<FormExpense>({ ...EMPTY_EXPENSE });
 const programmedExpenseForm = ref<ProgrammedExpense>({
   ...EMPTY_PROGRAMMED_EXPENSE,
 });
@@ -85,7 +85,7 @@ function showMessage(message: string) {
   appToaster.value.openToast(message);
 }
 
-async function submitForm(form: Expense | ProgrammedExpense) {
+async function submitForm(form: Expense | ProgrammedExpense | FormExpense) {
   const isProgrammed = formKind.value === "programmed";
   const url = isProgrammed ? "/api/programmed-expenses" : "/api/expenses";
 
