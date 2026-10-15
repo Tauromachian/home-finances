@@ -52,7 +52,6 @@ const EMPTY_EXPENSE: Expense = {
   category: "",
   expenseDate: "",
   description: "",
-  groupId: null,
 };
 
 const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
