@@ -7,7 +7,7 @@ export type Expense = {
   category: string;
   expenseDate: string;
   description: string;
-  groupId: number | null;
+  groupId?: number;
 };
 
 export type ProgrammedExpense = {
