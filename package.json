@@ -38,7 +38,8 @@
     "vue-router": "^4.5.0",
     "vue3-apexcharts": "^1.11.1",
     "vue3-easy-data-table": "^1.5.47",
-    "xlsx": "0.18.5"
+    "xlsx": "0.18.5",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@iconify-json/material-symbols-light": "^1.2.15",
