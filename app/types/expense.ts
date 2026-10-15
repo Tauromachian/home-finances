@@ -19,5 +19,5 @@ export type ProgrammedExpense = {
   description: string;
   chargeDay: number | null;
   chargeMonth: number | null;
-  groupId: number | null;
+  groupId?: number;
 };
