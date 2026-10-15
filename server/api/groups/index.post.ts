@@ -10,7 +10,11 @@ export default defineEventHandler(async (event) => {
 
   const res = Group.omit({ id: true }).safeParse(body);
   if (!res.success) {
-    throw createError({ statusCode: 400, message: "name is required" });
+    throw createError({
+      statusCode: 400,
+      message: "name is required",
+      data: res.error,
+    });
   }
 
   const [group] = await db
