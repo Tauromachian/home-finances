@@ -3,16 +3,16 @@ import { Form } from "vee-validate";
 
 import { required, positiveNumber } from "@/utils/rules";
 
-import type { Income } from "~/types/income";
+import type { FormIncome, Income } from "~/types/income";
 
 type FormMode = "edit" | "insert";
 
 defineProps<{ formMode: FormMode }>();
 
-const modelValue = defineModel<Income>();
+const modelValue = defineModel<FormIncome>();
 
 const emit = defineEmits<{
-  submit: [income: Income];
+  submit: [income: FormIncome];
 }>();
 
 const formRef = useTemplateRef<typeof Form>("formRef");

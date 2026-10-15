@@ -3,7 +3,7 @@ import { getIncomes as fetchIncomes } from "~/services/incomes";
 import { getProgrammedIncomes as fetchProgrammedIncomes } from "~/services/programmedIncomes";
 import { INCOME_COLUMNS } from "~/utils/spreadsheet";
 
-import type { Income, ProgrammedIncome } from "~/types/income";
+import type { FormIncome, Income, ProgrammedIncome } from "~/types/income";
 import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
@@ -47,12 +47,11 @@ const activeFormRef = computed(() =>
 
 const appToaster = inject<Ref>("appToaster");
 
-const EMPTY_INCOME: Income = {
+const EMPTY_INCOME: FormIncome = {
   name: "",
   amount: 0,
   incomeDate: "",
   description: "",
-  groupId: null,
 };
 
 const EMPTY_PROGRAMMED_INCOME: ProgrammedIncome = {
@@ -65,7 +64,7 @@ const EMPTY_PROGRAMMED_INCOME: ProgrammedIncome = {
   groupId: null,
 };
 
-const incomeForm = ref<Income>({ ...EMPTY_INCOME });
+const incomeForm = ref<FormIncome>({ ...EMPTY_INCOME });
 const programmedIncomeForm = ref<ProgrammedIncome>({
   ...EMPTY_PROGRAMMED_INCOME,
 });
@@ -85,7 +84,7 @@ function showMessage(message: string) {
   appToaster.value.openToast(message);
 }
 
-async function submitForm(form: Income | ProgrammedIncome) {
+async function submitForm(form: Income | ProgrammedIncome | FormIncome) {
   const isProgrammed = formKind.value === "programmed";
   const url = isProgrammed ? "/api/programmed-incomes" : "/api/incomes";
 
