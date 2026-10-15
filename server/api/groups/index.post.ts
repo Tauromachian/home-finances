@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
 
   const [group] = await db
     .insert(groupsTable)
-    .values({ name: body.name })
+    .values(res.data)
     .returning({ id: groupsTable.id, name: groupsTable.name });
 
   // Purely defensive should never happen unless there is a DB error
