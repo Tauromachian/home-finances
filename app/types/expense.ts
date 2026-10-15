@@ -1,7 +1,8 @@
 import type { Frequency } from "./frequency";
 
 export type Expense = {
-  id?: string | number;
+  id: string | number;
+  userId: string;
   name: string;
   amount: number;
   category: string;
