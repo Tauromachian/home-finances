@@ -11,6 +11,8 @@ export type Expense = {
   groupId?: number;
 };
 
+export type FormExpense = Omit<Expense, "id" | "userId">;
+
 export type ProgrammedExpense = {
   id?: string | number;
   name: string;
