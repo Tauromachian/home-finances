@@ -46,11 +46,11 @@ export async function createExpense(form: FormExpense): Promise<Expense> {
     body: JSON.stringify(form),
   });
 
-  const data = await res.json();
-
   if (!res.ok) {
     throw new FetchNotOkError(null, res.status);
   }
+
+  const data = await res.json();
 
   return data.data;
 }
