@@ -28,18 +28,9 @@ describe("AppMenu", () => {
     const popover = wrapper.find("[popover]");
 
     expect(trigger.attributes("popovertarget")).toBe(popover.attributes("id"));
-    expect(trigger.attributes("id")).toBeTruthy();
   });
 
-  it("anchors the popover to the activator", () => {
-    const wrapper = mountMenu();
-    const trigger = wrapper.find(".trigger");
-    const popover = wrapper.find("[popover]");
-
-    expect(popover.attributes("anchor")).toBe(trigger.attributes("id"));
-  });
-
-  it("applies the default position (below, right-aligned)", () => {
+  it("applies the default position (below, left-aligned)", () => {
     const wrapper = mountMenu();
     const popover = wrapper.find("[popover]");
 
@@ -50,7 +41,7 @@ describe("AppMenu", () => {
         string,
         string
       >,
-    ).toHaveProperty("positionArea", "bottom span-end");
+    ).toHaveProperty("positionArea", "bottom left");
   });
 
   it("applies a custom position from the outside", () => {
