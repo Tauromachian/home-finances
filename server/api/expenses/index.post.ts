@@ -25,5 +25,7 @@ export default defineEventHandler(async (event) => {
 
   const [inserted] = await db.insert(expensesTable).values(expense).returning();
 
+  setResponseStatus(event, 201);
+
   return { message: "Success", data: inserted };
 });
