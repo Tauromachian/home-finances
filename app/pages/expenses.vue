@@ -1,6 +1,16 @@
 <script setup lang="ts">
-import { getExpenses as fetchExpenses } from "~/services/expenses";
-import { getProgrammedExpenses as fetchProgrammedExpenses } from "~/services/programmedExpenses";
+import {
+  createExpense,
+  deleteExpense as removeExpense,
+  getExpenses as fetchExpenses,
+  updateExpense,
+} from "~/services/expenses";
+import {
+  createProgrammedExpense,
+  deleteProgrammedExpense as removeProgrammedExpense,
+  getProgrammedExpenses as fetchProgrammedExpenses,
+  updateProgrammedExpense,
+} from "~/services/programmedExpenses";
 import { EXPENSE_COLUMNS } from "~/utils/spreadsheet";
 
 import type { Expense, FormExpense, ProgrammedExpense } from "~/types/expense";
@@ -86,26 +96,21 @@ function showMessage(message: string) {
 
 async function submitForm(form: Expense | ProgrammedExpense | FormExpense) {
   const isProgrammed = formKind.value === "programmed";
-  const url = isProgrammed ? "/api/programmed-expenses" : "/api/expenses";
 
   if (formMode.value === "insert") {
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
+    if (isProgrammed) {
+      await createProgrammedExpense(form as ProgrammedExpense);
+    } else {
+      await createExpense(form as FormExpense);
+    }
 
     showMessage("New expense added!");
   } else {
-    await fetch(`${url}/${selectedId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
+    if (isProgrammed) {
+      await updateProgrammedExpense(selectedId, form as ProgrammedExpense);
+    } else {
+      await updateExpense(selectedId, form as FormExpense);
+    }
 
     showMessage("Expense edited");
   }
@@ -156,9 +161,13 @@ function openDeleteConfirmationDialog(id: string | number, kind: FormKind) {
 
 async function deleteExpense() {
   const isProgrammed = deleteKind.value === "programmed";
-  const url = isProgrammed ? "/api/programmed-expenses" : "/api/expenses";
 
-  await fetch(`${url}/${selectedId}`, { method: "DELETE" });
+  if (isProgrammed) {
+    await removeProgrammedExpense(selectedId);
+  } else {
+    await removeExpense(selectedId);
+  }
+
   isConfirmationDialogOpen.value = false;
 
   if (isProgrammed) {

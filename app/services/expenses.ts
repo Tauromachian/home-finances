@@ -1,5 +1,5 @@
 import type { Filter } from "~/types/filter";
-import type { Expense } from "../types/expense";
+import type { Expense, FormExpense } from "../types/expense";
 import {
   elapsedMonths,
   isInRange,
@@ -7,6 +7,7 @@ import {
   parseIsoDate,
   round2,
 } from "../utils/period";
+import { FetchNotOkError } from "~~/server/utils/errors";
 
 export const MONTH_LABELS = [
   "Jan",
@@ -34,6 +35,41 @@ export async function getExpenses(filters?: Filter): Promise<Expense[]> {
   const res = await fetch(URL);
   const data = await res.json();
   return data.data as Expense[];
+}
+
+export async function createExpense(form: FormExpense): Promise<Expense> {
+  const res = await fetch("/api/expenses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(form),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
+
+  return data;
+}
+
+export async function updateExpense(
+  id: number | string,
+  form: FormExpense,
+): Promise<void> {
+  await fetch(`/api/expenses/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(form),
+  });
+}
+
+export async function deleteExpense(id: number | string): Promise<void> {
+  await fetch(`/api/expenses/${id}`, { method: "DELETE" });
 }
 
 /**
