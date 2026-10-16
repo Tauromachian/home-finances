@@ -20,13 +20,12 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  data.groupId = await resolveGroupId(user.id, data);
-  const [insertedIncome] = await db
-    .insert(incomesTable)
-    .values(data)
-    .returning();
+  const income = res.data;
+  income.groupId = await resolveGroupId(user.id, data);
+
+  const [inserted] = await db.insert(incomesTable).values(data).returning();
 
   setResponseStatus(event, 201);
 
-  return { data: insertedIncome, message: "Success" };
+  return { message: "Success", data: inserted };
 });
