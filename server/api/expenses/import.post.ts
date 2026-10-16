@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
 
   const valid: {
     userId: string;
-    groupId?: number;
+    groupId?: number | null;
     name: string;
     amount: number;
     category: string;
