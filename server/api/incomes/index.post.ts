@@ -12,5 +12,7 @@ export default defineEventHandler(async (event) => {
 
   await db.insert(incomesTable).values(income);
 
+  setResponseStatus(event, 201);
+
   return { message: "Success" };
 });
