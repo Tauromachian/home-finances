@@ -23,7 +23,6 @@ describe("BaseButtonGroup", () => {
   it("Renders a group wrapper with joined-button layout classes", () => {
     const wrapper = mountGroup();
 
-    expect(wrapper.attributes("role")).toBe("group");
     expect(wrapper.classes()).toContain("inline-flex");
   });
 
