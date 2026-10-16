@@ -46,7 +46,7 @@ watch(actualDate, (date) => {
 
 // The share picker travels outside vee-validate state, like the date.
 const sharedGroupId = computed({
-  get: () => modelValue.value?.groupId ?? null,
+  get: () => modelValue.value?.groupId,
   set: (value: number | null) => {
     if (modelValue.value) modelValue.value.groupId = value;
   },
