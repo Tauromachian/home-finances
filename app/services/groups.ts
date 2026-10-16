@@ -1,16 +1,18 @@
 import type { Group, GroupMember } from "../types/group";
-
-async function handleResponse(res: Response, fallback: string) {
-  const data = await res.json().catch(() => null);
-
-  if (!res.ok) throw new Error(data?.message ?? fallback);
-
-  return data;
-}
+import { FetchNotOkError } from "~~/server/utils/errors";
 
 export async function getGroups(): Promise<Group[]> {
   const res = await fetch("/api/groups");
-  const data = await handleResponse(res, "Could not load groups");
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new FetchNotOkError(
+      data?.message ?? "Could not load groups",
+      res.status,
+    );
+  }
+
+  const data = await res.json();
   return data.data as Group[];
 }
 
@@ -20,18 +22,43 @@ export async function createGroup(name: string): Promise<Group> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
   });
-  const data = await handleResponse(res, "Could not create group");
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new FetchNotOkError(
+      data?.message ?? "Could not create group",
+      res.status,
+    );
+  }
+
+  const data = await res.json();
   return data.data as Group;
 }
 
 export async function deleteGroup(id: number): Promise<void> {
   const res = await fetch(`/api/groups/${id}`, { method: "DELETE" });
-  await handleResponse(res, "Could not delete group");
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new FetchNotOkError(
+      data?.message ?? "Could not delete group",
+      res.status,
+    );
+  }
 }
 
 export async function getGroupMembers(groupId: number): Promise<GroupMember[]> {
   const res = await fetch(`/api/groups/${groupId}/members`);
-  const data = await handleResponse(res, "Could not load members");
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new FetchNotOkError(
+      data?.message ?? "Could not load members",
+      res.status,
+    );
+  }
+
+  const data = await res.json();
   return data.data as GroupMember[];
 }
 
@@ -44,7 +71,14 @@ export async function addGroupMember(
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email }),
   });
-  await handleResponse(res, "Could not add member");
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new FetchNotOkError(
+      data?.message ?? "Could not add member",
+      res.status,
+    );
+  }
 }
 
 export async function removeGroupMember(
@@ -54,5 +88,12 @@ export async function removeGroupMember(
   const res = await fetch(`/api/groups/${groupId}/members/${userId}`, {
     method: "DELETE",
   });
-  await handleResponse(res, "Could not remove member");
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new FetchNotOkError(
+      data?.message ?? "Could not remove member",
+      res.status,
+    );
+  }
 }
