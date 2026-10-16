@@ -76,5 +76,7 @@ export default defineEventHandler(async (event) => {
     await db.insert(expensesTable).values(valid);
   }
 
+  setResponseStatus(event, 201);
+
   return { inserted: valid.length, errors };
 });
