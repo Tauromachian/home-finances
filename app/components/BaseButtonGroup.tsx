@@ -5,7 +5,7 @@ export default defineComponent({
     modelValue: { type: [String, Number], default: "" },
   },
   emit: ["update:modelValue"],
-  setup(props, { emit, slots }) {
+  setup(props, { emit, slots, attrs }) {
     const active = computed({
       get() {
         return props.modelValue;
@@ -36,7 +36,10 @@ export default defineComponent({
     }
 
     return () => (
-      <div class="inline-flex items-stretch [&>button]:-ml-px [&>button]:rounded-none [&>button]:focus-visible:relative [&>button]:focus-visible:z-10 [&>button:first-child]:ml-0 [&>button:first-child]:rounded-l-xl [&>button:last-child]:rounded-r-xl">
+      <div
+        {...attrs}
+        class="inline-flex items-stretch [&>button]:-ml-px [&>button]:rounded-none [&>button]:focus-visible:relative [&>button]:focus-visible:z-10 [&>button:first-child]:ml-0 [&>button:first-child]:rounded-l-xl [&>button:last-child]:rounded-r-xl"
+      >
         {makeButtons(slots.default)}
       </div>
     );
