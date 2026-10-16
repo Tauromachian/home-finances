@@ -100,7 +100,8 @@ async function submitForm(form: Income | ProgrammedIncome | FormIncome) {
     if (isProgrammed) {
       await createProgrammedIncome(form as ProgrammedIncome);
     } else {
-      await createIncome(form as FormIncome);
+      const newIncome = await createIncome(form as FormIncome);
+      incomes.value.push(newIncome);
     }
 
     showMessage("New income added!");
@@ -116,8 +117,6 @@ async function submitForm(form: Income | ProgrammedIncome | FormIncome) {
 
   if (isProgrammed) {
     loadProgrammedIncomes();
-  } else {
-    loadIncomes();
   }
 }
 
