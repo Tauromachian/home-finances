@@ -7,7 +7,7 @@ import {
   parseIsoDate,
   round2,
 } from "../utils/period";
-import { FetchNotOkError } from "~~/server/utils/errors";
+import { FetchNotOkError } from "../utils/errors";
 
 export const MONTH_LABELS = [
   "Jan",

@@ -1,5 +1,5 @@
 import type { ProgrammedExpense } from "../types/expense";
-import { FetchNotOkError } from "~~/server/utils/errors";
+import { FetchNotOkError } from "../utils/errors";
 
 export async function getProgrammedExpenses(): Promise<ProgrammedExpense[]> {
   const res = await fetch("/api/programmed-expenses");

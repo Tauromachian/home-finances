@@ -1,5 +1,5 @@
 import type { ProgrammedIncome } from "../types/income";
-import { FetchNotOkError } from "~~/server/utils/errors";
+import { FetchNotOkError } from "../utils/errors";
 
 export async function getProgrammedIncomes(): Promise<ProgrammedIncome[]> {
   const res = await fetch("/api/programmed-incomes");

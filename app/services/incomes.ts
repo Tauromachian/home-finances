@@ -6,7 +6,7 @@ import {
   parseIsoDate,
   round2,
 } from "../utils/period";
-import { FetchNotOkError } from "~~/server/utils/errors";
+import { FetchNotOkError } from "../utils/errors";
 
 export async function getIncomes(): Promise<Income[]> {
   const res = await fetch("/api/incomes");

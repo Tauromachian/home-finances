@@ -1,5 +1,5 @@
 import type { Group, GroupMember } from "../types/group";
-import { FetchNotOkError } from "~~/server/utils/errors";
+import { FetchNotOkError } from "../utils/errors";
 
 export async function getGroups(): Promise<Group[]> {
   const res = await fetch("/api/groups");
