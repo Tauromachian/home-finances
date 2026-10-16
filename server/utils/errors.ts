@@ -7,3 +7,14 @@ export class MarketUpstreamError extends Error {
     this.rateLimited = rateLimited;
   }
 }
+
+export class FetchNotOkError extends Error {
+  status: number;
+
+  constructor(message: string, status: number = 400) {
+    message ??= "Issue with response";
+
+    super(message);
+    this.status = status;
+  }
+}
