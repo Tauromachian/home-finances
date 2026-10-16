@@ -101,7 +101,8 @@ async function submitForm(form: Expense | ProgrammedExpense | FormExpense) {
     if (isProgrammed) {
       await createProgrammedExpense(form as ProgrammedExpense);
     } else {
-      await createExpense(form as FormExpense);
+      const insertedExpense = await createExpense(form as FormExpense);
+      expenses.value.push(insertedExpense);
     }
 
     showMessage("New expense added!");
@@ -117,8 +118,6 @@ async function submitForm(form: Expense | ProgrammedExpense | FormExpense) {
 
   if (isProgrammed) {
     loadProgrammedExpenses();
-  } else {
-    loadExpenses();
   }
 }
 
