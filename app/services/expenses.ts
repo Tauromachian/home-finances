@@ -52,7 +52,7 @@ export async function createExpense(form: FormExpense): Promise<Expense> {
     throw new FetchNotOkError(null, res.status);
   }
 
-  return data;
+  return data.data;
 }
 
 export async function updateExpense(
