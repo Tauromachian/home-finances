@@ -31,8 +31,8 @@ export function toISODate(year: number, month: number, day: number): string {
 }
 
 /**
- * Last day of the month previous to `now` (September => Aug 31,
- * January => Dec 31 of the previous year).
+ * Last day of the current month (September => Sep 30,
+ * January => Jan 31).
  */
 export function endOfThisMonth(now: Date = new Date()): string {
   const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
@@ -40,8 +40,7 @@ export function endOfThisMonth(now: Date = new Date()): string {
 }
 
 /**
- * Default reports range: January 1st up to the end of the previous
- * month (completed periods only).
+ * Default reports range: January 1st up to the end of the current month.
  */
 export function defaultReportRange(now: Date = new Date()): {
   start: string;
