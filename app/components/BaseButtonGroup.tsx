@@ -16,6 +16,8 @@ export default defineComponent({
     });
 
     function makeButtons(slot: Slot): VNode[] {
+      if (!slot) return [];
+
       const buttons = slot();
 
       const newButtons = [];
