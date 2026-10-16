@@ -68,16 +68,8 @@ function onSelectFrequency(item: Item) {
   }
 }
 
-// The share picker travels outside vee-validate state.
-const sharedGroupId = computed({
-  get: () => modelValue.value?.groupId ?? null,
-  set: (value: number | null) => {
-    if (modelValue.value) modelValue.value.groupId = value;
-  },
-});
-
 function onSubmit(values: ProgrammedExpense) {
-  const normalized = { ...values, groupId: sharedGroupId.value };
+  const normalized = { ...values, groupId: modelValue.value.groupId };
 
   const day = Number(normalized.chargeDay);
   normalized.chargeDay =
@@ -186,7 +178,7 @@ defineExpose({ internalRef: formRef, resetForm });
         name="category"
       ></AppAutocomplete>
 
-      <GroupSharePicker v-model="sharedGroupId" />
+      <GroupSharePicker v-model="modelValue.groupId" />
 
       <AppInput
         :model-value="modelValue.description"
