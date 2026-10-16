@@ -61,7 +61,6 @@ const EMPTY_PROGRAMMED_INCOME: ProgrammedIncome = {
   description: "",
   chargeDay: null,
   chargeMonth: null,
-  groupId: null,
 };
 
 const incomeForm = ref<FormIncome>({ ...EMPTY_INCOME });
