@@ -53,5 +53,5 @@ export default defineEventHandler(async (event) => {
     .where(eq(usersGroupsTable.groupId, groupId));
   await db.delete(groupsTable).where(eq(groupsTable.id, groupId));
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });

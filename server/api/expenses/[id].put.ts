@@ -29,5 +29,5 @@ export default defineEventHandler(async (event) => {
 
   await db.update(expensesTable).set(expense).where(eq(expensesTable.id, id));
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });

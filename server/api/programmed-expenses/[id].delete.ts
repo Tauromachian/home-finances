@@ -31,5 +31,5 @@ export default defineEventHandler(async (event) => {
     .delete(programmedExpensesTable)
     .where(eq(programmedExpensesTable.id, Number(id)));
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });

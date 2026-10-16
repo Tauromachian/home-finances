@@ -12,5 +12,5 @@ export default defineEventHandler(async (event) => {
 
   await db.insert(investmentsTable).values(investment);
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });

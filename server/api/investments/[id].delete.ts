@@ -11,5 +11,5 @@ export default defineEventHandler(async (event) => {
 
   await db.delete(investmentsTable).where(eq(investmentsTable.id, Number(id)));
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });

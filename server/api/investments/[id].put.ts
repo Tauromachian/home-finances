@@ -17,5 +17,5 @@ export default defineEventHandler(async (event) => {
     .set(investment)
     .where(eq(investmentsTable.id, investment.id));
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });

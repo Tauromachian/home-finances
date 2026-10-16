@@ -47,5 +47,5 @@ export default defineEventHandler(async (event) => {
     .set(programmedExpense)
     .where(eq(programmedExpensesTable.id, id));
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });

@@ -24,5 +24,5 @@ export default defineEventHandler(async (event) => {
 
   await db.insert(programmedIncomesTable).values(programmedIncome);
 
-  return { msg: "Success" };
+  return { message: "Success" };
 });
