@@ -19,7 +19,7 @@ export async function getIncomes(): Promise<Income[]> {
   return data.data as Income[];
 }
 
-export async function createIncome(form: FormIncome): Promise<void> {
+export async function createIncome(form: FormIncome): Promise<Income> {
   const res = await fetch("/api/incomes", {
     method: "POST",
     headers: {
@@ -31,6 +31,10 @@ export async function createIncome(form: FormIncome): Promise<void> {
   if (!res.ok) {
     throw new FetchNotOkError(null, res.status);
   }
+
+  const data = await res.json();
+
+  return data.data;
 }
 
 export async function updateIncome(
