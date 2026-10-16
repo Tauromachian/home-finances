@@ -11,7 +11,7 @@ export class MarketUpstreamError extends Error {
 export class FetchNotOkError extends Error {
   status: number;
 
-  constructor(message: string, status: number = 400) {
+  constructor(message?: string | null, status: number = 400) {
     message ??= "Issue with response";
 
     super(message);
