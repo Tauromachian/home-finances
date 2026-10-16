@@ -1,16 +1,34 @@
 import { db } from "@@/server/orm";
 
 import { investmentsTable } from "@@/server/db/schema";
+import { Investment } from "@@/server/dtos/investment";
 import { normalizeMarketSymbol } from "@@/server/utils/marketSymbol";
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user;
 
-  const investment = await readBody(event);
-  investment.userId = user.id;
+  const data = await readBody(event);
+  data.userId = user.id;
+
+  const res = Investment.omit({ id: true }).safeParse(data);
+
+  if (!res.success) {
+    throw createError({
+      statusCode: 400,
+      message: "Bad Request",
+      data: res.error,
+    });
+  }
+
+  const investment = res.data;
   investment.marketSymbol = normalizeMarketSymbol(investment.marketSymbol);
 
-  await db.insert(investmentsTable).values(investment);
+  const [inserted] = await db
+    .insert(investmentsTable)
+    .values(investment)
+    .returning();
 
-  return { message: "Success" };
+  setResponseStatus(event, 201);
+
+  return { message: "Success", data: inserted };
 });
