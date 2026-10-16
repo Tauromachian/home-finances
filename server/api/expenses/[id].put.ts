@@ -41,7 +41,13 @@ export default defineEventHandler(async (event) => {
   const expense = res.data;
   expense.groupId = await resolveGroupId(user.id, expense);
 
-  await db.update(expensesTable).set(expense).where(eq(expensesTable.id, id));
+  const editedExpense = await db
+    .update(expensesTable)
+    .set(expense)
+    .where(eq(expensesTable.id, id))
+    .returning();
 
-  return { message: "Success" };
+  setResponseStatus(event, 204);
+
+  return { message: "Success", data: editedExpense };
 });
