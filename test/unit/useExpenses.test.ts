@@ -4,8 +4,12 @@ import { useExpenses } from "../../app/composables/useExpenses";
 
 import type { Expense } from "../../app/types/expense";
 
+let nextId = 1;
+
 function buildExpense(overrides: Partial<Expense> = {}): Expense {
   return {
+    id: nextId++,
+    userId: "user-1",
     name: "Test",
     amount: 100,
     category: "Food",
@@ -16,9 +20,9 @@ function buildExpense(overrides: Partial<Expense> = {}): Expense {
 }
 
 describe("useExpenses", () => {
-  it("Sums year-to-date actuals and averages over elapsed months", () => {
+  it("Sums year-to-date expenses over completed months when no range is given", () => {
     const now = new Date(2026, 8, 10);
-    const { yearlyExpenses, monthlyExpenses, categoriesCount } = useExpenses(
+    const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
       [
         buildExpense({ amount: 100, expenseDate: "2026-01-10" }),
         buildExpense({
@@ -32,31 +36,36 @@ describe("useExpenses", () => {
       now,
     );
 
-    expect(yearlyExpenses.value).toBe(400);
-    expect(monthlyExpenses.value).toBe(50);
+    expect(yearToDateExpenses.value).toHaveLength(2);
+    expect(totalExpenses.value).toBe(400);
     expect(categoriesCount.value).toBe(2);
   });
 
-  it("Returns zero monthly average in January", () => {
-    const { monthlyExpenses, yearlyExpenses } = useExpenses(
+  it("Returns zero totals in January when no month is completed", () => {
+    const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
       [buildExpense({ amount: 100, expenseDate: "2026-01-10" })],
       new Date(2026, 0, 20),
     );
 
-    expect(yearlyExpenses.value).toBe(0);
-    expect(monthlyExpenses.value).toBe(0);
+    expect(yearToDateExpenses.value).toHaveLength(0);
+    expect(totalExpenses.value).toBe(0);
+    expect(categoriesCount.value).toBe(0);
   });
 
   it("Tolerates undefined expenses", () => {
-    const { yearlyExpenses } = useExpenses(undefined as never);
+    const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
+      undefined as never,
+    );
 
-    expect(yearlyExpenses.value).toBe(0);
+    expect(yearToDateExpenses.value).toHaveLength(0);
+    expect(totalExpenses.value).toBe(0);
+    expect(categoriesCount.value).toBe(0);
   });
 
-  it("Filters by a custom start/end range and averages over its months", () => {
+  it("Filters by a custom start/end range", () => {
     const now = new Date(2026, 8, 10);
     const range = { start: "2026-03-01", end: "2026-04-30" };
-    const { yearlyExpenses, monthlyExpenses, categoriesCount } = useExpenses(
+    const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
       [
         buildExpense({ amount: 100, expenseDate: "2026-01-10" }),
         buildExpense({ amount: 200, expenseDate: "2026-03-10" }),
@@ -71,19 +80,20 @@ describe("useExpenses", () => {
       range,
     );
 
-    expect(yearlyExpenses.value).toBe(600);
-    expect(monthlyExpenses.value).toBe(300);
+    expect(yearToDateExpenses.value).toHaveLength(2);
+    expect(totalExpenses.value).toBe(600);
     expect(categoriesCount.value).toBe(2);
   });
 
-  it("Returns zero monthly average when the range has no months", () => {
-    const { monthlyExpenses, yearlyExpenses } = useExpenses(
+  it("Returns zero totals when the range matches nothing", () => {
+    const { totalExpenses, categoriesCount, yearToDateExpenses } = useExpenses(
       [buildExpense({ amount: 100, expenseDate: "2026-01-10" })],
       new Date(2026, 8, 10),
       { start: "2026-05-01", end: "2026-02-01" },
     );
 
-    expect(yearlyExpenses.value).toBe(0);
-    expect(monthlyExpenses.value).toBe(0);
+    expect(yearToDateExpenses.value).toHaveLength(0);
+    expect(totalExpenses.value).toBe(0);
+    expect(categoriesCount.value).toBe(0);
   });
 });
