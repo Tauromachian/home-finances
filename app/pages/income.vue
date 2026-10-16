@@ -110,6 +110,7 @@ async function submitForm(form: Income | ProgrammedIncome | FormIncome) {
       await updateProgrammedIncome(selectedId, form as ProgrammedIncome);
     } else {
       await updateIncome(selectedId, form as FormIncome);
+      loadIncomes();
     }
 
     showMessage("Income edited");

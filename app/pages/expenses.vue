@@ -111,6 +111,7 @@ async function submitForm(form: Expense | ProgrammedExpense | FormExpense) {
       await updateProgrammedExpense(selectedId, form as ProgrammedExpense);
     } else {
       await updateExpense(selectedId, form as FormExpense);
+      loadExpenses();
     }
 
     showMessage("Expense edited");
