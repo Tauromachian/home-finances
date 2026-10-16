@@ -8,19 +8,19 @@ export function isInScope(
   recordGroupId: number | null | undefined,
   activeGroupId: number | null,
 ): boolean {
-  if (activeGroupId === null)
+  if (activeGroupId == null) {
     return recordGroupId === null || recordGroupId === undefined;
+  }
   return recordGroupId === activeGroupId;
 }
 
 export const useGroups = () => {
   // Shared across pages so the selected scope survives navigation.
   const groups = useState<Group[]>("groups", () => []);
-  const activeGroupId = useState<number | null>("active-group-id", () => null);
+  const activeGroupId = useState<number>("active-group-id", () => undefined);
 
-  const activeGroup = computed(
-    () =>
-      groups.value.find((group) => group.id === activeGroupId.value) ?? null,
+  const activeGroup = computed(() =>
+    groups.value.find((group) => group.id === activeGroupId.value),
   );
 
   async function loadGroups() {
@@ -28,14 +28,14 @@ export const useGroups = () => {
 
     // The selected group may have been deleted elsewhere.
     if (
-      activeGroupId.value !== null &&
+      activeGroupId.value !== undefined &&
       !groups.value.some((group) => group.id === activeGroupId.value)
     ) {
-      activeGroupId.value = null;
+      activeGroupId.value = undefined;
     }
   }
 
-  function inScope<T extends { groupId?: number | null }>(records: T[]): T[] {
+  function inScope<T extends { groupId?: number }>(records: T[]): T[] {
     return (records ?? []).filter((record) =>
       isInScope(record.groupId, activeGroupId.value),
     );
