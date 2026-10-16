@@ -30,5 +30,7 @@ export default defineEventHandler(async (event) => {
     groupId: group.id,
   });
 
+  setResponseStatus(event, 201);
+
   return { message: "Success", data: group };
 });
