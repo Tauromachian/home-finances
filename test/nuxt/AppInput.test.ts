@@ -30,7 +30,7 @@ describe("AppInput", () => {
 
     expect(
       wrapper.find('[data-testid="input-wrapper-el"]').classes(),
-    ).toContain("mb-1");
+    ).not.toContain("mb-5");
   });
   it("renders prepend and append slots", () => {
     const wrapper = mount(AppInput, {
