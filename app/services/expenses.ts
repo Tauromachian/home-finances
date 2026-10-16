@@ -33,6 +33,11 @@ export async function getExpenses(filters?: Filter): Promise<Expense[]> {
   }
 
   const res = await fetch(URL);
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
+
   const data = await res.json();
   return data.data as Expense[];
 }
@@ -59,17 +64,25 @@ export async function updateExpense(
   id: number | string,
   form: FormExpense,
 ): Promise<void> {
-  await fetch(`/api/expenses/${id}`, {
+  const res = await fetch(`/api/expenses/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(form),
   });
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
 }
 
 export async function deleteExpense(id: number | string): Promise<void> {
-  await fetch(`/api/expenses/${id}`, { method: "DELETE" });
+  const res = await fetch(`/api/expenses/${id}`, { method: "DELETE" });
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
 }
 
 /**

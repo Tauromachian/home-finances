@@ -6,9 +6,15 @@ import {
   parseIsoDate,
   round2,
 } from "../utils/period";
+import { FetchNotOkError } from "~~/server/utils/errors";
 
 export async function getIncomes(): Promise<Income[]> {
   const res = await fetch("/api/incomes");
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
+
   const data = await res.json();
   return data.data as Income[];
 }

@@ -10,7 +10,7 @@ async function handleResponse(res: Response, fallback: string) {
 
 export async function getGroups(): Promise<Group[]> {
   const res = await fetch("/api/groups");
-  const data = await res.json();
+  const data = await handleResponse(res, "Could not load groups");
   return data.data as Group[];
 }
 
@@ -29,11 +29,9 @@ export async function deleteGroup(id: number): Promise<void> {
   await handleResponse(res, "Could not delete group");
 }
 
-export async function getGroupMembers(
-  groupId: number,
-): Promise<GroupMember[]> {
+export async function getGroupMembers(groupId: number): Promise<GroupMember[]> {
   const res = await fetch(`/api/groups/${groupId}/members`);
-  const data = await res.json();
+  const data = await handleResponse(res, "Could not load members");
   return data.data as GroupMember[];
 }
 
