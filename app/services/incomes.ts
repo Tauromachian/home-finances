@@ -1,4 +1,4 @@
-import type { Income } from "../types/income";
+import type { FormIncome, Income } from "../types/income";
 import {
   elapsedMonths,
   isInRange,
@@ -17,6 +17,45 @@ export async function getIncomes(): Promise<Income[]> {
 
   const data = await res.json();
   return data.data as Income[];
+}
+
+export async function createIncome(form: FormIncome): Promise<void> {
+  const res = await fetch("/api/incomes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(form),
+  });
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
+}
+
+export async function updateIncome(
+  id: number | string,
+  form: FormIncome,
+): Promise<void> {
+  const res = await fetch(`/api/incomes/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(form),
+  });
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
+}
+
+export async function deleteIncome(id: number | string): Promise<void> {
+  const res = await fetch(`/api/incomes/${id}`, { method: "DELETE" });
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
 }
 
 export const MONTH_LABELS = [

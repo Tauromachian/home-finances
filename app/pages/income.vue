@@ -1,6 +1,16 @@
 <script setup lang="ts">
-import { getIncomes as fetchIncomes } from "~/services/incomes";
-import { getProgrammedIncomes as fetchProgrammedIncomes } from "~/services/programmedIncomes";
+import {
+  createIncome,
+  deleteIncome as removeIncome,
+  getIncomes as fetchIncomes,
+  updateIncome,
+} from "~/services/incomes";
+import {
+  createProgrammedIncome,
+  deleteProgrammedIncome as removeProgrammedIncome,
+  getProgrammedIncomes as fetchProgrammedIncomes,
+  updateProgrammedIncome,
+} from "~/services/programmedIncomes";
 import { INCOME_COLUMNS } from "~/utils/spreadsheet";
 
 import type { FormIncome, Income, ProgrammedIncome } from "~/types/income";
@@ -85,26 +95,21 @@ function showMessage(message: string) {
 
 async function submitForm(form: Income | ProgrammedIncome | FormIncome) {
   const isProgrammed = formKind.value === "programmed";
-  const url = isProgrammed ? "/api/programmed-incomes" : "/api/incomes";
 
   if (formMode.value === "insert") {
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
+    if (isProgrammed) {
+      await createProgrammedIncome(form as ProgrammedIncome);
+    } else {
+      await createIncome(form as FormIncome);
+    }
 
     showMessage("New income added!");
   } else {
-    await fetch(`${url}/${selectedId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
+    if (isProgrammed) {
+      await updateProgrammedIncome(selectedId, form as ProgrammedIncome);
+    } else {
+      await updateIncome(selectedId, form as FormIncome);
+    }
 
     showMessage("Income edited");
   }
@@ -155,9 +160,13 @@ function openDeleteConfirmationDialog(id: string | number, kind: FormKind) {
 
 async function deleteIncome() {
   const isProgrammed = deleteKind.value === "programmed";
-  const url = isProgrammed ? "/api/programmed-incomes" : "/api/incomes";
 
-  await fetch(`${url}/${selectedId}`, { method: "DELETE" });
+  if (isProgrammed) {
+    await removeProgrammedIncome(selectedId);
+  } else {
+    await removeIncome(selectedId);
+  }
+
   isConfirmationDialogOpen.value = false;
 
   if (isProgrammed) {
