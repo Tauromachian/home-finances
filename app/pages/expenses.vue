@@ -62,7 +62,6 @@ const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
   description: "",
   chargeDay: null,
   chargeMonth: null,
-  groupId: null,
 };
 
 const expenseForm = ref<FormExpense>({ ...EMPTY_EXPENSE });
