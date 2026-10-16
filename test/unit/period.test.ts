@@ -4,7 +4,7 @@ import {
   countMonthsInRange,
   defaultReportRange,
   elapsedMonths,
-  endOfPreviousMonth,
+  endOfThisMonth,
   formatPeriodDate,
   isInRange,
   isInYearToDate,
@@ -75,29 +75,29 @@ describe("round2", () => {
   });
 });
 
-describe("endOfPreviousMonth", () => {
-  it("Returns the last day of the previous month", () => {
-    expect(endOfPreviousMonth(new Date(2026, 8, 10))).toBe("2026-08-31");
-    expect(endOfPreviousMonth(new Date(2026, 2, 1))).toBe("2026-02-28");
+describe("endOfThisMonth", () => {
+  it("Returns the last day of the current month", () => {
+    expect(endOfThisMonth(new Date(2026, 8, 10))).toBe("2026-09-30");
+    expect(endOfThisMonth(new Date(2026, 2, 1))).toBe("2026-03-31");
   });
 
-  it("Wraps to December of the previous year in January", () => {
-    expect(endOfPreviousMonth(new Date(2026, 0, 20))).toBe("2025-12-31");
+  it("Stays in January instead of wrapping to the previous year", () => {
+    expect(endOfThisMonth(new Date(2026, 0, 20))).toBe("2026-01-31");
   });
 });
 
 describe("defaultReportRange", () => {
-  it("Spans January 1st to the end of the previous month", () => {
+  it("Spans January 1st to the end of the current month", () => {
     expect(defaultReportRange(new Date(2026, 8, 10))).toEqual({
       start: "2026-01-01",
-      end: "2026-08-31",
+      end: "2026-09-30",
     });
   });
 
-  it("Falls back to the previous year in January", () => {
+  it("Starts January 1st of the same year in January", () => {
     expect(defaultReportRange(new Date(2026, 0, 20))).toEqual({
-      start: "2025-01-01",
-      end: "2025-12-31",
+      start: "2026-01-01",
+      end: "2026-01-31",
     });
   });
 });
