@@ -2,24 +2,22 @@ import { db } from "@@/server/orm";
 
 import { groupsTable, usersGroupsTable } from "@@/server/db/schema";
 import { Group } from "@@/server/dtos/group";
+import { created, parseOr400 } from "@@/server/utils/http";
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user;
 
   const body = await readBody(event);
 
-  const res = Group.omit({ id: true }).safeParse(body);
-  if (!res.success) {
-    throw createError({
-      statusCode: 400,
-      message: "name is required",
-      data: res.error,
-    });
-  }
+  const groupData = parseOr400(
+    Group.omit({ id: true }),
+    body,
+    "name is required",
+  );
 
   const [group] = await db
     .insert(groupsTable)
-    .values(res.data)
+    .values(groupData)
     .returning({ id: groupsTable.id, name: groupsTable.name });
 
   // Purely defensive should never happen unless there is a DB error
@@ -30,7 +28,5 @@ export default defineEventHandler(async (event) => {
     groupId: group.id,
   });
 
-  setResponseStatus(event, 201);
-
-  return { message: "Success", data: group };
+  return created(event, group);
 });
