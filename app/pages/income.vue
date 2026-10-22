@@ -13,7 +13,12 @@ import {
 } from "~/services/programmedIncomes";
 import { INCOME_COLUMNS } from "~/utils/spreadsheet";
 
-import type { FormIncome, Income, ProgrammedIncome } from "~/types/income";
+import type {
+  FormIncome,
+  FormProgrammedIncome,
+  Income,
+  ProgrammedIncome,
+} from "~/types/income";
 import { Frequency } from "~/types/frequency";
 
 type FormMode = "edit" | "insert";
@@ -64,7 +69,7 @@ const EMPTY_INCOME: FormIncome = {
   description: "",
 };
 
-const EMPTY_PROGRAMMED_INCOME: ProgrammedIncome = {
+const EMPTY_PROGRAMMED_INCOME: FormProgrammedIncome = {
   name: "",
   amount: 0,
   frequency: Frequency.MONTHLY,
@@ -74,7 +79,7 @@ const EMPTY_PROGRAMMED_INCOME: ProgrammedIncome = {
 };
 
 const incomeForm = ref<FormIncome>({ ...EMPTY_INCOME });
-const programmedIncomeForm = ref<ProgrammedIncome>({
+const programmedIncomeForm = ref<FormProgrammedIncome>({
   ...EMPTY_PROGRAMMED_INCOME,
 });
 const formKind = ref<FormKind>("actual");
@@ -93,12 +98,12 @@ function showMessage(message: string) {
   appToaster.value.openToast(message);
 }
 
-async function submitForm(form: Income | ProgrammedIncome | FormIncome) {
+async function submitForm(form: FormIncome | FormProgrammedIncome) {
   const isProgrammed = formKind.value === "programmed";
 
   if (formMode.value === "insert") {
     if (isProgrammed) {
-      await createProgrammedIncome(form as ProgrammedIncome);
+      await createProgrammedIncome(form as FormProgrammedIncome);
     } else {
       const newIncome = await createIncome(form as FormIncome);
       incomes.value.push(newIncome);
@@ -107,7 +112,7 @@ async function submitForm(form: Income | ProgrammedIncome | FormIncome) {
     showMessage("New income added!");
   } else {
     if (isProgrammed) {
-      await updateProgrammedIncome(selectedId, form as ProgrammedIncome);
+      await updateProgrammedIncome(selectedId, form as FormProgrammedIncome);
     } else {
       await updateIncome(selectedId, form as FormIncome);
       loadIncomes();

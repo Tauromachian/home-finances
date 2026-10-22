@@ -1,26 +1,16 @@
-import type { Frequency } from "./frequency";
+import type { z } from "zod";
 
-export type Expense = {
-  id: string | number;
-  userId: string;
-  name: string;
-  amount: number;
-  category: string;
-  expenseDate: string;
-  description: string;
-  groupId?: number;
-};
+import type { Expense as ExpenseSchema } from "../../server/dtos/expense";
+import type { ProgrammedExpense as ProgrammedExpenseSchema } from "../../server/dtos/programmed-expense";
 
+/**
+ * Rows as returned by the API — inferred from the Zod DTOs in
+ * `server/dtos`, which are the single source of truth shared with the
+ * server. The hand-written duplicates that used to live here have been
+ * removed so the two can't drift.
+ */
+export type Expense = z.infer<typeof ExpenseSchema>;
 export type FormExpense = Omit<Expense, "id" | "userId">;
 
-export type ProgrammedExpense = {
-  id?: string | number;
-  name: string;
-  amount: number;
-  category: string;
-  frequency: Frequency;
-  description: string;
-  chargeDay: number | null;
-  chargeMonth: number | null;
-  groupId?: number;
-};
+export type ProgrammedExpense = z.infer<typeof ProgrammedExpenseSchema>;
+export type FormProgrammedExpense = Omit<ProgrammedExpense, "id" | "userId">;

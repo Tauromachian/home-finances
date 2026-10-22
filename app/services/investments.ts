@@ -1,15 +1,13 @@
-import type { Investment } from "../types/investment";
-
-async function handleResponse(res: Response, fallback: string) {
-  if (!res.ok) {
-    const data = await res.json().catch(() => null);
-    throw new Error(data?.message ?? fallback);
-  }
-}
+import type { FormInvestment, Investment } from "../types/investment";
+import { FetchNotOkError } from "../utils/errors";
 
 export async function getInvestments(): Promise<Investment[]> {
   const res = await fetch("/api/investments");
-  await handleResponse(res, "Could not load investments");
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
+
   const data = await res.json().catch(() => null);
   return ((data?.data ?? []) as Investment[]).map((row) => ({
     ...row,
@@ -17,32 +15,41 @@ export async function getInvestments(): Promise<Investment[]> {
   }));
 }
 
-export async function createInvestment(investment: Investment): Promise<void> {
+export async function createInvestment(form: FormInvestment): Promise<void> {
   const res = await fetch("/api/investments", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(investment),
+    body: JSON.stringify(form),
   });
-  await handleResponse(res, "Could not create investment");
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
 }
 
 export async function updateInvestment(
   id: number | string,
-  investment: Investment,
+  form: FormInvestment,
 ): Promise<void> {
   const res = await fetch(`/api/investments/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(investment),
+    body: JSON.stringify(form),
   });
-  await handleResponse(res, "Could not update investment");
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
 }
 
 export async function deleteInvestment(id: number | string): Promise<void> {
   const res = await fetch(`/api/investments/${id}`, { method: "DELETE" });
-  await handleResponse(res, "Could not delete investment");
+
+  if (!res.ok) {
+    throw new FetchNotOkError(null, res.status);
+  }
 }

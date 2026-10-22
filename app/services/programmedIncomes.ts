@@ -1,4 +1,4 @@
-import type { ProgrammedIncome } from "../types/income";
+import type { FormProgrammedIncome, ProgrammedIncome } from "../types/income";
 import { FetchNotOkError } from "../utils/errors";
 
 export async function getProgrammedIncomes(): Promise<ProgrammedIncome[]> {
@@ -13,7 +13,7 @@ export async function getProgrammedIncomes(): Promise<ProgrammedIncome[]> {
 }
 
 export async function createProgrammedIncome(
-  form: ProgrammedIncome,
+  form: FormProgrammedIncome,
 ): Promise<void> {
   const res = await fetch("/api/programmed-incomes", {
     method: "POST",
@@ -30,7 +30,7 @@ export async function createProgrammedIncome(
 
 export async function updateProgrammedIncome(
   id: number | string,
-  form: ProgrammedIncome,
+  form: FormProgrammedIncome,
 ): Promise<void> {
   const res = await fetch(`/api/programmed-incomes/${id}`, {
     method: "PUT",

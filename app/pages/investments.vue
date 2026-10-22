@@ -7,7 +7,7 @@ import {
 } from "~/services/investments";
 import { gainVsCost, resolveCurrentValue } from "~/utils/market";
 import { assetsCategories, getCategoryByName } from "~/utils/categories";
-import type { Investment } from "~/types/investment";
+import type { FormInvestment, Investment } from "~/types/investment";
 import type { Item } from "~/types/item";
 
 type FormMode = "edit" | "insert";
@@ -201,7 +201,7 @@ function showError(message: string) {
   appToaster.value.openToast(message);
 }
 
-async function submitForm(form: Investment) {
+async function submitForm(form: FormInvestment) {
   // Tracked stocks take their current value from the live quote; manual
   // holdings use the entered value. Abort when neither is available.
   const currentValue = resolveCurrentValue(

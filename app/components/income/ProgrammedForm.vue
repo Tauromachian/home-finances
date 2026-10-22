@@ -8,16 +8,16 @@ import { monthItems, getMonthTitle, parseMonthValue } from "@/utils/months";
 import type { Item } from "@/types/item";
 import type { Frequency } from "~/types/frequency";
 import { Frequency as FrequencyValues } from "~/types/frequency";
-import type { ProgrammedIncome } from "~/types/income";
+import type { FormProgrammedIncome } from "~/types/income";
 
 type FormMode = "edit" | "insert";
 
 defineProps<{ formMode: FormMode }>();
 
-const modelValue = defineModel<ProgrammedIncome>();
+const modelValue = defineModel<FormProgrammedIncome>();
 
 const emit = defineEmits<{
-  submit: [income: ProgrammedIncome];
+  submit: [income: FormProgrammedIncome];
 }>();
 
 const formRef = useTemplateRef<typeof Form>("formRef");
@@ -64,7 +64,7 @@ const sharedGroupId = computed({
   },
 });
 
-function onSubmit(values: ProgrammedIncome) {
+function onSubmit(values: FormProgrammedIncome) {
   const normalized = { ...values, groupId: sharedGroupId.value };
 
   const day = Number(normalized.chargeDay);

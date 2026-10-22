@@ -9,16 +9,16 @@ import { monthItems, getMonthTitle, parseMonthValue } from "@/utils/months";
 import type { Item } from "@/types/item";
 import type { Frequency } from "~/types/frequency";
 import { Frequency as FrequencyValues } from "~/types/frequency";
-import type { ProgrammedExpense } from "~/types/expense";
+import type { FormProgrammedExpense } from "~/types/expense";
 
 type FormMode = "edit" | "insert";
 
 defineProps<{ formMode: FormMode }>();
 
-const modelValue = defineModel<ProgrammedExpense>();
+const modelValue = defineModel<FormProgrammedExpense>();
 
 const emit = defineEmits<{
-  submit: [expense: ProgrammedExpense];
+  submit: [expense: FormProgrammedExpense];
 }>();
 
 const formRef = useTemplateRef<typeof Form>("formRef");
@@ -68,7 +68,7 @@ function onSelectFrequency(item: Item) {
   }
 }
 
-function onSubmit(values: ProgrammedExpense) {
+function onSubmit(values: FormProgrammedExpense) {
   const normalized = { ...values, groupId: modelValue.value.groupId };
 
   const day = Number(normalized.chargeDay);

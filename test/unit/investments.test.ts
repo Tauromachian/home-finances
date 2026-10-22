@@ -6,10 +6,20 @@ import {
   getInvestments,
   updateInvestment,
 } from "../../app/services/investments";
-import type { Investment } from "../../app/types/investment";
+import type { FormInvestment, Investment } from "../../app/types/investment";
 
 const INVESTMENT: Investment = {
   id: 1,
+  userId: "user-1",
+  name: "Apple",
+  category: "Stocks/ETFs",
+  amount: 100,
+  currentValue: 200,
+  description: "",
+  marketSymbol: "AAPL",
+};
+
+const FORM_INVESTMENT: FormInvestment = {
   name: "Apple",
   category: "Stocks/ETFs",
   amount: 100,
@@ -55,12 +65,12 @@ describe("createInvestment", () => {
   it("POSTs the investment as JSON", async () => {
     const fetchMock = stubFetch();
 
-    await createInvestment(INVESTMENT);
+    await createInvestment(FORM_INVESTMENT);
 
     expect(fetchMock).toHaveBeenCalledWith("/api/investments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(INVESTMENT),
+      body: JSON.stringify(FORM_INVESTMENT),
     });
   });
 });
@@ -69,12 +79,12 @@ describe("updateInvestment", () => {
   it("PUTs the investment to its URL", async () => {
     const fetchMock = stubFetch();
 
-    await updateInvestment(1, INVESTMENT);
+    await updateInvestment(1, FORM_INVESTMENT);
 
     expect(fetchMock).toHaveBeenCalledWith("/api/investments/1", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(INVESTMENT),
+      body: JSON.stringify(FORM_INVESTMENT),
     });
   });
 });

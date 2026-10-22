@@ -13,7 +13,12 @@ import {
 } from "~/services/programmedExpenses";
 import { EXPENSE_COLUMNS } from "~/utils/spreadsheet";
 
-import type { Expense, FormExpense, ProgrammedExpense } from "~/types/expense";
+import type {
+  Expense,
+  FormExpense,
+  FormProgrammedExpense,
+  ProgrammedExpense,
+} from "~/types/expense";
 import { Frequency } from "~/types/frequency";
 import type { Filter } from "~/types/filter";
 
@@ -64,7 +69,7 @@ const EMPTY_EXPENSE: FormExpense = {
   description: "",
 };
 
-const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
+const EMPTY_PROGRAMMED_EXPENSE: FormProgrammedExpense = {
   name: "",
   amount: 0,
   category: "",
@@ -75,7 +80,7 @@ const EMPTY_PROGRAMMED_EXPENSE: ProgrammedExpense = {
 };
 
 const expenseForm = ref<FormExpense>({ ...EMPTY_EXPENSE });
-const programmedExpenseForm = ref<ProgrammedExpense>({
+const programmedExpenseForm = ref<FormProgrammedExpense>({
   ...EMPTY_PROGRAMMED_EXPENSE,
 });
 const formKind = ref<FormKind>("actual");
@@ -94,12 +99,12 @@ function showMessage(message: string) {
   appToaster.value.openToast(message);
 }
 
-async function submitForm(form: Expense | ProgrammedExpense | FormExpense) {
+async function submitForm(form: FormExpense | FormProgrammedExpense) {
   const isProgrammed = formKind.value === "programmed";
 
   if (formMode.value === "insert") {
     if (isProgrammed) {
-      await createProgrammedExpense(form as ProgrammedExpense);
+      await createProgrammedExpense(form as FormProgrammedExpense);
     } else {
       const insertedExpense = await createExpense(form as FormExpense);
       expenses.value.push(insertedExpense);
@@ -108,7 +113,7 @@ async function submitForm(form: Expense | ProgrammedExpense | FormExpense) {
     showMessage("New expense added!");
   } else {
     if (isProgrammed) {
-      await updateProgrammedExpense(selectedId, form as ProgrammedExpense);
+      await updateProgrammedExpense(selectedId, form as FormProgrammedExpense);
     } else {
       await updateExpense(selectedId, form as FormExpense);
       loadExpenses();

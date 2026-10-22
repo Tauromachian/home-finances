@@ -35,7 +35,7 @@ export const useGroups = () => {
     }
   }
 
-  function inScope<T extends { groupId?: number }>(records: T[]): T[] {
+  function inScope<T extends { groupId?: number | null }>(records: T[]): T[] {
     return (records ?? []).filter((record) =>
       isInScope(record.groupId, activeGroupId.value),
     );

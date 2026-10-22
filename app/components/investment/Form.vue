@@ -3,7 +3,7 @@ import { Form } from "vee-validate";
 
 import { required, positiveNumber } from "@/utils/rules";
 import { assetsCategories } from "@/utils/categories";
-import type { Investment } from "~/types/investment";
+import type { FormInvestment } from "~/types/investment";
 import type { Item } from "@/types/item";
 
 type FormMode = "edit" | "insert";
@@ -19,7 +19,7 @@ const props = defineProps<{
   marketPrices?: Record<string, MarketPrice>;
 }>();
 
-const emit = defineEmits<{ submit: [investment: Investment] }>();
+const emit = defineEmits<{ submit: [investment: FormInvestment] }>();
 const formattedCategories = assetsCategories.map((item) => ({
   title: item.name,
   value: item.name,
@@ -55,7 +55,7 @@ function formatLivePrice(marketSymbol: unknown): string {
   }
 }
 
-function onSubmit(investment: Investment) {
+function onSubmit(investment: FormInvestment) {
   emit("submit", investment);
   formRef.value.resetForm();
 }

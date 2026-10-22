@@ -1,24 +1,16 @@
-import type { Frequency } from "./frequency";
+import type { z } from "zod";
 
-export type Income = {
-  id: string | number;
-  userId: string;
-  name: string;
-  amount: number;
-  incomeDate: string;
-  description: string;
-  groupId?: number;
-};
+import type { Income as IncomeSchema } from "../../server/dtos/income";
+import type { ProgrammedIncome as ProgrammedIncomeSchema } from "../../server/dtos/programmed-income";
 
+/**
+ * Rows as returned by the API — inferred from the Zod DTOs in
+ * `server/dtos`, which are the single source of truth shared with the
+ * server. The hand-written duplicates that used to live here have been
+ * removed so the two can't drift.
+ */
+export type Income = z.infer<typeof IncomeSchema>;
 export type FormIncome = Omit<Income, "id" | "userId">;
 
-export type ProgrammedIncome = {
-  id?: string | number;
-  name: string;
-  amount: number;
-  frequency: Frequency;
-  description: string;
-  chargeDay: number | null;
-  chargeMonth: number | null;
-  groupId?: number | null;
-};
+export type ProgrammedIncome = z.infer<typeof ProgrammedIncomeSchema>;
+export type FormProgrammedIncome = Omit<ProgrammedIncome, "id" | "userId">;

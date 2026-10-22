@@ -3,7 +3,7 @@ import { Form } from "vee-validate";
 
 import { required, positiveNumber } from "@/utils/rules";
 
-import type { FormIncome, Income } from "~/types/income";
+import type { FormIncome } from "~/types/income";
 
 type FormMode = "edit" | "insert";
 
@@ -40,7 +40,7 @@ const sharedGroupId = computed({
   },
 });
 
-function onSubmit(values: Income) {
+function onSubmit(values: FormIncome) {
   if (!actualDate.value) {
     dateError.value = "Date is required";
     return;

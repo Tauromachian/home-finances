@@ -1,4 +1,7 @@
-import type { ProgrammedExpense } from "../types/expense";
+import type {
+  FormProgrammedExpense,
+  ProgrammedExpense,
+} from "../types/expense";
 import { FetchNotOkError } from "../utils/errors";
 
 export async function getProgrammedExpenses(): Promise<ProgrammedExpense[]> {
@@ -13,7 +16,7 @@ export async function getProgrammedExpenses(): Promise<ProgrammedExpense[]> {
 }
 
 export async function createProgrammedExpense(
-  form: ProgrammedExpense,
+  form: FormProgrammedExpense,
 ): Promise<void> {
   const res = await fetch("/api/programmed-expenses", {
     method: "POST",
@@ -30,7 +33,7 @@ export async function createProgrammedExpense(
 
 export async function updateProgrammedExpense(
   id: number | string,
-  form: ProgrammedExpense,
+  form: FormProgrammedExpense,
 ): Promise<void> {
   const res = await fetch(`/api/programmed-expenses/${id}`, {
     method: "PUT",
