@@ -116,11 +116,12 @@ onBeforeMount(async () => {
         </p>
 
         <div class="flex gap-2 mt-4">
-          <input
+          <AppInput
             v-model="newGroupName"
-            type="text"
+            name="groupName"
+            no-error
             placeholder="New group name"
-            class="text-field"
+            class="flex-1"
             @keydown.enter="createGroup"
           />
           <BaseButton @click="createGroup">Create</BaseButton>
@@ -153,11 +154,13 @@ onBeforeMount(async () => {
         <p class="text-md font-bold">{{ selectedGroup.name }} members</p>
 
         <div class="flex gap-2 mt-4">
-          <input
+          <AppInput
             v-model="newMemberEmail"
             type="email"
+            name="memberEmail"
+            no-error
             placeholder="Member email"
-            class="text-field"
+            class="flex-1"
             @keydown.enter="addMember"
           />
           <BaseButton @click="addMember">Add</BaseButton>
