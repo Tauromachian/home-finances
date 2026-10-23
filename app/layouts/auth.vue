@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import type { ThemeName } from "~/types/theme";
-
-const theme = inject<Ref<ThemeName>>("theme", ref("system"));
-
-const themeName = computed(() => {
-  return theme.value[0].toUpperCase() + theme.value.slice(1);
-});
+const { theme, themeName } = useTheme();
 </script>
 
 <template>

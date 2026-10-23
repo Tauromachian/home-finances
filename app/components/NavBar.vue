@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type { ThemeName } from "~/types/theme";
-
 const isCollapsed = defineModel<boolean>("collapsed");
 
 const links = [
@@ -36,17 +34,13 @@ const links = [
   },
 ];
 
-const theme = inject<Ref<ThemeName>>("theme", ref("system"));
+const { theme, themeName } = useTheme();
 const supabase = useSupabaseClient();
 
 const isMenuOpen = ref(false);
 function toggleSidebar() {
   isCollapsed.value = !isCollapsed.value;
 }
-
-const themeName = computed(() => {
-  return theme.value[0].toUpperCase() + theme.value.slice(1);
-});
 
 async function signOut() {
   const { error } = await supabase.auth.signOut();

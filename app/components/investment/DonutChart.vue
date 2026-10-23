@@ -13,7 +13,7 @@ const props = defineProps({
 
 const { isLGAndUp } = useDisplay();
 
-const textColor = inject<Ref<string | undefined>>("donutChartTextColor");
+const { textColor } = useTheme();
 
 const investmentsByCategory = computed(() => {
   const totalByCategory = {};

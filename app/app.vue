@@ -2,66 +2,15 @@
 import "@fontsource-variable/dm-sans";
 import "@fontsource/dm-serif-display";
 
-import { ensureTheme, type ThemeName } from "~/types/theme";
-
 const appToaster = useTemplateRef("appToaster");
 const route = useRoute();
 
-const theme = ref<ThemeName>("system");
-const textColor = ref();
-
-let darkMode: MediaQueryList;
-
-function getSystemTheme(): "dark" | "light" {
-  const isDark = darkMode.matches;
-
-  return isDark ? "dark" : "light";
-}
-
-function setTheme(theme: "dark" | "light") {
-  const html = document.querySelector("html");
-  html.setAttribute("data-theme", theme);
-
-  textColor.value = window
-    .getComputedStyle(document.documentElement)
-    .getPropertyValue("--color-text-1");
-}
-
-function applyTheme(enterTheme: ThemeName) {
-  let appliableTheme: "light" | "dark";
-
-  if (enterTheme === "system") appliableTheme = getSystemTheme();
-  else appliableTheme = enterTheme;
-
-  setTheme(appliableTheme);
-  localStorage.setItem("theme", enterTheme);
-}
-
-watch(theme, applyTheme);
+useTheme();
 
 const isAuthRoute = computed(() => route.name === "login");
 const layoutName = computed(() => (isAuthRoute.value ? "auth" : "default"));
 
-provide("donutChartTextColor", textColor);
 provide("appToaster", appToaster);
-provide("theme", theme);
-
-onMounted(() => {
-  darkMode = window.matchMedia("(prefers-color-scheme: dark)");
-
-  const themeString = localStorage.getItem("theme");
-  const enterTheme = ensureTheme(themeString);
-
-  darkMode.addEventListener("change", () => {
-    if (enterTheme !== "system") return;
-
-    const systemTheme = getSystemTheme();
-    setTheme(systemTheme);
-  });
-
-  theme.value = enterTheme;
-  applyTheme(enterTheme);
-});
 </script>
 
 <template>
