@@ -122,6 +122,7 @@ onUnmounted(() => {
         v-bind="$attrs"
         class="text-field peer"
         :name="name"
+        autocomplete="off"
         @input="onInput"
         @keydown="onKeyDown"
         @focus="isOpen = true"
