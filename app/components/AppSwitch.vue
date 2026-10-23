@@ -42,19 +42,17 @@ const classes = computed<string[]>(() => {
   <div class="flex items-center">
     <button
       type="button"
+      :aria-label="label ? `${label}: ${step}` : step"
       class="rounded-full bg-neutral-1 w-12 h-6 cursor-pointer"
       @click="nextStep"
     >
       <div
         class="rounded-full h-4 w-4 transition duration-200 ease-in-out cursor-pointer ml-1"
         :class="classes"
-      >
-        <input type="checkbox" class="opacity-0" />
-      </div>
+      ></div>
     </button>
     <label
       v-if="label"
-      for=""
       class="cursor-pointer pl-1 text-text-1"
       @click="nextStep"
     >
