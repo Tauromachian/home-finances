@@ -269,7 +269,7 @@ function openLinkDialog(investment: Investment) {
 }
 
 async function linkStock(item: Item) {
-  if (linkTarget.value?.id === undefined || linkTarget.value?.id === "") return;
+  if (!linkTarget.value?.id) return;
 
   try {
     await updateInvestment(linkTarget.value.id, {
@@ -291,7 +291,7 @@ async function linkStock(item: Item) {
 }
 
 async function unlinkStock(investment: Investment) {
-  if (investment.id === undefined || investment.id === "") return;
+  if (!investment?.id) return;
 
   try {
     await updateInvestment(investment.id, {
